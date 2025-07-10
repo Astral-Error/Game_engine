@@ -1,21 +1,21 @@
 cmake_minimum_required(VERSION 3.15)
 project(Game_engine)
 
-#C++ Standard
+# C++ Standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-#Output directories
+# Output directories
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-#Source files
+# Source files
 file(GLOB_RECURSE ENGINE_SOURCES ${PROJECT_SOURCE_DIR}/src/*.cxx)
 
-#Create executable
+# Create executable
 add_executable(Game_engine ${ENGINE_SOURCES})
 
-#Platform-specific includes and linking
+# Platform-specific includes and linking
 if (WIN32)
     # Include Directories (Windows only)
     target_include_directories(Game_engine PRIVATE
@@ -39,14 +39,21 @@ if (WIN32)
     target_include_directories(imgui PUBLIC ${PROJECT_SOURCE_DIR}/dependencies/imgui)
     target_link_libraries(Game_engine imgui)
 
-    # Link Windows-specific static libraries
+    # Link SDL2 statically + Windows system libraries
     target_link_libraries(Game_engine
-    ${PROJECT_SOURCE_DIR}/dependencies/SDL2/lib/libSDL2main.a
+        ${PROJECT_SOURCE_DIR}/dependencies/SDL2/lib/libSDL2main.a
         ${PROJECT_SOURCE_DIR}/dependencies/SDL2/lib/libSDL2.a
         ${PROJECT_SOURCE_DIR}/dependencies/SDL2_mixer/lib/libSDL2_mixer.a
         ${PROJECT_SOURCE_DIR}/dependencies/Box2D/lib/libbox2d.a
+
+        # Windows system libraries required by SDL2 static linking
+        setupapi
+        imm32
+        version
+        winmm
         opengl32
     )
+
 else()
     message(WARNING "Non-Windows builds are not fully configured yet. You must configure Linux paths and linking.")
 endif()
