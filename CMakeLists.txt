@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(ShadowSwapEngine)
+project(Game_engine)
 
 # Use C++17
 set(CMAKE_CXX_STANDARD 17)
@@ -22,20 +22,20 @@ include_directories(
 file(GLOB_RECURSE ENGINE_SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 
 # Add executable
-add_executable(ShadowSwap ${ENGINE_SOURCES})
+add_executable(Game_engine ${ENGINE_SOURCES})
 
 # SDL2
 find_package(SDL2 REQUIRED)
 if (SDL2_FOUND)
     include_directories(${SDL2_INCLUDE_DIRS})
-    target_link_libraries(ShadowSwap ${SDL2_LIBRARIES})
+    target_link_libraries(Game_engine ${SDL2_LIBRARIES})
 else()
     message(FATAL_ERROR "SDL2 not found")
 endif()
 
 # Link OpenGL
 find_package(OpenGL REQUIRED)
-target_link_libraries(ShadowSwap ${OPENGL_gl_LIBRARY})
+target_link_libraries(Game_engine ${OPENGL_gl_LIBRARY})
 
 # Optional: Add SDL_mixer, Box2D, ImGui as needed later
-# target_link_libraries(ShadowSwap SDL2_mixer Box2D imgui)
+# target_link_libraries(Game_engine SDL2_mixer Box2D imgui)
