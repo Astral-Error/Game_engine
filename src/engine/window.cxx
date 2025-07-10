@@ -17,12 +17,12 @@ bool window::init(const char* title, int width, int height){
         return false;
     }
     win = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
-    if(win==NULL){
+    if(NULL==win){
         std::cout<<"Window creation failed"<<SDL_GetError()<<std::endl;
         return false;
     }
     renderer = SDL_CreateRenderer(win,-1,SDL_RENDERER_PRESENTVSYNC);
-    if(renderer=NULL){
+    if(NULL==renderer){
         std::cout<<"Render Window Creation failed, Error:"<<SDL_GetError()<<std::endl;
     }
     appRunning = true;
@@ -45,4 +45,8 @@ void window::inputHandler(){
 
 bool window::isRunning() const{
     return appRunning;
+}
+
+SDL_Renderer* window::getRenderer(){
+    return window::renderer;
 }

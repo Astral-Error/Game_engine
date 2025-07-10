@@ -13,5 +13,6 @@ class window{
     bool init(const char*,int,int);
     void inputHandler();
     bool isRunning() const;
+    SDL_Renderer* getRenderer();
     ~window();
 };
