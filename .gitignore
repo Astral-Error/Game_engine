@@ -12,6 +12,9 @@ obj/
 # Ignore testing data
 testData/
 
+#Ignore windows compile time dependencies
+dependencies/
+
 # Optional: ignore distribution packages (uncomment if built dynamically)
 # dist/
 
