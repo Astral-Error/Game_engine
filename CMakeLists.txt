@@ -12,6 +12,8 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 # Source files
 file(GLOB_RECURSE ENGINE_SOURCES ${PROJECT_SOURCE_DIR}/src/*.cxx)
 
+message(STATUS "Engine sources: ${ENGINE_SOURCES}")
+
 # Create executable
 add_executable(Game_engine ${ENGINE_SOURCES})
 

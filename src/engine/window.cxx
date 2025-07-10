@@ -1,13 +1,48 @@
 #include "window.hxx"
+#include <SDL2/SDL_main.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_render.h>
+#include <SDL2/SDL_events.h>
+#include <iostream>
 
-void window::init(){
-    printf("Initializing SDL");
-    if(SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO)==-1){
-        std::cout<<"Couldn't initalize SDL, Error: "<<SDL_GetError();
-        exit(-1);
-    }
-    std::cout<<"SDL Initialized";
+window::~window(){
+    if(renderer) SDL_DestroyRenderer(renderer);
+    if(win) SDL_DestroyWindow(win);
     SDL_Quit();
-    exit(0);
+}
+
+bool window::init(const char* title, int width, int height){
+    if(SDL_Init(SDL_INIT_VIDEO)<0){
+        std::cout<<"SDL Init failed\n";
+        return false;
+    }
+    win = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
+    if(win==NULL){
+        std::cout<<"Window creation failed"<<SDL_GetError()<<std::endl;
+        return false;
+    }
+    renderer = SDL_CreateRenderer(win,-1,SDL_RENDERER_PRESENTVSYNC);
+    if(renderer=NULL){
+        std::cout<<"Render Window Creation failed, Error:"<<SDL_GetError()<<std::endl;
+    }
+    appRunning = true;
+    return true;
+}
+
+void window::inputHandler(){
+    SDL_Event input_event;
+    while(SDL_PollEvent(&input_event)){
+        switch(input_event.type){
+            case SDL_KEYDOWN:
+                std::cout<<SDL_GetKeyName(input_event.key.keysym.sym)<<std::endl;
+                break;
+        }
+        if(input_event.type == SDL_QUIT){
+            appRunning = false;
+        }
+    }
+}
+
+bool window::isRunning() const{
+    return appRunning;
 }
