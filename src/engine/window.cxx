@@ -32,13 +32,32 @@ bool window::init(const char* winTitle, int width, int height){
 void window::inputHandler(){
     SDL_Event input_event;
     while(SDL_PollEvent(&input_event)){
-        switch(input_event.type){
-            case SDL_KEYDOWN:
-                std::cout<<SDL_GetKeyName(input_event.key.keysym.sym)<<std::endl;
-                break;
-        }
         if(input_event.type == SDL_QUIT){
             appRunning = false;
+        }
+        switch(input_event.key.keysym.sym){
+            case SDLK_ESCAPE:
+                appRunning = false;
+                break;
+
+            case SDLK_w:
+                std::cout<<SDL_GetKeyName(input_event.key.keysym.sym);
+                break;
+
+            case SDLK_s:
+                std::cout<<SDL_GetKeyName(input_event.key.keysym.sym);
+                break;
+            
+            case SDLK_a:
+                std::cout<<SDL_GetKeyName(input_event.key.keysym.sym);
+                break;
+
+            case SDLK_d:
+                std::cout<<SDL_GetKeyName(input_event.key.keysym.sym);
+                break;
+            
+            default:
+                break;
         }
     }
 }
