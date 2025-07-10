@@ -10,7 +10,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 #Source files
-file(GLOB_RECURSE ENGINE_SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
+file(GLOB_RECURSE ENGINE_SOURCES ${PROJECT_SOURCE_DIR}/src/*.cxx)
 
 #Create executable
 add_executable(Game_engine ${ENGINE_SOURCES})
@@ -41,8 +41,8 @@ if (WIN32)
 
     # Link Windows-specific static libraries
     target_link_libraries(Game_engine
+    ${PROJECT_SOURCE_DIR}/dependencies/SDL2/lib/libSDL2main.a
         ${PROJECT_SOURCE_DIR}/dependencies/SDL2/lib/libSDL2.a
-        ${PROJECT_SOURCE_DIR}/dependencies/SDL2/lib/libSDL2main.a
         ${PROJECT_SOURCE_DIR}/dependencies/SDL2_mixer/lib/libSDL2_mixer.a
         ${PROJECT_SOURCE_DIR}/dependencies/Box2D/lib/libbox2d.a
         opengl32
