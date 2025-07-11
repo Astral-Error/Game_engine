@@ -11,7 +11,7 @@ window::~window(){
     SDL_Quit();
 }
 
-bool window::init(const char* winTitle, int width, int height){
+bool window::initiateWindow(const char* winTitle, int width, int height){
     if(SDL_Init(SDL_INIT_VIDEO)<0){
         std::cout<<"SDL Init failed\n";
         return false;

@@ -6,6 +6,6 @@ class core{
         window win;
     
     public:
-        bool init(const char*,int,int);
+        bool initiateWindow(const char*,int,int);
         void initiateGameLoop();
 };

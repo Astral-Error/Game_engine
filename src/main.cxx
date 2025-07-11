@@ -5,7 +5,7 @@
 
 int main(int argc, char* argv[]){
     core engine;
-    if(!engine.init("Shadow Swap",1280,720)) return -1;
+    if(!engine.initiateWindow("Shadow Swap",1280,720)) return -1;
     engine.initiateGameLoop();
     return 0;
 }

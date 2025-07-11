@@ -5,10 +5,10 @@ class inGameObject{
     private:
         int x,y;
         int width, height;
-        int speed;
+        int movementSpeed;
 
     public:
         inGameObject(int,int,int);
         void updateObjectState();
-        void renderObject();
+        void renderObject(SDL_Renderer*);
 };

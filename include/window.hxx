@@ -10,7 +10,7 @@ class window{
     bool appRunning = false;
 
     public:
-    bool init(const char*,int,int);
+    bool initiateWindow(const char*,int,int);
     void inputHandler();
     bool isRunning() const;
     SDL_Renderer* getRenderer();
