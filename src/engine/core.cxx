@@ -1,5 +1,5 @@
 #include "core.hxx"
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <iostream>
 
 bool core::init(const char* winTitle, int width, int height){

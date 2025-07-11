@@ -1,5 +1,5 @@
 #include <iostream>
-#include <SDL2/SDL_render.h>
+#include <SDL_render.h>
 #include "window.hxx"
 #include "core.hxx"
 
@@ -9,5 +9,3 @@ int main(int argc, char* argv[]){
     engine.initiateGameLoop();
     return 0;
 }
-
-//testing webhooks

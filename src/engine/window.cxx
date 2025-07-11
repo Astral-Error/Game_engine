@@ -1,8 +1,8 @@
 #include "window.hxx"
-#include <SDL2/SDL_main.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_render.h>
-#include <SDL2/SDL_events.h>
+#include <SDL_main.h>
+#include <SDL.h>
+#include <SDL_render.h>
+#include <SDL_events.h>
 #include <iostream>
 
 window::~window(){
