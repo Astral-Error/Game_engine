@@ -3,12 +3,12 @@
 
 class inGameObject{
     private:
-        int x,y;
+        float x,y;
         int width, height;
-        int movementSpeed;
+        float movementSpeed;
 
     public:
-        inGameObject(int,int,int);
-        void updateObjectState();
+        inGameObject(float,float,int);
+        void updateObjectState(float);
         void renderObject(SDL_Renderer*);
 };

@@ -3,23 +3,23 @@
 
 namespace engineTime{
     static Uint64 frameStart=0;
-    static Uint64 frameEnd=0;
     static float deltaTime=0.0f;
+    static Uint64 sysTimerFrequency = SDL_GetPerformanceFrequency();
 
     void startFrame(){
-        frameStart=SDL_GetTicks64();
+        frameStart=SDL_GetPerformanceCounter();
     }
 
     void endFrame(int targetFPS){
-        frameEnd=SDL_GetTicks64();
-        Uint64 frameDuration = frameEnd-frameStart;
+        Uint64 frameEnd= SDL_GetPerformanceCounter();
+        deltaTime = float(frameEnd-frameStart)/sysTimerFrequency;
         Uint64 frameDelay = 1000/targetFPS;
 
-        if(frameDuration<frameDelay){
-            SDL_Delay(frameDelay-frameDuration);
-            frameEnd=SDL_GetTicks64();
+        float targetFrameTime = 1.0/targetFPS;
+        if(deltaTime<targetFrameTime){
+            SDL_Delay(Uint32(targetFrameTime-deltaTime)*1000.0);
+            deltaTime = targetFrameTime;
         }
-        deltaTime = (frameEnd-frameStart)/1000.0f;
     }
     float getDeltaTime(){
         return deltaTime;
