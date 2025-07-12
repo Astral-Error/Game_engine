@@ -3,6 +3,7 @@
 #include<SDL_Keyboard.h>
 #include<SDL_Keycode.h>
 
+
 inGameObject::inGameObject(float init_x, float init_y, int init_width, int init_height, float init_speed, SDL_Color init_objectColor) : x(init_x), y(init_y), width(init_width), height(init_height), movementSpeed(init_speed), objectColor(init_objectColor) {}
 inGameObject::inGameObject() : x(0.0), y(0.0), width(0), height(0), movementSpeed(0) {}
 
@@ -20,3 +21,14 @@ void inGameObject::renderObject(SDL_Renderer* renderer){
     SDL_SetRenderDrawColor(renderer,objectColor.r,objectColor.g,objectColor.b,objectColor.a);
     SDL_RenderFillRect(renderer,&rectangle);
 }
+
+float inGameObject::getX() {return x;}
+float inGameObject::getY() {return y;}
+void inGameObject::setX(float newX){x=newX;}
+float inGameObject::getWidth() {return width;}
+float inGameObject::getHeight() {return height;}
+float inGameObject::getVelocityY() {return velocityY;}
+float inGameObject::getGrounded() {return isGrounded;}
+void inGameObject::setY(float newY) {y=newY;}
+void inGameObject::setVelocityY(float newVelocityY) {velocityY=newVelocityY;}
+void inGameObject::setGrounded(bool newState) {isGrounded = newState;}
