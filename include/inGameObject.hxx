@@ -8,7 +8,7 @@ class inGameObject{
         float movementSpeed;
 
     public:
-        inGameObject(float,float,int);
+        inGameObject(float,float,int,float);
         inGameObject();
         void updateObjectState(float);
         void renderObject(SDL_Renderer*);

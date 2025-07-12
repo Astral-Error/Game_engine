@@ -3,7 +3,7 @@
 #include<SDL_Keyboard.h>
 #include<SDL_Keycode.h>
 
-inGameObject::inGameObject(float init_x, float init_y, int size) : x(init_x), y(init_y), width(size), height(size), movementSpeed(100.0) {}
+inGameObject::inGameObject(float init_x, float init_y, int size, float init_speed) : x(init_x), y(init_y), width(size), height(size), movementSpeed(init_speed) {}
 inGameObject::inGameObject() : x(0.0), y(0.0), width(0), height(0), movementSpeed(0) {}
 
 void inGameObject::updateObjectState(float deltaTime){

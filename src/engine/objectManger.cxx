@@ -3,9 +3,9 @@
 #include "time.hxx"
 
 namespace engine{
-    void objectManager::addObject(float x, float y, int size, std::string objectTag){
+    void objectManager::addObject(float x, float y, int size, float MovementSpeed, std::string objectTag){
         struct objectWithTag temp;
-        temp.object = inGameObject(x,y,size);
+        temp.object = inGameObject(x,y,size,MovementSpeed);
         temp.objectTag=objectTag;
         gameObjects.push_back(temp);
     }

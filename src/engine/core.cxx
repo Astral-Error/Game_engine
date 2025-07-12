@@ -10,7 +10,7 @@ bool core::initiateWindow(const char* winTitle, int width, int height){
 }
 
 void core::initiateGameLoop(){
-    objManager.addObject(100,100,50,"Square");
+    createSampleMap();
     while(win.isRunning()){
         engineTime::startFrame();
         win.inputHandler();
@@ -28,4 +28,8 @@ void core::initiateGameLoop(){
         SDL_RenderPresent(win.getRenderer());
         engineTime::endFrame(60);
     }
+}
+
+void core::createSampleMap(){
+    
 }

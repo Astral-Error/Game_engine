@@ -12,4 +12,5 @@ class core{
     public:
         bool initiateWindow(const char*,int,int);
         void initiateGameLoop();
+        void createSampleMap();
 };
