@@ -9,6 +9,7 @@ class inGameObject{
 
     public:
         inGameObject(float,float,int);
+        inGameObject();
         void updateObjectState(float);
         void renderObject(SDL_Renderer*);
 };

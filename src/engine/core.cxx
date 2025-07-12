@@ -10,14 +10,12 @@ bool core::initiateWindow(const char* winTitle, int width, int height){
 }
 
 void core::initiateGameLoop(){
-    gameObjects.emplace_back(100,100,50);
+    objManager.addObject(100,100,50,"Square");
     while(win.isRunning()){
         engineTime::startFrame();
         win.inputHandler();
 
-        for(inGameObject& i : gameObjects){
-            i.updateObjectState(engineTime::getDeltaTime());
-        }
+        objManager.updateAllObjects();
 
         if(SDL_SetRenderDrawColor(win.getRenderer(),150,160,255,255)<0){
             std::cout<<"Render Draw Color failed, Error: "<<SDL_GetError()<<std::endl;
@@ -25,9 +23,7 @@ void core::initiateGameLoop(){
 
         SDL_RenderClear(win.getRenderer());
 
-        for(inGameObject& i : gameObjects){
-            i.renderObject(win.getRenderer());
-        }
+        objManager.renderAllObjects(win.getRenderer());
 
         SDL_RenderPresent(win.getRenderer());
         engineTime::endFrame(60);
