@@ -31,5 +31,12 @@ void core::initiateGameLoop(){
 }
 
 void core::createSampleMap(){
-    
+    objManager.addObject(0,300,100,20,0,"Wall 1");
+    objManager.addObject(100,500,100,20,0,"Wall 2");
+    objManager.addObject(300,400,100,20,0,"Wall 3");
+    objManager.addObject(400,300,150,20,0,"Wall 4");
+    objManager.addObject(700,200,150,20,0,"Wall 5");
+    objManager.addObject(850,100,150,20,0,"Wall 6");
+    objManager.addObject(1000,200,150,20,0,"Wall 7");
+    objManager.addObject(640,360,40,40,150,"Player");
 }
