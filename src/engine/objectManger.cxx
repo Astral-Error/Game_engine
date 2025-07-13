@@ -20,31 +20,38 @@ namespace engine{
         for(inGameObject surface : gameObjects){
             if(surface.getObjectTag()=="Wall"){
                 if(collision::checkAABB(gameObjects[playerIndex],surface)){
-                    float playerLeft   = gameObjects[playerIndex].getX();
-                    float playerRight  = playerLeft + gameObjects[playerIndex].getWidth();
-                    float playerTop    = gameObjects[playerIndex].getY();
-                    float playerBottom = playerTop + gameObjects[playerIndex].getHeight();
+                    inGameObject& player = gameObjects[playerIndex];
+                    float playerLeft   = player.getX();
+                    float playerRight  = playerLeft + player.getWidth();
+                    float playerTop    = player.getY();
+                    float playerBottom = playerTop + player.getHeight();
 
                     float platLeft   = surface.getX();
                     float platRight  = platLeft + surface.getWidth();
                     float platTop    = surface.getY();
                     float platBottom = platTop + surface.getHeight();
 
-                    if (gameObjects[playerIndex].getVelocityY() >= 0 &&
-                        (playerBottom > platTop && playerBottom<platBottom && playerTop < platTop) &&
-                        playerRight > platLeft &&
-                        playerLeft < platRight){
-                        gameObjects[playerIndex].setY(platTop - gameObjects[playerIndex].getHeight());
-                        gameObjects[playerIndex].setVelocityY(0);
-                        gameObjects[playerIndex].setGrounded(true);
-                    }
+                    float overlapX = std::min(playerRight, platRight) - std::max(playerLeft, platLeft);
+                    float overlapY = std::min(playerBottom, platBottom) - std::max(playerTop, platTop);
 
-                    else if(gameObjects[playerIndex].getVelocityY()<0 &&
-                        playerTop<=platBottom && playerBottom>=platBottom &&
-                        playerRight > platLeft &&
-                        playerLeft < platRight){
-                        gameObjects[playerIndex].setY(platBottom);
-                        gameObjects[playerIndex].setVelocityY(0);
+                    if (overlapX <= 0 || overlapY <= 0) return;
+
+                    if (player.getVelocityY() >= 0 && playerBottom - overlapY <= platTop){
+                        player.setY(platTop - player.getHeight());
+                        player.setVelocityY(0);
+                        player.setGrounded(true);
+                    }
+                    else if (player.getVelocityY() < 0 && playerTop + overlapY >= platBottom){
+                        player.setY(platBottom);
+                        player.setVelocityY(0);
+                    }
+                    else{
+                        if(playerRight - overlapX <= platLeft){
+                            player.setX(platLeft - player.getWidth());
+                        }
+                        else if(playerLeft + overlapX >= platRight){
+                            player.setX(platRight);
+                        }
                     }
                 }
             }
