@@ -38,5 +38,5 @@ void core::createSampleMap(){
     objManager.addObject(700,200,150,20,0,mediumGrey,"Wall");
     objManager.addObject(850,100,150,20,0,mediumGrey,"Wall");
     objManager.addObject(1000,200,150,20,0,mediumGrey,"Wall");
-    objManager.addObject(640,360,40,40,150,white,"Player");
+    objManager.addObject(0,240,40,40,150,white,"Player");
 }

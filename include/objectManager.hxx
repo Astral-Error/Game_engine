@@ -7,12 +7,7 @@
 namespace engine{
     class objectManager{
         private:
-            struct objectWithTag{
-                inGameObject object;
-                std::string objectTag;
-            };
-
-            std::vector<objectWithTag> gameObjects;
+            std::vector<inGameObject> gameObjects;
 
         public:
             void addObject(float,float,int,int,float,SDL_Color,std::string objectTag="NULL");
