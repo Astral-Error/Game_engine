@@ -30,25 +30,22 @@ namespace engine{
                     float platTop    = surface.getY();
                     float platBottom = platTop + surface.getHeight();
 
-                    if (playerBottom <= platTop + 10.0f) {
+                    if (gameObjects[playerIndex].getVelocityY() >= 0 &&
+                        (playerBottom > platTop && playerBottom<platBottom && playerTop < platTop) &&
+                        playerRight > platLeft &&
+                        playerLeft < platRight){
                         gameObjects[playerIndex].setY(platTop - gameObjects[playerIndex].getHeight());
                         gameObjects[playerIndex].setVelocityY(0);
                         gameObjects[playerIndex].setGrounded(true);
                     }
-                    
-                    else if (playerTop >= platBottom - 10.0f) {
+
+                    else if(gameObjects[playerIndex].getVelocityY()<0 &&
+                        playerTop<=platBottom && playerBottom>=platBottom &&
+                        playerRight > platLeft &&
+                        playerLeft < platRight){
                         gameObjects[playerIndex].setY(platBottom);
                         gameObjects[playerIndex].setVelocityY(0);
                     }
-                    
-                    else if (playerRight >= platLeft && playerLeft < platLeft) {
-                        gameObjects[playerIndex].setX(platLeft - gameObjects[playerIndex].getWidth());
-                    }
-                    
-                    else if (playerLeft <= platRight && playerRight > platRight) {
-                        gameObjects[playerIndex].setX(platRight);
-                    }
-
                 }
             }
         }

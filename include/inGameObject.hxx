@@ -21,6 +21,7 @@ class inGameObject{
         float getVelocityY();
         float getGrounded();
         std::string getObjectTag();
+        float getVelocity();
         void setY(float);
         void setX(float);
         void setVelocityY(float);
