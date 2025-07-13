@@ -65,6 +65,7 @@ else() # Linux
     pkg_check_modules(SDL2_mixer REQUIRED SDL2_mixer)
 
     target_include_directories(Game_engine PRIVATE
+        ${PROJECT_SOURCE_DIR}/include
         ${SDL2_INCLUDE_DIRS}
         ${SDL2_mixer_INCLUDE_DIRS}
     )
