@@ -56,6 +56,24 @@ if (WIN32)
         opengl32
     )
 
-else()
-    message(WARNING "Non-Windows builds are not fully configured yet. You must configure Linux paths and linking.")
+else() # Linux
+    message(STATUS "Configuring simplified Linux build")
+
+    # Use system-installed SDL2 and SDL2_mixer only
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(SDL2 REQUIRED sdl2)
+    pkg_check_modules(SDL2_mixer REQUIRED SDL2_mixer)
+
+    target_include_directories(Game_engine PRIVATE
+        ${SDL2_INCLUDE_DIRS}
+        ${SDL2_mixer_INCLUDE_DIRS}
+    )
+
+    target_link_libraries(Game_engine
+        ${SDL2_LIBRARIES}
+        ${SDL2_mixer_LIBRARIES}
+        pthread
+        dl
+        m
+    )
 endif()
