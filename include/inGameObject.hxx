@@ -7,15 +7,17 @@ class inGameObject{
         float x,y;
         int width, height;
         float movementSpeed,
-        velocityY=0.0f, 
-        gravity=980.0,
-        coyoteTimer=0.0;
-        static constexpr float coyoteTimeGap = 0.15f;
+            velocityY=0.0f, 
+            gravity=980.0,
+            coyoteTimer=0.0,
+            jumpBufferTimer = 0.0;
+        static constexpr float coyoteTimeGap=0.15f,
+            jumpBufferGap=0.1;
         SDL_Color objectColor;
         bool isGrounded = false;
         std::string objectTag;
-        static constexpr int SCREEN_WIDTH = 1280;
-        static constexpr int SCREEN_HEIGHT = 720;
+        static constexpr int SCREEN_WIDTH=1280;
+        static constexpr int SCREEN_HEIGHT=720;
 
 
     public:
@@ -36,6 +38,7 @@ class inGameObject{
         void setGrounded(bool);
         void setCoyoteTimer(float);
         void resetCoyoteTimer();
+        void updateJumpBuffer(float);
         void updateObjectState(float);
         void renderObject(SDL_Renderer*);
 };

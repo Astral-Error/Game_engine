@@ -19,10 +19,13 @@ void inGameObject::updateObjectState(float deltaTime) {
             resetCoyoteTimer();
         }
         y += velocityY * deltaTime;
-        if (keyboardState[SDL_SCANCODE_SPACE] && (isGrounded || coyoteTimer>0.0)) {
+        if(keyboardState[SDL_SCANCODE_SPACE]) jumpBufferTimer=jumpBufferGap;
+        updateJumpBuffer(deltaTime);
+        if ((isGrounded || coyoteTimer>0.0) && jumpBufferTimer>0) {
             velocityY = -600.0;
             isGrounded = false;
             coyoteTimer = 0.0f;
+            jumpBufferTimer=0;
         }
         if (y > SCREEN_HEIGHT) {
             y = -height;
@@ -64,3 +67,6 @@ void inGameObject::setCoyoteTimer(float deltaTime){
     if(coyoteTimer>0.0f) coyoteTimer-=deltaTime;
 }
 void inGameObject::resetCoyoteTimer(){coyoteTimer=coyoteTimeGap;}
+void inGameObject::updateJumpBuffer(float deltaTime){
+    jumpBufferTimer-=deltaTime;
+}
