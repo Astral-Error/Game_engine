@@ -11,20 +11,24 @@ void inGameObject::updateObjectState(float deltaTime) {
     if (keyboardState[SDL_SCANCODE_A]) x -= movementSpeed * deltaTime;
     if (keyboardState[SDL_SCANCODE_D]) x += movementSpeed * deltaTime;
     if (objectTag == "Player"){
-        if (!isGrounded) velocityY += gravity * deltaTime;
+        if (!isGrounded){
+            velocityY += gravity * deltaTime;
+            setCoyoteTimer(deltaTime);
+        }
+        else{
+            resetCoyoteTimer();
+        }
         y += velocityY * deltaTime;
-        
-        if (keyboardState[SDL_SCANCODE_SPACE] && isGrounded) {
+        if (keyboardState[SDL_SCANCODE_SPACE] && (isGrounded || coyoteTimer>0.0)) {
             velocityY = -600.0;
             isGrounded = false;
+            coyoteTimer = 0.0f;
         }
-
         if (y > SCREEN_HEIGHT) {
             y = -height;
             velocityY = 300.0;
             isGrounded = false;
         }
-
         if (y < -height) {
             y = -height;
         }
@@ -46,12 +50,17 @@ void inGameObject::renderObject(SDL_Renderer *renderer) {
 float inGameObject::getX() { return x; }
 float inGameObject::getY() { return y; }
 std::string inGameObject::getObjectTag() { return objectTag; }
-void inGameObject::setX(float newX) { x = newX; }
 float inGameObject::getWidth() { return width; }
 float inGameObject::getHeight() { return height; }
 float inGameObject::getVelocityY() { return velocityY; }
 float inGameObject::getGrounded() { return isGrounded; }
 float inGameObject::getVelocity() { return velocityY; }
+float inGameObject::getCoyoteTimer(){return coyoteTimer;}
+void inGameObject::setX(float newX) { x = newX; }
 void inGameObject::setY(float newY) { y = newY; }
 void inGameObject::setVelocityY(float newVelocityY) {velocityY = newVelocityY;}
 void inGameObject::setGrounded(bool newState) { isGrounded = newState; }
+void inGameObject::setCoyoteTimer(float deltaTime){
+    if(coyoteTimer>0.0f) coyoteTimer-=deltaTime;
+}
+void inGameObject::resetCoyoteTimer(){coyoteTimer=coyoteTimeGap;}
