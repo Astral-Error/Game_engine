@@ -9,10 +9,8 @@ class inGameObject{
         float movementSpeed,
             velocityY=0.0f, 
             gravity=980.0,
-            coyoteTimer=0.0,
             jumpBufferTimer = 0.0;
-        static constexpr float coyoteTimeGap=0.15f,
-            jumpBufferGap=0.1;
+        static constexpr float jumpBufferGap=0.1;
         SDL_Color objectColor;
         bool isGrounded = false;
         std::string objectTag;
@@ -29,15 +27,12 @@ class inGameObject{
         float getHeight();
         float getVelocityY();
         float getGrounded();
-        float getCoyoteTimer();
         std::string getObjectTag();
         float getVelocity();
         void setY(float);
         void setX(float);
         void setVelocityY(float);
         void setGrounded(bool);
-        void setCoyoteTimer(float);
-        void resetCoyoteTimer();
         void updateJumpBuffer(float);
         void updateObjectState(float);
         void renderObject(SDL_Renderer*);

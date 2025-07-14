@@ -13,21 +13,16 @@ void inGameObject::updateObjectState(float deltaTime) {
     if (objectTag == "Player"){
         if (!isGrounded){
             velocityY += gravity * deltaTime;
-            setCoyoteTimer(deltaTime);
-        }
-        else{
-            resetCoyoteTimer();
         }
         y += velocityY * deltaTime;
         if(keyboardState[SDL_SCANCODE_SPACE]) jumpBufferTimer=jumpBufferGap;
         updateJumpBuffer(deltaTime);
-        if ((isGrounded || coyoteTimer>0.0) && jumpBufferTimer>0) {
-            velocityY = -600.0;
+        if ((isGrounded) && jumpBufferTimer>0) {
+            velocityY = -700.0;
             isGrounded = false;
-            coyoteTimer = 0.0f;
             jumpBufferTimer=0;
         }
-        if(!keyboardState[SDL_SCANCODE_SPACE]&&velocityY<0.0) velocityY*=0.3;
+        if(!keyboardState[SDL_SCANCODE_SPACE]&&velocityY<0.0) velocityY*=0.5;
         if (y > SCREEN_HEIGHT) {
             y = -height;
             velocityY = 300.0;
@@ -59,15 +54,10 @@ float inGameObject::getHeight() { return height; }
 float inGameObject::getVelocityY() { return velocityY; }
 float inGameObject::getGrounded() { return isGrounded; }
 float inGameObject::getVelocity() { return velocityY; }
-float inGameObject::getCoyoteTimer(){return coyoteTimer;}
 void inGameObject::setX(float newX) { x = newX; }
 void inGameObject::setY(float newY) { y = newY; }
 void inGameObject::setVelocityY(float newVelocityY) {velocityY = newVelocityY;}
 void inGameObject::setGrounded(bool newState) { isGrounded = newState; }
-void inGameObject::setCoyoteTimer(float deltaTime){
-    if(coyoteTimer>0.0f) coyoteTimer-=deltaTime;
-}
-void inGameObject::resetCoyoteTimer(){coyoteTimer=coyoteTimeGap;}
 void inGameObject::updateJumpBuffer(float deltaTime){
     jumpBufferTimer-=deltaTime;
 }
