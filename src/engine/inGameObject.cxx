@@ -1,4 +1,5 @@
 #include "inGameObject.hxx"
+#include "core.hxx"
 #include <SDL.h>
 #include <SDL_keyboard.h>
 #include <SDL_keycode.h>
@@ -41,9 +42,14 @@ void inGameObject::updateObjectState(float deltaTime) {
 }
 
 void inGameObject::renderObject(SDL_Renderer *renderer) {
-    SDL_Rect rectangle = {int(x), int(y), width, height};
-    SDL_SetRenderDrawColor(renderer, objectColor.r, objectColor.g, objectColor.b, objectColor.a);
-    SDL_RenderFillRect(renderer, &rectangle);
+    SDL_Rect renderObject = {int(x), int(y), width, height};
+    if(objectTag=="Wall"){
+        core::wallTexture.render(renderer,renderObject.x, renderObject.y, renderObject.w, renderObject.h);
+    }
+    else{
+        SDL_SetRenderDrawColor(renderer, objectColor.r, objectColor.g, objectColor.b, objectColor.a);
+        SDL_RenderFillRect(renderer, &renderObject);
+    }
 }
 
 float inGameObject::getX() { return x; }
