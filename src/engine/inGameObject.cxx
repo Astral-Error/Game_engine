@@ -27,6 +27,7 @@ void inGameObject::updateObjectState(float deltaTime) {
             coyoteTimer = 0.0f;
             jumpBufferTimer=0;
         }
+        if(!keyboardState[SDL_SCANCODE_SPACE]&&velocityY<0.0) velocityY*=0.3;
         if (y > SCREEN_HEIGHT) {
             y = -height;
             velocityY = 300.0;
