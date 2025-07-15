@@ -23,6 +23,7 @@ if (WIN32)
     target_include_directories(Game_engine PRIVATE
         ${PROJECT_SOURCE_DIR}/include
         ${PROJECT_SOURCE_DIR}/dependencies/SDL2/include
+        ${PROJECT_SOURCE_DIR}/dependencies/SDL2_image/include
         ${PROJECT_SOURCE_DIR}/dependencies/SDL2_mixer/include
         ${PROJECT_SOURCE_DIR}/dependencies/GLM
         ${PROJECT_SOURCE_DIR}/dependencies/Box2D/include
@@ -45,6 +46,7 @@ if (WIN32)
     target_link_libraries(Game_engine
         ${PROJECT_SOURCE_DIR}/dependencies/SDL2/lib/libSDL2main.a
         ${PROJECT_SOURCE_DIR}/dependencies/SDL2/lib/libSDL2.a
+        ${PROJECT_SOURCE_DIR}/dependencies/SDL2_image/lib/libSDL2_image.a
         ${PROJECT_SOURCE_DIR}/dependencies/SDL2_mixer/lib/libSDL2_mixer.a
         ${PROJECT_SOURCE_DIR}/dependencies/Box2D/lib/libbox2d.a
 
