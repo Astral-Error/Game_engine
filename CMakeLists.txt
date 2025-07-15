@@ -23,7 +23,6 @@ if (WIN32)
     target_include_directories(Game_engine PRIVATE
         ${PROJECT_SOURCE_DIR}/include
         ${PROJECT_SOURCE_DIR}/dependencies/SDL2/include
-        ${PROJECT_SOURCE_DIR}/dependencies/SDL2_image/include
         ${PROJECT_SOURCE_DIR}/dependencies/SDL2_mixer/include
         ${PROJECT_SOURCE_DIR}/dependencies/GLM
         ${PROJECT_SOURCE_DIR}/dependencies/Box2D/include

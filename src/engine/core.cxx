@@ -1,19 +1,15 @@
 #include "core.hxx"
 #include "inGameObject.hxx"
 #include "time.hxx"
-#include "texture.hxx"
 #include <SDL.h>
 #include <iostream>
 #include <vector>
-texture core::wallTexture;
 
 bool core::initiateWindow(const char* winTitle, int width, int height){
     return win.initiateWindow(winTitle,width,height);
 }
 
 void core::initiateGameLoop(){
-
-    wallTexture.loadFromFile(win.getRenderer(),"assets/Moss_Stone_Wall_Texture.png");
     createSampleMap();
     while(win.isRunning()){
         engineTime::startFrame();
