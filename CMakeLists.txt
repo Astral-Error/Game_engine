@@ -18,65 +18,66 @@ message(STATUS "Engine sources: ${ENGINE_SOURCES}")
 add_executable(Game_engine ${ENGINE_SOURCES})
 
 # Platform-specific includes and linking
-if (WIN32)
-    # Include Directories (Windows only)
-    target_include_directories(Game_engine PRIVATE
-        ${PROJECT_SOURCE_DIR}/include
-        ${PROJECT_SOURCE_DIR}/dependencies/SDL2/include
-        ${PROJECT_SOURCE_DIR}/dependencies/SDL2_image/include
-        ${PROJECT_SOURCE_DIR}/dependencies/SDL2_mixer/include
-        ${PROJECT_SOURCE_DIR}/dependencies/GLM
-        ${PROJECT_SOURCE_DIR}/dependencies/Box2D/include
-        ${PROJECT_SOURCE_DIR}/dependencies/glad/include
-        ${PROJECT_SOURCE_DIR}/dependencies/imgui
-    )
+if(WIN32)
+  # Include Directories (Windows only)
+  target_include_directories(
+    Game_engine
+    PRIVATE ${PROJECT_SOURCE_DIR}/include
+            ${PROJECT_SOURCE_DIR}/dependencies/SDL2/include
+            ${PROJECT_SOURCE_DIR}/dependencies/SDL2_image/include
+            ${PROJECT_SOURCE_DIR}/dependencies/SDL2_mixer/include
+            ${PROJECT_SOURCE_DIR}/dependencies/GLM
+            ${PROJECT_SOURCE_DIR}/dependencies/Box2D/include
+            ${PROJECT_SOURCE_DIR}/dependencies/glad/include
+            ${PROJECT_SOURCE_DIR}/dependencies/imgui)
 
-    # GLAD (Windows)
-    add_library(glad STATIC dependencies/glad/src/glad.c)
-    target_include_directories(glad PUBLIC ${PROJECT_SOURCE_DIR}/dependencies/glad/include)
-    target_link_libraries(Game_engine glad)
+  # GLAD (Windows)
+  add_library(glad STATIC dependencies/glad/src/glad.c)
+  target_include_directories(
+    glad PUBLIC ${PROJECT_SOURCE_DIR}/dependencies/glad/include)
+  target_link_libraries(Game_engine glad)
 
-    # ImGui (Windows)
-    file(GLOB IMGUI_SOURCES ${PROJECT_SOURCE_DIR}/dependencies/imgui/*.cpp)
-    add_library(imgui STATIC ${IMGUI_SOURCES})
-    target_include_directories(imgui PUBLIC ${PROJECT_SOURCE_DIR}/dependencies/imgui)
-    target_link_libraries(Game_engine imgui)
+  # ImGui (Windows)
+  file(GLOB IMGUI_SOURCES ${PROJECT_SOURCE_DIR}/dependencies/imgui/*.cpp)
+  add_library(imgui STATIC ${IMGUI_SOURCES})
+  target_include_directories(imgui
+                             PUBLIC ${PROJECT_SOURCE_DIR}/dependencies/imgui)
+  target_link_libraries(Game_engine imgui)
 
-    # Link SDL2 statically + Windows system libraries
-    target_link_libraries(Game_engine
-        ${PROJECT_SOURCE_DIR}/dependencies/SDL2/lib/libSDL2main.a
-        ${PROJECT_SOURCE_DIR}/dependencies/SDL2/lib/libSDL2.a
-        ${PROJECT_SOURCE_DIR}/dependencies/SDL2_image/lib/libSDL2_image.a
-        ${PROJECT_SOURCE_DIR}/dependencies/SDL2_mixer/lib/libSDL2_mixer.a
-        ${PROJECT_SOURCE_DIR}/dependencies/Box2D/lib/libbox2d.a
-
-        # Windows system libraries required by SDL2 static linking
-        setupapi
-        imm32
-        version
-        winmm
-        opengl32
-    )
+  # Link SDL2 statically + Windows system libraries
+  target_link_libraries(
+    Game_engine
+    ${PROJECT_SOURCE_DIR}/dependencies/SDL2/lib/libSDL2main.a
+    ${PROJECT_SOURCE_DIR}/dependencies/SDL2/lib/libSDL2.a
+    ${PROJECT_SOURCE_DIR}/dependencies/SDL2_image/lib/libSDL2_image.a
+    ${PROJECT_SOURCE_DIR}/dependencies/SDL2_mixer/lib/libSDL2_mixer.a
+    ${PROJECT_SOURCE_DIR}/dependencies/Box2D/lib/libbox2d.a
+    # Windows system libraries required by SDL2 static linking
+    setupapi
+    imm32
+    version
+    winmm
+    opengl32)
 
 else() # Linux
-    message(STATUS "Configuring simplified Linux build")
+  message(STATUS "Configuring simplified Linux build")
 
-    # Use system-installed SDL2 and SDL2_mixer only
-    find_package(PkgConfig REQUIRED)
-    pkg_check_modules(SDL2 REQUIRED sdl2)
-    pkg_check_modules(SDL2_mixer REQUIRED SDL2_mixer)
+  # Use system-installed SDL2 and SDL2_mixer only
+  find_package(PkgConfig REQUIRED)
+  pkg_check_modules(SDL2 REQUIRED sdl2)
+  pkg_check_modules(SDL2_mixer REQUIRED SDL2_mixer)
+  pkg_check_modules(SDL2_image REQUIRED SDL2_image)
 
-    target_include_directories(Game_engine PRIVATE
-        ${PROJECT_SOURCE_DIR}/include
-        ${SDL2_INCLUDE_DIRS}
-        ${SDL2_mixer_INCLUDE_DIRS}
-    )
+  target_include_directories(
+    Game_engine PRIVATE ${PROJECT_SOURCE_DIR}/include ${SDL2_INCLUDE_DIRS}
+                        ${SDL2_mixer_INCLUDE_DIRS} ${SDL2_image_INCLUDE_DIRS})
 
-    target_link_libraries(Game_engine
-        ${SDL2_LIBRARIES}
-        ${SDL2_mixer_LIBRARIES}
-        pthread
-        dl
-        m
-    )
+  target_link_libraries(
+    Game_engine
+    ${SDL2_LIBRARIES}
+    ${SDL2_mixer_LIBRARIES}
+    ${SDL2_image_LIBRARIES}
+    pthread
+    dl
+    m)
 endif()
