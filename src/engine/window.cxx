@@ -21,6 +21,7 @@ bool window::initiateWindow(const char* winTitle, int width, int height){
         std::cout<<"Window creation failed"<<SDL_GetError()<<std::endl;
         return false;
     }
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"); 
     renderer = SDL_CreateRenderer(win,-1,SDL_RENDERER_PRESENTVSYNC);
     if(NULL==renderer){
         std::cout<<"Render Window Creation failed, Error:"<<SDL_GetError()<<std::endl;

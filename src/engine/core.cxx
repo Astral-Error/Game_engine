@@ -1,6 +1,7 @@
 #include "core.hxx"
 #include "inGameObject.hxx"
 #include "time.hxx"
+#include "parallaxManager.hxx"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>
@@ -11,7 +12,9 @@ SDL_Texture* core::backgroundImage=nullptr;
 SDL_Surface* core::surfaceTexture =nullptr;
 
 bool core::initiateWindow(const char* winTitle, int width, int height){
-    return win.initiateWindow(winTitle,width,height);
+    screenWidth = width;
+    screenHeight = height;
+    return win.initiateWindow(winTitle,screenWidth,screenHeight);
 }
 
 void core::initiateGameLoop(){
@@ -34,13 +37,18 @@ void core::initiateGameLoop(){
         std::cout << "CreateTexture failed: " << SDL_GetError() << std::endl;
     }
     SDL_FreeSurface(surfaceTexture);
+    parallaxManager background(win.getRenderer(),screenWidth,screenHeight);
+    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Bg_1/sky.png",0.0);
+    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Bg_1/rocks_1.png",0.0);
+    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Bg_1/rocks_2.png",0.0);
+    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Bg_1/long_cloud1920x1080.png",3.0);
     while(win.isRunning()){
         engineTime::startFrame();
         win.inputHandler();
 
         objManager.updateAllObjects();
-        SDL_Rect screenBackground={0,0,1280,720};
-        SDL_RenderCopy(win.getRenderer(),backgroundImage,nullptr,&screenBackground);
+        background.update(engineTime::getDeltaTime());
+        background.render();
 
         objManager.renderAllObjects(win.getRenderer());
 
