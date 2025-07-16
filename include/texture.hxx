@@ -5,7 +5,7 @@
 
 class texture{
     private:
-        SDL_Texture* texture;
+        SDL_Texture* loadedTexture;
         int textureHeight, textureWidth;
     
     public:
@@ -15,4 +15,5 @@ class texture{
         int getTextureHeight();
         int getTextureWidth();
         bool loadTextureFromFile(SDL_Renderer*,std::string&);
+        void destroy();
 };

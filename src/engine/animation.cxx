@@ -1,4 +1,5 @@
 #include "animation.hxx"
+#include "texture.hxx"
 #include <SDL.h>
 
 animation::animation(): spriteSheet(nullptr), totalFrames(0), currentFrame(0), frameWidth(0), frameHeight(0), frameTime(0), elapsedTime(0), looping(false), flipped(false) {}
