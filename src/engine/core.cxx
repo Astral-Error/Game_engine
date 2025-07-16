@@ -2,6 +2,7 @@
 #include "inGameObject.hxx"
 #include "time.hxx"
 #include "parallaxManager.hxx"
+#include "animation.hxx"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>
@@ -58,7 +59,6 @@ void core::initiateGameLoop(){
 }
 
 SDL_Texture* core::getTexture(std::string objectTag){
-    
     if(objectTag=="Wall") return core::wallTexture;
     else return nullptr;
 }
