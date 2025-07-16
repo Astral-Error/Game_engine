@@ -1,11 +1,12 @@
 #include "animation.hxx"
 #include <SDL.h>
 
-animation::animation(): spriteSheet(0), totalFrames(0), currentFrame(0), frameWidth(0), frameHeight(0), frameTime(0), elapsedTime(0), looping(false), flipped(false) {}
-animation::animation(SDL_Texture* texture, int init_totalFrames, float duration, int spriteHeight) : spriteSheet(texture), totalFrames(init_totalFrames), frameTime(duration), frameHeight(spriteHeight){
-    int texWidthTemp;
-    SDL_QueryTexture(texture,nullptr,nullptr,&texWidthTemp,nullptr);
-    frameWidth = texWidthTemp/init_totalFrames;
+animation::animation(): spriteSheet(nullptr), totalFrames(0), currentFrame(0), frameWidth(0), frameHeight(0), frameTime(0), elapsedTime(0), looping(false), flipped(false) {}
+animation::animation(texture* textureClassPtr, int init_totalFrames, float duration, int spriteHeight) : spriteSheet(textureClassPtr), totalFrames(init_totalFrames), frameTime(duration), frameHeight(spriteHeight){
+    if(spriteSheet){
+        frameWidth = spriteSheet->getTextureWidth();
+        frameHeight = spriteSheet->getTextureHeight();
+    }
 }
 
 void animation::updateAnimation(float deltaTime){
@@ -41,7 +42,7 @@ SDL_Rect animation::getCurrentFrameRect(){
     return temp;
 }
 
-SDL_Texture* animation::getTexture(){
+texture* animation::getTexture(){
     return spriteSheet;
 }
 
