@@ -3,34 +3,34 @@
 #include <SDL_image.h>
 #include <iostream>
 
-texture::texture() : texture(nullptr), textureHeight(0), textureWidth(0){}
+texture::texture() : loadedTexture(nullptr), textureHeight(0), textureWidth(0){}
 texture::~texture(){
     destroy();
 }
 
-bool texture::loadTextureFromFile(SDL_Renderer* renderer, std::string filePath){
+bool texture::loadTextureFromFile(SDL_Renderer* renderer, std::string& filePath){
     destroy();
-    texture = IMG_LoadTexture(renderer,filePath.c_str());
-    if(!texture){
-        std::cout<<"Failed to load texture at "<<filepath<<"Error: "<<SDL_GetError()<<std::endl;
+    loadedTexture = IMG_LoadTexture(renderer,filePath.c_str());
+    if(!loadedTexture){
+        std::cout<<"Failed to load texture at "<<filePath<<"Error: "<<SDL_GetError()<<std::endl;
         return false;
     }
-    SDL_QueryTexture(texture,nullptr,nullptr,&textureWidth,&textureHeight);
+    SDL_QueryTexture(loadedTexture,nullptr,nullptr,&textureWidth,&textureHeight);
     return true;
 }
 
 SDL_Texture* texture::getTexture(){
-    return texture;
+    return loadedTexture;
 }
 
-int getTextureHeight(){return textureHeight;}
-int getTextureWidth(){return textureWidth;}
+int texture::getTextureHeight(){return textureHeight;}
+int texture::getTextureWidth(){return textureWidth;}
 
 void texture::destroy(){
-    if(texture){
-        SDL_DestroyTexture(texture);
-        texture=nullptr;
-        width=0;
-        height=0;
+    if(loadedTexture){
+        SDL_DestroyTexture(loadedTexture);
+        loadedTexture=nullptr;
+        textureWidth=0;
+        textureHeight=0;
     }
 }
