@@ -68,20 +68,16 @@ void inGameObject::renderObject(SDL_Renderer* renderer) {
     else destRect = { int(x), int(y), width, height };
 
     if (animationStaterManagerClass.getCurrentAnimation()) {
-        // Get texture, source frame, and flip direction
         texture* currentTexture = animationStaterManagerClass.getCurrentAnimation()->getTexture();
         SDL_Rect srcRect = animationStaterManagerClass.getCurrentAnimation()->getCurrentFrameRect();
         SDL_RendererFlip flip = animationStaterManagerClass.getCurrentAnimation()->getFlip();
 
-        // Render current animation frame
         SDL_RenderCopyEx(renderer, currentTexture->getTexture(), &srcRect, &destRect, 0, nullptr, flip);
     }
     else if (core::getTexture(objectTag)) {
-        // Render full texture if no animation
         SDL_RenderCopy(renderer, core::getTexture(objectTag), nullptr, &destRect);
     }
     else {
-        // Fallback: draw solid color box
         SDL_SetRenderDrawColor(renderer, objectColor.r, objectColor.g, objectColor.b, objectColor.a);
         SDL_RenderFillRect(renderer, &destRect);
     }
