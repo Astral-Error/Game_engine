@@ -5,10 +5,16 @@
 animation::animation(): spriteSheet(nullptr), totalFrames(0), currentFrame(0), frameWidth(0), frameHeight(0), frameTime(0), elapsedTime(0), looping(false), flipped(false) {}
 animation::animation(texture* textureClassPtr, int init_totalFrames, float duration, int spriteHeight) : spriteSheet(textureClassPtr), totalFrames(init_totalFrames), frameTime(duration), frameHeight(spriteHeight){
     if(spriteSheet){
-        frameWidth = spriteSheet->getTextureWidth();
-        frameHeight = spriteSheet->getTextureHeight();
+        frameWidth = spriteSheet->getTextureWidth() / totalFrames; 
+    }
+    else{
+        frameWidth = 0;
     }
 }
+animation::~animation(){
+    
+}
+
 
 void animation::updateAnimation(float deltaTime){
     elapsedTime+=deltaTime;

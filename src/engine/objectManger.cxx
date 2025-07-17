@@ -40,4 +40,13 @@ namespace engine{
             }
         }
     }
+
+    inGameObject* objectManager::getObjectByTag(const std::string& tag) {
+        for (auto& obj : gameObjects) {
+            if (obj.getObjectTag() == tag) {
+                return &obj;
+            }
+        }
+        return nullptr; 
+    }
 }

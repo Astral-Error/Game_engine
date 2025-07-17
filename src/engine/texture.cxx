@@ -8,7 +8,7 @@ texture::~texture(){
     destroy();
 }
 
-bool texture::loadTextureFromFile(SDL_Renderer* renderer, std::string& filePath){
+bool texture::loadTextureFromFile(SDL_Renderer* renderer, const std::string& filePath){
     destroy();
     loadedTexture = IMG_LoadTexture(renderer,filePath.c_str());
     if(!loadedTexture){

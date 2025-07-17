@@ -14,6 +14,6 @@ class texture{
         SDL_Texture* getTexture();
         int getTextureHeight();
         int getTextureWidth();
-        bool loadTextureFromFile(SDL_Renderer*,std::string&);
+        bool loadTextureFromFile(SDL_Renderer*,const std::string&);
         void destroy();
 };

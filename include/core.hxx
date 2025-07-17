@@ -16,6 +16,7 @@ class core{
         static SDL_Surface* surfaceTexture;
         static SDL_Texture* wallTexture;
         static SDL_Texture* backgroundImage;
+        static SDL_Texture* playerTexture;
     
     public:
         bool initiateWindow(const char*,int,int);

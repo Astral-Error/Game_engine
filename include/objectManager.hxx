@@ -14,5 +14,6 @@ namespace engine{
             void updateAllObjects();
             void renderAllObjects(SDL_Renderer*);
             void removeObject(std::string tag);
+            inGameObject* getObjectByTag(const std::string& tag);
     };
 }

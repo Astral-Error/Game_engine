@@ -1,4 +1,5 @@
 #pragma once
+#include "animationStateManager.hxx"
 #include <SDL.h>
 #include <string>
 
@@ -7,6 +8,7 @@ class inGameObject{
         float x,y;
         int width, height;
         float movementSpeed,
+            velocityX=0.0,
             velocityY=0.0f, 
             gravity=980.0,
             jumpBufferTimer = 0.0;
@@ -19,6 +21,7 @@ class inGameObject{
 
 
     public:
+        animationStateManager animationStaterManagerClass;
         inGameObject(float,float,int,int,float,SDL_Color,std::string);
         inGameObject();
         float getX();

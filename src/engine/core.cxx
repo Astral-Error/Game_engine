@@ -3,6 +3,8 @@
 #include "time.hxx"
 #include "parallaxManager.hxx"
 #include "animation.hxx"
+#include "objectManager.hxx"
+#include "texture.hxx"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>
@@ -11,6 +13,7 @@
 SDL_Texture* core::wallTexture = nullptr;
 SDL_Texture* core::backgroundImage=nullptr;
 SDL_Surface* core::surfaceTexture =nullptr;
+SDL_Texture* core::playerTexture=nullptr;
 
 bool core::initiateWindow(const char* winTitle, int width, int height){
     screenWidth = width;
@@ -28,21 +31,30 @@ void core::initiateGameLoop(){
         std::cout << "CreateTexture failed: " << SDL_GetError() << std::endl;
     }
     SDL_FreeSurface(surfaceTexture);
+    texture* playerTexture = new texture();
+    texture* playerTexture1 = new texture();
+    texture* playerTexture2 = new texture();
+    texture* playerTexture3 = new texture();
+    texture* playerTexture4 = new texture();
     createSampleMap();
-    surfaceTexture = IMG_Load("assets/backgrounds/CloudySkiesOverTheMountain.png");
-    if (!surfaceTexture) {
-        std::cout << "IMG_Load failed: " << IMG_GetError() << std::endl;
-    }
-    backgroundImage = SDL_CreateTextureFromSurface(win.getRenderer(),surfaceTexture);
-    if (!backgroundImage) {
-        std::cout << "CreateTexture failed: " << SDL_GetError() << std::endl;
-    }
-    SDL_FreeSurface(surfaceTexture);
     parallaxManager background(win.getRenderer(),screenWidth,screenHeight);
     background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Bg_1/sky.png",0.0);
     background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Bg_1/rocks_1.png",0.0);
     background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Bg_1/rocks_2.png",0.0);
     background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Bg_1/long_cloud1920x1080.png",3.0);
+    inGameObject* player = objManager.getObjectByTag("Player");
+    if (player) {
+        playerTexture->loadTextureFromFile(win.getRenderer(),"assets/Character/Ninja_Peasant/Idle.png");
+        player->animationStaterManagerClass.addAnimation("idle", animation(playerTexture, 6, 0.12f, 96));
+        playerTexture1->loadTextureFromFile(win.getRenderer(),"assets/Character/Ninja_Peasant/Jump.png");
+        player->animationStaterManagerClass.addAnimation("jump", animation(playerTexture1, 8, 0.10f, 96));
+        playerTexture2->loadTextureFromFile(win.getRenderer(),"assets/Character/Ninja_Peasant/Run.png");
+        player->animationStaterManagerClass.addAnimation("run",  animation(playerTexture2, 6, 0.08f, 96));
+        playerTexture3->loadTextureFromFile(win.getRenderer(),"assets/Character/Ninja_Peasant/Walk.png");
+        player->animationStaterManagerClass.addAnimation("walk", animation(playerTexture3, 8, 0.10f, 96));
+        playerTexture4->loadTextureFromFile(win.getRenderer(),"assets/Character/Ninja_Peasant/Dead.png");
+        player->animationStaterManagerClass.addAnimation("death", animation(playerTexture4, 4, 0.15f, 96));
+    }
     while(win.isRunning()){
         engineTime::startFrame();
         win.inputHandler();
