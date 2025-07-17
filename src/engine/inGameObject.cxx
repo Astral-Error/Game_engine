@@ -63,15 +63,16 @@ void inGameObject::updateObjectState(float deltaTime) {
 }
 
 void inGameObject::renderObject(SDL_Renderer* renderer) {
-    SDL_Rect destRect;
-    if(objectTag=="Player")destRect = { int(x), int(y), width, height };
-    else destRect = { int(x), int(y), width, height };
+    SDL_Rect destRect = { int(x), int(y), width, height };
 
     if (animationStaterManagerClass.getCurrentAnimation()) {
         texture* currentTexture = animationStaterManagerClass.getCurrentAnimation()->getTexture();
         SDL_Rect srcRect = animationStaterManagerClass.getCurrentAnimation()->getCurrentFrameRect();
         SDL_RendererFlip flip = animationStaterManagerClass.getCurrentAnimation()->getFlip();
-
+        float renderScale = 1.2;
+        float xOffset = (width * renderScale - srcRect.w * renderScale) / 2.0f;
+        float yOffset = srcRect.h * renderScale - height;
+        if(objectTag=="Player")destRect = { int(x + xOffset), int(y - yOffset), int(srcRect.w * renderScale), int(srcRect.h * renderScale)};
         SDL_RenderCopyEx(renderer, currentTexture->getTexture(), &srcRect, &destRect, 0, nullptr, flip);
     }
     else if (core::getTexture(objectTag)) {

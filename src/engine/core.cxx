@@ -45,13 +45,13 @@ void core::initiateGameLoop(){
     inGameObject* player = objManager.getObjectByTag("Player");
     if (player) {
         playerTexture->loadTextureFromFile(win.getRenderer(),"assets/Character/Ninja_Peasant/Idle.png");
-        player->animationStaterManagerClass.addAnimation("idle", animation(playerTexture, 6, 0.12f, 96));
+        player->animationStaterManagerClass.addAnimation("idle", animation(playerTexture, 6, 0.12f, 68));
         playerTexture1->loadTextureFromFile(win.getRenderer(),"assets/Character/Ninja_Peasant/Jump.png");
         player->animationStaterManagerClass.addAnimation("jump", animation(playerTexture1, 8, 0.10f, 96));
         playerTexture2->loadTextureFromFile(win.getRenderer(),"assets/Character/Ninja_Peasant/Run.png");
         player->animationStaterManagerClass.addAnimation("run",  animation(playerTexture2, 6, 0.08f, 96));
         playerTexture3->loadTextureFromFile(win.getRenderer(),"assets/Character/Ninja_Peasant/Walk.png");
-        player->animationStaterManagerClass.addAnimation("walk", animation(playerTexture3, 8, 0.10f, 96));
+        player->animationStaterManagerClass.addAnimation("walk", animation(playerTexture3, 8, 0.10f, 65));
         playerTexture4->loadTextureFromFile(win.getRenderer(),"assets/Character/Ninja_Peasant/Dead.png");
         player->animationStaterManagerClass.addAnimation("death", animation(playerTexture4, 4, 0.15f, 96));
     }
@@ -83,5 +83,6 @@ void core::createSampleMap(){
     objManager.addObject(700,200,150,20,0,mediumGrey,"Wall");
     objManager.addObject(850,100,150,20,0,mediumGrey,"Wall");
     objManager.addObject(1000,200,150,20,0,mediumGrey,"Wall");
+    objManager.addObject(0,670,1280,50,0,mediumGrey,"Wall");
     objManager.addObject(0,240,40,40,150,{0,0,0,255},"Player");
 }

@@ -56,3 +56,7 @@ texture* animation::getTexture(){
 SDL_RendererFlip animation::getFlip(){
     return flipped?SDL_FLIP_HORIZONTAL:SDL_FLIP_NONE;
 }
+
+int animation::getFrameWidth(){
+    return frameWidth;
+}

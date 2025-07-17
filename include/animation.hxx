@@ -20,5 +20,6 @@ class animation{
         void setFlipping(bool);
         SDL_Rect getCurrentFrameRect();
         texture* getTexture();
+        int getFrameWidth();
         SDL_RendererFlip getFlip();
 };
