@@ -42,4 +42,16 @@ namespace collision{
             }
         }
     }
+    
+    bool isTouchingGround(inGameObject& player, inGameObject& surface) {
+        float threshold = 5.0f;
+        float playerBottom = player.getY() + player.getHeight();
+        float surfaceTop = surface.getY();
+
+        bool verticallyAligned = playerBottom <= surfaceTop + threshold && playerBottom >= surfaceTop;
+        bool horizontallyOverlapping = player.getX() + player.getWidth() > surface.getX() &&
+                                    player.getX() < surface.getX() + surface.getWidth();
+
+        return verticallyAligned && horizontallyOverlapping;    
+    }
 }

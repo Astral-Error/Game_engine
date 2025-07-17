@@ -11,6 +11,7 @@ class inGameObject{
             velocityX=0.0,
             velocityY=0.0f, 
             gravity=980.0,
+            groundedGraceTimer = 0.0,
             jumpBufferTimer = 0.0;
         static constexpr float jumpBufferGap=0.1;
         SDL_Color objectColor;

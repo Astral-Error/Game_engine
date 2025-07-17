@@ -17,13 +17,20 @@ namespace engine{
         int playerIndex = gameObjects.size()-1;
         gameObjects[playerIndex].setGrounded(false);
 
+        bool grounded=false;
+
         for(inGameObject surface : gameObjects){
             if(surface.getObjectTag()=="Wall"){
                 if(collision::checkAABB(gameObjects[playerIndex],surface)){
                     collision::resolveCollision(gameObjects[playerIndex],surface);
                 }
+
+                if(collision::isTouchingGround(gameObjects[playerIndex], surface)){
+                    grounded = true;
+                }
             }
         }
+        gameObjects[playerIndex].setGrounded(grounded);
     }
 
     void objectManager::renderAllObjects(SDL_Renderer* renderer){

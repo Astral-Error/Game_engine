@@ -46,11 +46,20 @@ void inGameObject::updateObjectState(float deltaTime) {
         if (y < -height) {
             y = -height;
         }
-        if (velocityX!=0){
-            animationStaterManagerClass.play("walk");
+        if (!isGrounded) {
+            if (animationStaterManagerClass.getCurrentStateName() != "jump") {
+                animationStaterManagerClass.play("jump");
+            }
         }
-        else{
-            animationStaterManagerClass.play("idle");
+        else if (velocityX != 0) {
+            if (animationStaterManagerClass.getCurrentStateName() != "walk") {
+                animationStaterManagerClass.play("walk");
+            }
+        }
+        else {
+            if (animationStaterManagerClass.getCurrentStateName() != "idle") {
+                animationStaterManagerClass.play("idle");
+            }
         }
         animationStaterManagerClass.update(deltaTime);
     }
