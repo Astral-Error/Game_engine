@@ -10,6 +10,7 @@ class texture{
     
     public:
         texture();
+        texture(SDL_Renderer*,const std::string&);
         ~texture();
         SDL_Texture* getTexture();
         int getTextureHeight();

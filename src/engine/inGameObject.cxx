@@ -78,7 +78,7 @@ void inGameObject::renderObject(SDL_Renderer* renderer) {
         texture* currentTexture = animationStaterManagerClass.getCurrentAnimation()->getTexture();
         SDL_Rect srcRect = animationStaterManagerClass.getCurrentAnimation()->getCurrentFrameRect();
         SDL_RendererFlip flip = animationStaterManagerClass.getCurrentAnimation()->getFlip();
-        float renderScale = 1.2;
+        float renderScale = 1.0;
         float xOffset = (width * renderScale - srcRect.w * renderScale) / 2.0f;
         float yOffset = srcRect.h * renderScale - height;
         if(objectTag=="Player")destRect = { int(x + xOffset), int(y - yOffset), int(srcRect.w * renderScale), int(srcRect.h * renderScale)};

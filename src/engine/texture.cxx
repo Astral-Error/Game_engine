@@ -4,11 +4,19 @@
 #include <iostream>
 
 texture::texture() : loadedTexture(nullptr), textureHeight(0), textureWidth(0){}
+texture::texture(SDL_Renderer* renderer, const std::string& filePath){
+    destroy();
+    loadedTexture = IMG_LoadTexture(renderer,filePath.c_str());
+    if(!loadedTexture){
+        std::cout<<"Failed to load texture at "<<filePath<<"Error: "<<SDL_GetError()<<std::endl;
+    }
+    SDL_QueryTexture(loadedTexture,nullptr,nullptr,&textureWidth,&textureHeight);
+}
 texture::~texture(){
     destroy();
 }
 
-bool texture::loadTextureFromFile(SDL_Renderer* renderer, const std::string& filePath){
+/*bool texture::loadTextureFromFile(SDL_Renderer* renderer, const std::string& filePath){
     destroy();
     loadedTexture = IMG_LoadTexture(renderer,filePath.c_str());
     if(!loadedTexture){
@@ -17,7 +25,7 @@ bool texture::loadTextureFromFile(SDL_Renderer* renderer, const std::string& fil
     }
     SDL_QueryTexture(loadedTexture,nullptr,nullptr,&textureWidth,&textureHeight);
     return true;
-}
+}*/
 
 SDL_Texture* texture::getTexture(){
     return loadedTexture;

@@ -31,11 +31,11 @@ void core::initiateGameLoop(){
         std::cout << "CreateTexture failed: " << SDL_GetError() << std::endl;
     }
     SDL_FreeSurface(surfaceTexture);
-    texture* playerTexture = new texture();
-    texture* playerTexture1 = new texture();
-    texture* playerTexture2 = new texture();
-    texture* playerTexture3 = new texture();
-    texture* playerTexture4 = new texture();
+    texture* playerTexture = new texture(win.getRenderer(),"assets/Character/Ninja_Peasant/Idle.png");
+    texture* playerTexture1 = new texture(win.getRenderer(),"assets/Character/Ninja_Peasant/Jump.png");
+    texture* playerTexture2 = new texture(win.getRenderer(),"assets/Character/Ninja_Peasant/Run.png");
+    texture* playerTexture3 = new texture(win.getRenderer(),"assets/Character/Ninja_Peasant/Walk.png");
+    texture* playerTexture4 = new texture(win.getRenderer(),"assets/Character/Ninja_Peasant/Dead.png");
     createSampleMap();
     parallaxManager background(win.getRenderer(),screenWidth,screenHeight);
     background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Bg_1/sky.png",0.0);
@@ -44,16 +44,30 @@ void core::initiateGameLoop(){
     background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Bg_1/long_cloud1920x1080.png",3.0);
     inGameObject* player = objManager.getObjectByTag("Player");
     if (player) {
-        playerTexture->loadTextureFromFile(win.getRenderer(),"assets/Character/Ninja_Peasant/Idle.png");
-        player->animationStaterManagerClass.addAnimation("idle", animation(playerTexture, 6, 0.12f, 68));
-        playerTexture1->loadTextureFromFile(win.getRenderer(),"assets/Character/Ninja_Peasant/Jump.png");
-        player->animationStaterManagerClass.addAnimation("jump", animation(playerTexture1, 8, 0.10f, 96));
-        playerTexture2->loadTextureFromFile(win.getRenderer(),"assets/Character/Ninja_Peasant/Run.png");
-        player->animationStaterManagerClass.addAnimation("run",  animation(playerTexture2, 6, 0.08f, 96));
-        playerTexture3->loadTextureFromFile(win.getRenderer(),"assets/Character/Ninja_Peasant/Walk.png");
-        player->animationStaterManagerClass.addAnimation("walk", animation(playerTexture3, 8, 0.10f, 65));
-        playerTexture4->loadTextureFromFile(win.getRenderer(),"assets/Character/Ninja_Peasant/Dead.png");
-        player->animationStaterManagerClass.addAnimation("death", animation(playerTexture4, 4, 0.15f, 96));
+        // Idle (loop)
+        animation idleAnim(playerTexture, 6, 0.12f, 68);
+        idleAnim.setLooping(true);
+        player->animationStaterManagerClass.addAnimation("idle", idleAnim);
+
+        // Jump (not looping)
+        animation jumpAnim(playerTexture1, 8, 0.10f, 96);
+        jumpAnim.setLooping(true); // or skip this line
+        player->animationStaterManagerClass.addAnimation("jump", jumpAnim);
+
+        // Run (loop)
+        animation runAnim(playerTexture2, 6, 0.08f, 96);
+        runAnim.setLooping(true);
+        player->animationStaterManagerClass.addAnimation("run", runAnim);
+
+        // Walk (loop)
+        animation walkAnim(playerTexture3, 8, 0.10f, 65);
+        walkAnim.setLooping(true);
+        player->animationStaterManagerClass.addAnimation("walk", walkAnim);
+
+        // Death (not looping)
+        animation deathAnim(playerTexture4, 4, 0.15f, 96);
+        deathAnim.setLooping(false);
+        player->animationStaterManagerClass.addAnimation("death", deathAnim);
     }
     while(win.isRunning()){
         engineTime::startFrame();
@@ -84,5 +98,5 @@ void core::createSampleMap(){
     objManager.addObject(850,100,150,20,0,mediumGrey,"Wall");
     objManager.addObject(1000,200,150,20,0,mediumGrey,"Wall");
     objManager.addObject(0,670,1280,50,0,mediumGrey,"Wall");
-    objManager.addObject(0,240,40,40,150,{0,0,0,255},"Player");
+    objManager.addObject(0,240,40,80,150,{0,0,0,255},"Player");
 }
