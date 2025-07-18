@@ -22,7 +22,7 @@ bool core::initiateWindow(const char* winTitle, int width, int height){
 }
 
 void core::initiateGameLoop(){
-    surfaceTexture = IMG_Load("assets/textures/WallTexture/ClassicBrickWall-rect.png");
+    surfaceTexture = IMG_Load("assets/textures/WallTexture/greyBrickTexture.png");
     if (!surfaceTexture) {
         std::cout << "IMG_Load failed: " << IMG_GetError() << std::endl;
     }
@@ -38,10 +38,14 @@ void core::initiateGameLoop(){
     texture* playerTexture4 = new texture(win.getRenderer(),"assets/Character/Ninja_Peasant/Dead.png");
     createSampleMap();
     parallaxManager background(win.getRenderer(),screenWidth,screenHeight);
-    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Bg_1/sky.png",0.0);
-    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Bg_1/rocks_1.png",0.0);
-    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Bg_1/rocks_2.png",0.0);
-    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Bg_1/long_cloud1920x1080.png",3.0);
+    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Forest/forest_sky.png",1.0);
+    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Forest/forest_mountain.png",0.0);
+    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Forest/forest_back.png",0.0);
+    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Forest/forest_mid.png",0.0);
+    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Forest/forest_short.png",0.0);
+    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Basic_Scene/_08_clouds.png",6.0);
+    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Basic_Scene/_09_distant_clouds1.png",4.0);
+    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Basic_Scene/_10_distant_clouds.png",3.0);
     inGameObject* player = objManager.getObjectByTag("Player");
     if (player) {
         // Idle (loop)
@@ -80,7 +84,7 @@ void core::initiateGameLoop(){
         objManager.renderAllObjects(win.getRenderer());
 
         SDL_RenderPresent(win.getRenderer());
-        engineTime::endFrame(60);
+        engineTime::endFrame(144);
     }
 }
 

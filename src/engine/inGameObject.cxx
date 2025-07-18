@@ -85,7 +85,15 @@ void inGameObject::renderObject(SDL_Renderer* renderer) {
         SDL_RenderCopyEx(renderer, currentTexture->getTexture(), &srcRect, &destRect, 0, nullptr, flip);
     }
     else if (core::getTexture(objectTag)) {
-        SDL_RenderCopy(renderer, core::getTexture(objectTag), nullptr, &destRect);
+        int tileW, tileH;
+        SDL_QueryTexture(core::getTexture(objectTag),nullptr,nullptr,&tileW,&tileH);
+        for(int offsetY =0;offsetY<height;offsetY+=tileH){
+            for(int offsetX=0;offsetX<width;offsetX+=tileW){
+                SDL_Rect srcRect = {0,0,tileW,tileH};
+                SDL_Rect destRect = {int(x+offsetX),int(y+offsetY),std::min(tileW,width-offsetX), std::min(tileH,height-offsetY)};
+                SDL_RenderCopy(renderer,core::getTexture(objectTag),&srcRect,&destRect);
+            }
+        }
     }
     else {
         SDL_SetRenderDrawColor(renderer, objectColor.r, objectColor.g, objectColor.b, objectColor.a);
