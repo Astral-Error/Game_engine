@@ -17,8 +17,6 @@ class inGameObject{
         SDL_Color objectColor;
         bool isGrounded = false;
         std::string objectTag;
-        static constexpr int SCREEN_WIDTH=1280;
-        static constexpr int SCREEN_HEIGHT=720;
 
 
     public:

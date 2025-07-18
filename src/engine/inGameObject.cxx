@@ -38,7 +38,7 @@ void inGameObject::updateObjectState(float deltaTime) {
             jumpBufferTimer=0;
         }
         if(!keyboardState[SDL_SCANCODE_SPACE]&&velocityY<0.0) velocityY*=0.5;
-        if (y > SCREEN_HEIGHT) {
+        if (y > core::getScreenHeight()) {
             y = -height;
             velocityY = 300.0;
             isGrounded = false;
@@ -66,8 +66,8 @@ void inGameObject::updateObjectState(float deltaTime) {
 
     if (x < 0) {
         x = 0;
-    } else if (x + width > SCREEN_WIDTH) {
-        x = SCREEN_WIDTH - width;
+    } else if (x + width > core::getScreenWidth()) {
+        x = core::getScreenWidth() - width;
     }
 }
 

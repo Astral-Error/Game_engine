@@ -10,6 +10,8 @@
 #include <iostream>
 #include <vector>
 
+int core::screenWidth = 0;
+int core::screenHeight = 0;
 SDL_Texture* core::wallTexture = nullptr;
 SDL_Texture* core::backgroundImage=nullptr;
 SDL_Surface* core::surfaceTexture =nullptr;
@@ -94,13 +96,16 @@ SDL_Texture* core::getTexture(std::string objectTag){
 }
 
 void core::createSampleMap(){
-    objManager.addObject(0,300,100,20,0,mediumGrey,"Wall");
-    objManager.addObject(100,500,100,20,0,mediumGrey,"Wall");
-    objManager.addObject(300,400,100,20,0,mediumGrey,"Wall");
-    objManager.addObject(400,300,150,20,0,mediumGrey,"Wall");
-    objManager.addObject(700,200,150,20,0,mediumGrey,"Wall");
-    objManager.addObject(850,100,150,20,0,mediumGrey,"Wall");
-    objManager.addObject(1000,200,150,20,0,mediumGrey,"Wall");
-    objManager.addObject(0,670,1280,50,0,mediumGrey,"Wall");
+    objManager.addObject(0,350,100,20,0,mediumGrey,"Wall");
+    objManager.addObject(100,550,100,20,0,mediumGrey,"Wall");
+    objManager.addObject(300,450,100,20,0,mediumGrey,"Wall");
+    objManager.addObject(400,350,150,20,0,mediumGrey,"Wall");
+    objManager.addObject(700,250,150,20,0,mediumGrey,"Wall");
+    objManager.addObject(850,150,150,20,0,mediumGrey,"Wall");
+    objManager.addObject(1000,250,150,20,0,mediumGrey,"Wall");
+    objManager.addObject(0,814,1536,50,0,mediumGrey,"Wall");
     objManager.addObject(0,240,40,80,150,{0,0,0,255},"Player");
 }
+
+int core::getScreenWidth(){return screenWidth;}
+int core::getScreenHeight(){return screenHeight;}

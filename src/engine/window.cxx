@@ -12,11 +12,8 @@ window::~window(){
 }
 
 bool window::initiateWindow(const char* winTitle, int width, int height){
-    if(SDL_Init(SDL_INIT_VIDEO)<0){
-        std::cout<<"SDL Init failed\n";
-        return false;
-    }
-    win = SDL_CreateWindow(winTitle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
+    Uint32 windowFlags = SDL_WINDOW_BORDERLESS | SDL_WINDOW_RESIZABLE;
+    win = SDL_CreateWindow(winTitle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, windowFlags);
     if(NULL==win){
         std::cout<<"Window creation failed"<<SDL_GetError()<<std::endl;
         return false;
