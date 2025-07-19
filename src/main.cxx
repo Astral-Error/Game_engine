@@ -1,9 +1,15 @@
+#ifdef _WIN32
+#include <windows.h>
+#endif
 #include <iostream>
 #include <SDL_render.h>
 #include "window.hxx"
 #include "core.hxx"
 
 int main(int argc, char* argv[]){
+    #ifdef _WIN32
+        SetProcessDPIAware();
+    #endif
     if(SDL_Init(SDL_INIT_VIDEO)<0){
         std::cout<<"SDL Init failed\n";
         return false;

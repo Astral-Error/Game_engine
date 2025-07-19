@@ -96,14 +96,14 @@ SDL_Texture* core::getTexture(std::string objectTag){
 }
 
 void core::createSampleMap(){
-    objManager.addObject(0,350,100,20,0,mediumGrey,"Wall");
-    objManager.addObject(100,550,100,20,0,mediumGrey,"Wall");
-    objManager.addObject(300,450,100,20,0,mediumGrey,"Wall");
-    objManager.addObject(400,350,150,20,0,mediumGrey,"Wall");
-    objManager.addObject(700,250,150,20,0,mediumGrey,"Wall");
-    objManager.addObject(850,150,150,20,0,mediumGrey,"Wall");
-    objManager.addObject(1000,250,150,20,0,mediumGrey,"Wall");
-    objManager.addObject(0,814,1536,50,0,mediumGrey,"Wall");
+    objManager.addObject(0,450,100,20,0,mediumGrey,"Wall");
+    objManager.addObject(100,650,100,20,0,mediumGrey,"Wall");
+    objManager.addObject(300,550,100,20,0,mediumGrey,"Wall");
+    objManager.addObject(400,450,150,20,0,mediumGrey,"Wall");
+    objManager.addObject(700,350,150,20,0,mediumGrey,"Wall");
+    objManager.addObject(850,250,150,20,0,mediumGrey,"Wall");
+    objManager.addObject(1000,350,150,20,0,mediumGrey,"Wall");
+    objManager.addObject(0,1030,1920,50,0,mediumGrey,"Wall");
     objManager.addObject(0,240,40,80,150,{0,0,0,255},"Player");
 }
 
