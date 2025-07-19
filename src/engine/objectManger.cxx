@@ -33,9 +33,9 @@ namespace engine{
         gameObjects[playerIndex].setGrounded(grounded);
     }
 
-    void objectManager::renderAllObjects(SDL_Renderer* renderer){
+    void objectManager::renderAllObjects(SDL_Renderer* renderer, camera& cam){
         for(inGameObject& i : gameObjects){
-            i.renderObject(renderer);
+            i.renderObject(renderer,cam);
         }
     }
 

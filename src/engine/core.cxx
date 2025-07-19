@@ -5,6 +5,7 @@
 #include "animation.hxx"
 #include "objectManager.hxx"
 #include "texture.hxx"
+#include "camera.hxx"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>
@@ -24,6 +25,7 @@ bool core::initiateWindow(const char* winTitle, int width, int height){
 }
 
 void core::initiateGameLoop(){
+    camera cam(screenWidth,screenHeight );
     surfaceTexture = IMG_Load("assets/textures/WallTexture/greyBrickTexture.png");
     if (!surfaceTexture) {
         std::cout << "IMG_Load failed: " << IMG_GetError() << std::endl;
@@ -40,14 +42,17 @@ void core::initiateGameLoop(){
     texture* playerTexture4 = new texture(win.getRenderer(),"assets/Character/Ninja_Peasant/Dead.png");
     createSampleMap();
     parallaxManager background(win.getRenderer(),screenWidth,screenHeight);
-    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Forest/forest_sky.png",1.0);
-    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Forest/forest_mountain.png",0.0);
-    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Forest/forest_back.png",0.0);
-    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Forest/forest_mid.png",0.0);
-    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Forest/forest_short.png",0.0);
-    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Basic_Scene/_08_clouds.png",6.0);
+    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/sky.png",1.0);
+    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/rocks.png",0.0);
+    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/ground_1.png",0.0);
+    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/ground_2.png",0.0);
+    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/ground_3.png",0.0);
+    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/plant.png",0.0);
+    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/clouds_1.png",0.0);
+    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/clouds_2.png",0.0);
+    /*background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Basic_Scene/_08_clouds.png",6.0);
     background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Basic_Scene/_09_distant_clouds1.png",4.0);
-    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Basic_Scene/_10_distant_clouds.png",3.0);
+    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Basic_Scene/_10_distant_clouds.png",3.0);*/
     inGameObject* player = objManager.getObjectByTag("Player");
     if (player) {
         // Idle (loop)
@@ -78,12 +83,13 @@ void core::initiateGameLoop(){
     while(win.isRunning()){
         engineTime::startFrame();
         win.inputHandler();
-
+        cam.updateCamera(player->getX(), player->getY());
         objManager.updateAllObjects();
+        //std::cout << "Player X: " << player->getX() << ", Camera X: " << cam.getCameraX() << std::endl;
         background.update(engineTime::getDeltaTime());
-        background.render();
+        background.render(cam.getCameraX());
 
-        objManager.renderAllObjects(win.getRenderer());
+        objManager.renderAllObjects(win.getRenderer(),cam);
 
         SDL_RenderPresent(win.getRenderer());
         engineTime::endFrame(144);

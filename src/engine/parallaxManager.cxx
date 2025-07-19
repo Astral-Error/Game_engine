@@ -3,6 +3,7 @@
 #include <SDL_image.h>
 #include <vector>
 #include <iostream>
+#include <cmath>
 
 parallaxManager::parallaxManager(SDL_Renderer* init_renderer, int init_screenWidth, int init_screenHeight) : renderer(init_renderer), screenWidth(init_screenWidth), screenHeight(init_screenHeight) {}
 
@@ -43,9 +44,9 @@ void parallaxManager::update(float deltaTime){
     }
 }
 
-void parallaxManager::render(){
+void parallaxManager::render(float cameraX){
     for(auto& i : layers){
-        float x = -i.offsetX;
+        float x = -fmod(i.offsetX + cameraX * (1 - i.scrollSpeed), i.textureWidth);
         while (x < screenWidth) {
                 SDL_FRect renderablTextureRect = { x, 0.0f, (float)i.textureWidth, (float)i.textureHeight };
                 SDL_RenderCopyF(renderer, i.parallaxTexture, nullptr, &renderablTextureRect);

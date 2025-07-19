@@ -1,5 +1,6 @@
 #pragma once
 #include "animationStateManager.hxx"
+#include "camera.hxx"
 #include <SDL.h>
 #include <string>
 
@@ -37,5 +38,5 @@ class inGameObject{
         void setGrounded(bool);
         void updateJumpBuffer(float);
         void updateObjectState(float);
-        void renderObject(SDL_Renderer*);
+        void renderObject(SDL_Renderer*,camera&);
 };

@@ -20,5 +20,5 @@ class parallaxManager{
         ~parallaxManager();
         void addLayer(const std::string&, float);
         void update(float);
-        void render();
+        void render(float);
 };

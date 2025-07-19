@@ -1,6 +1,7 @@
 #include "inGameObject.hxx"
 #include "core.hxx"
 #include "objectManager.hxx"
+#include "camera.hxx"
 #include <SDL.h>
 #include <SDL_keyboard.h>
 #include <SDL_keycode.h>
@@ -63,16 +64,10 @@ void inGameObject::updateObjectState(float deltaTime) {
         }
         animationStaterManagerClass.update(deltaTime);
     }
-
-    if (x < 0) {
-        x = 0;
-    } else if (x + width > core::getScreenWidth()) {
-        x = core::getScreenWidth() - width;
-    }
 }
 
-void inGameObject::renderObject(SDL_Renderer* renderer) {
-    SDL_Rect destRect = { int(x), int(y), width, height };
+void inGameObject::renderObject(SDL_Renderer* renderer, camera& cam) {
+    SDL_Rect destRect = { int(x-cam.getCameraX()), int(y-cam.getCameraY()), width, height };
 
     if (animationStaterManagerClass.getCurrentAnimation()) {
         texture* currentTexture = animationStaterManagerClass.getCurrentAnimation()->getTexture();
@@ -81,7 +76,7 @@ void inGameObject::renderObject(SDL_Renderer* renderer) {
         float renderScale = 1.0;
         float xOffset = (width * renderScale - srcRect.w * renderScale) / 2.0f;
         float yOffset = srcRect.h * renderScale - height;
-        if(objectTag=="Player")destRect = { int(x + xOffset), int(y - yOffset), int(srcRect.w * renderScale), int(srcRect.h * renderScale)};
+        if(objectTag=="Player")destRect = { int(x - cam.getCameraX() + xOffset), int(y - cam.getCameraY() - yOffset), int(srcRect.w * renderScale), int(srcRect.h * renderScale)};
         SDL_RenderCopyEx(renderer, currentTexture->getTexture(), &srcRect, &destRect, 0, nullptr, flip);
     }
     else if (core::getTexture(objectTag)) {
@@ -90,7 +85,7 @@ void inGameObject::renderObject(SDL_Renderer* renderer) {
         for(int offsetY =0;offsetY<height;offsetY+=tileH){
             for(int offsetX=0;offsetX<width;offsetX+=tileW){
                 SDL_Rect srcRect = {0,0,tileW,tileH};
-                SDL_Rect destRect = {int(x+offsetX),int(y+offsetY),std::min(tileW,width-offsetX), std::min(tileH,height-offsetY)};
+                SDL_Rect destRect = {int(x + offsetX - cam.getCameraX()), int(y + offsetY - cam.getCameraY()),std::min(tileW,width-offsetX), std::min(tileH,height-offsetY)};
                 SDL_RenderCopy(renderer,core::getTexture(objectTag),&srcRect,&destRect);
             }
         }
