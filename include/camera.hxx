@@ -4,11 +4,11 @@ class camera{
     private:
         float cameraX,cameraY;
         int cameraWidth,cameraHeight;
-        float cameraSmoothing=1.0;
+        float cameraSmoothing=0.03;
     
     public:
         camera(int,int);
-        void updateCamera(float,float);
+        void updateCamera(float,float,float,float);
         float getCameraX();
         float getCameraY();
         int getCameraWidth();

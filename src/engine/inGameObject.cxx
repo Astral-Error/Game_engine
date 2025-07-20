@@ -14,13 +14,13 @@ void inGameObject::updateObjectState(float deltaTime) {
     const Uint8 *keyboardState = SDL_GetKeyboardState(nullptr);
     velocityX = 0.0;
     if (keyboardState[SDL_SCANCODE_A]){
-        velocityX = -1.0f;
+        velocityX = -2.5f;
         if (animationStaterManagerClass.getCurrentAnimation()) {
             animationStaterManagerClass.getCurrentAnimation()->setFlipping(true); 
         }
     }
     if (keyboardState[SDL_SCANCODE_D]) {
-        velocityX = 1.0f;
+        velocityX = 2.5f;
         if (animationStaterManagerClass.getCurrentAnimation()) {
             animationStaterManagerClass.getCurrentAnimation()->setFlipping(false); 
         }
@@ -34,19 +34,11 @@ void inGameObject::updateObjectState(float deltaTime) {
         if(keyboardState[SDL_SCANCODE_SPACE]) jumpBufferTimer=jumpBufferGap;
         updateJumpBuffer(deltaTime);
         if ((isGrounded) && jumpBufferTimer>0) {
-            velocityY = -700.0;
+            velocityY = -800.0;
             isGrounded = false;
             jumpBufferTimer=0;
         }
         if(!keyboardState[SDL_SCANCODE_SPACE]&&velocityY<0.0) velocityY*=0.5;
-        if (y > core::getScreenHeight()) {
-            y = -height;
-            velocityY = 300.0;
-            isGrounded = false;
-        }
-        if (y < -height) {
-            y = -height;
-        }
         if (!isGrounded) {
             if (animationStaterManagerClass.getCurrentStateName() != "jump") {
                 animationStaterManagerClass.play("jump");

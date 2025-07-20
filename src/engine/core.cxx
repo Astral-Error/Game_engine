@@ -25,7 +25,7 @@ bool core::initiateWindow(const char* winTitle, int width, int height){
 }
 
 void core::initiateGameLoop(){
-    camera cam(screenWidth,screenHeight );
+    camera cam(screenWidth,screenHeight);
     surfaceTexture = IMG_Load("assets/textures/WallTexture/greyBrickTexture.png");
     if (!surfaceTexture) {
         std::cout << "IMG_Load failed: " << IMG_GetError() << std::endl;
@@ -83,7 +83,7 @@ void core::initiateGameLoop(){
     while(win.isRunning()){
         engineTime::startFrame();
         win.inputHandler();
-        cam.updateCamera(player->getX(), player->getY());
+        cam.updateCamera(player->getX(), player->getY(),6000,3100);
         objManager.updateAllObjects();
         //std::cout << "Player X: " << player->getX() << ", Camera X: " << cam.getCameraX() << std::endl;
         background.update(engineTime::getDeltaTime());
@@ -101,16 +101,44 @@ SDL_Texture* core::getTexture(std::string objectTag){
     else return nullptr;
 }
 
-void core::createSampleMap(){
-    objManager.addObject(0,450,100,20,0,mediumGrey,"Wall");
-    objManager.addObject(100,650,100,20,0,mediumGrey,"Wall");
-    objManager.addObject(300,550,100,20,0,mediumGrey,"Wall");
-    objManager.addObject(400,450,150,20,0,mediumGrey,"Wall");
-    objManager.addObject(700,350,150,20,0,mediumGrey,"Wall");
-    objManager.addObject(850,250,150,20,0,mediumGrey,"Wall");
-    objManager.addObject(1000,350,150,20,0,mediumGrey,"Wall");
-    objManager.addObject(0,1030,1920,50,0,mediumGrey,"Wall");
-    objManager.addObject(0,240,40,80,150,{0,0,0,255},"Player");
+void core::createSampleMap() {
+    // Ground (entire horizontal stretch)
+    objManager.addObject(0, 3000, 6000, 100, 0, mediumGrey, "Wall");
+
+    // Left Climb: vertical platform stairway
+    for (int i = 0; i < 10; ++i) {
+        objManager.addObject(200, 2900 - i * 200, 150, 20, 0, mediumGrey, "Wall");
+    }
+
+    // Central floating islands
+    objManager.addObject(1000, 2500, 200, 20, 0, mediumGrey, "Wall");
+    objManager.addObject(1300, 2200, 200, 20, 0, mediumGrey, "Wall");
+    objManager.addObject(1600, 1900, 200, 20, 0, mediumGrey, "Wall");
+    objManager.addObject(1900, 1600, 200, 20, 0, mediumGrey, "Wall");
+    objManager.addObject(2200, 1300, 200, 20, 0, mediumGrey, "Wall");
+
+    // Right-side descending path
+    for (int i = 0; i < 8; ++i) {
+        objManager.addObject(4000 + i * 150, 1000 + i * 200, 150, 20, 0, mediumGrey, "Wall");
+    }
+
+    // Wide mid-air jump challenges
+    objManager.addObject(3000, 800, 200, 20, 0, mediumGrey, "Wall");
+    objManager.addObject(3400, 800, 200, 20, 0, mediumGrey, "Wall");
+    objManager.addObject(3800, 800, 200, 20, 0, mediumGrey, "Wall");
+
+    // Mid-air vertical corridor platforms
+    objManager.addObject(5000, 700, 200, 20, 0, mediumGrey, "Wall");
+    objManager.addObject(5000, 500, 200, 20, 0, mediumGrey, "Wall");
+    objManager.addObject(5000, 300, 200, 20, 0, mediumGrey, "Wall");
+
+    // Bottom-right platform cluster
+    objManager.addObject(5500, 2900, 200, 20, 0, mediumGrey, "Wall");
+    objManager.addObject(5700, 2700, 200, 20, 0, mediumGrey, "Wall");
+    objManager.addObject(5900, 2500, 200, 20, 0, mediumGrey, "Wall");
+
+    // Player spawn — top-left corner
+    objManager.addObject(100, 100, 40, 80, 150, {0, 0, 0, 255}, "Player");
 }
 
 int core::getScreenWidth(){return screenWidth;}
