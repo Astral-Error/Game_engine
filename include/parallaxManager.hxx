@@ -9,7 +9,7 @@ class parallaxManager{
         struct parallaxLayer{
             SDL_Texture* parallaxTexture;
             float scrollSpeed, offsetX;
-            int textureWidth, textureHeight;
+            int textureWidth, textureHeight, camDependence;
         };
         SDL_Renderer* renderer;
         std::vector<parallaxLayer> layers;
@@ -18,7 +18,7 @@ class parallaxManager{
     public:
         parallaxManager(SDL_Renderer*,int,int);
         ~parallaxManager();
-        void addLayer(const std::string&, float);
+        void addLayer(const std::string& filePath, float scrollSpeed, int camDependence=0);
         void update(float);
         void render(float);
 };
