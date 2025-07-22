@@ -14,9 +14,7 @@
 int core::screenWidth = 0;
 int core::screenHeight = 0;
 SDL_Texture* core::wallTexture = nullptr;
-SDL_Texture* core::backgroundImage=nullptr;
 SDL_Surface* core::surfaceTexture =nullptr;
-SDL_Texture* core::playerTexture=nullptr;
 
 bool core::initiateWindow(const char* winTitle, int width, int height){
     screenWidth = width;
@@ -26,20 +24,12 @@ bool core::initiateWindow(const char* winTitle, int width, int height){
 
 void core::initiateGameLoop(){
     camera cam(screenWidth,screenHeight);
-    surfaceTexture = IMG_Load("assets/textures/WallTexture/greyBrickTexture.png");
-    if (!surfaceTexture) {
-        std::cout << "IMG_Load failed: " << IMG_GetError() << std::endl;
-    }
-    wallTexture = SDL_CreateTextureFromSurface(win.getRenderer(),surfaceTexture);
-    if (!wallTexture) {
-        std::cout << "CreateTexture failed: " << SDL_GetError() << std::endl;
-    }
-    SDL_FreeSurface(surfaceTexture);
-    texture* playerTexture = new texture(win.getRenderer(),"assets/Character/Ninja_Peasant/Idle.png");
-    texture* playerTexture1 = new texture(win.getRenderer(),"assets/Character/Ninja_Peasant/Jump.png");
-    texture* playerTexture2 = new texture(win.getRenderer(),"assets/Character/Ninja_Peasant/Run.png");
-    texture* playerTexture3 = new texture(win.getRenderer(),"assets/Character/Ninja_Peasant/Walk.png");
-    texture* playerTexture4 = new texture(win.getRenderer(),"assets/Character/Ninja_Peasant/Dead.png");
+    textureClass.addTexture(win.getRenderer(),"assets/textures/WallTexture/greyBrickTexture.png","Wall");
+    textureClass.addTexture(win.getRenderer(),"assets/Character/Ninja_Peasant/Idle.png","Player_Idle");
+    textureClass.addTexture(win.getRenderer(),"assets/Character/Ninja_Peasant/Jump.png","Player_Jump");
+    textureClass.addTexture(win.getRenderer(),"assets/Character/Ninja_Peasant/Run.png","Player_Run");
+    textureClass.addTexture(win.getRenderer(),"assets/Character/Ninja_Peasant/Walk.png","Player_Walk");
+    textureClass.addTexture(win.getRenderer(),"assets/Character/Ninja_Peasant/Dead.png","Player_Dead");
     createSampleMap();
     parallaxManager background(win.getRenderer(),screenWidth,screenHeight);
     background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/sky.png",0.8,1);
@@ -56,27 +46,27 @@ void core::initiateGameLoop(){
     inGameObject* player = objManager.getObjectByTag("Player");
     if (player) {
         // Idle (loop)
-        animation idleAnim(playerTexture, 6, 0.12f, 68);
+        animation idleAnim(textureClass.getIndiviualTexture("Player_Idle"), 6, 0.12f, 68);
         idleAnim.setLooping(true);
         player->animationStaterManagerClass.addAnimation("idle", idleAnim);
 
         // Jump (not looping)
-        animation jumpAnim(playerTexture1, 8, 0.10f, 96);
+        animation jumpAnim(textureClass.getIndiviualTexture("Player_Jump"), 8, 0.10f, 96);
         jumpAnim.setLooping(true); // or skip this line
         player->animationStaterManagerClass.addAnimation("jump", jumpAnim);
 
         // Run (loop)
-        animation runAnim(playerTexture2, 6, 0.08f, 96);
+        animation runAnim(textureClass.getIndiviualTexture("Player_Run"), 6, 0.08f, 96);
         runAnim.setLooping(true);
         player->animationStaterManagerClass.addAnimation("run", runAnim);
 
         // Walk (loop)
-        animation walkAnim(playerTexture3, 8, 0.10f, 65);
+        animation walkAnim(textureClass.getIndiviualTexture("Player_Walk"), 8, 0.10f, 65);
         walkAnim.setLooping(true);
         player->animationStaterManagerClass.addAnimation("walk", walkAnim);
 
         // Death (not looping)
-        animation deathAnim(playerTexture4, 4, 0.15f, 96);
+        animation deathAnim(textureClass.getIndiviualTexture("Player_Dead"), 4, 0.15f, 96);
         deathAnim.setLooping(false);
         player->animationStaterManagerClass.addAnimation("death", deathAnim);
     }
@@ -89,7 +79,7 @@ void core::initiateGameLoop(){
         background.update(engineTime::getDeltaTime());
         background.render(cam.getCameraX());
 
-        objManager.renderAllObjects(win.getRenderer(),cam);
+        objManager.renderAllObjects(win.getRenderer(),cam,textureClass);
 
         SDL_RenderPresent(win.getRenderer());
         engineTime::endFrame(144);
@@ -97,8 +87,7 @@ void core::initiateGameLoop(){
 }
 
 SDL_Texture* core::getTexture(std::string objectTag){
-    if(objectTag=="Wall") return core::wallTexture;
-    else return nullptr;
+    return textureClass.getIndiviualTexture(objectTag)->loadedTexture;
 }
 
 void core::createSampleMap() {

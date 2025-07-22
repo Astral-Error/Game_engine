@@ -3,9 +3,9 @@
 #include <SDL.h>
 
 animation::animation(): spriteSheet(nullptr), totalFrames(0), currentFrame(0), frameWidth(0), frameHeight(0), frameTime(0), elapsedTime(0), looping(false), flipped(false) {}
-animation::animation(texture* textureClassPtr, int init_totalFrames, float duration, int spriteHeight) : spriteSheet(textureClassPtr), totalFrames(init_totalFrames), frameTime(duration), frameHeight(spriteHeight){
+animation::animation(texture::individualTexture* init_spriteSheet, int init_totalFrames, float duration, int spriteHeight) : spriteSheet(init_spriteSheet), totalFrames(init_totalFrames), frameTime(duration), frameHeight(spriteHeight){
     if(spriteSheet){
-        frameWidth = spriteSheet->getTextureWidth() / totalFrames; 
+        frameWidth = spriteSheet->textureWidth / totalFrames; 
     }
     else{
         frameWidth = 0;
@@ -49,7 +49,7 @@ SDL_Rect animation::getCurrentFrameRect(){
     return temp;
 }
 
-texture* animation::getTexture(){
+texture::individualTexture* animation::getTexture(){
     return spriteSheet;
 }
 

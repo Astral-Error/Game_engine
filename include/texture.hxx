@@ -2,19 +2,23 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <string>
+#include <unordered_map>
 
 class texture{
     private:
-        SDL_Texture* loadedTexture;
-        int textureHeight, textureWidth;
+        struct individualTexture{
+            SDL_Texture* loadedTexture;
+            int textureHeight, textureWidth;
+        };
+        std::unordered_map<std::string, individualTexture> textureUNMap;
     
     public:
-        texture();
-        texture(SDL_Renderer*,const std::string&);
         ~texture();
-        SDL_Texture* getTexture();
-        int getTextureHeight();
-        int getTextureWidth();
-        bool loadTextureFromFile(SDL_Renderer*,const std::string&);
+        SDL_Texture* getTexture(std::string);
+        individualTexture* getIndiviualTexture(std::string);
+        int getTextureHeight(std::string);
+        int getTextureWidth(std::string);
+        void addTexture(SDL_Renderer*,const std::string&, std::string);
         void destroy();
+        friend class animation;
 };

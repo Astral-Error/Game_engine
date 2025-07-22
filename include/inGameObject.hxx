@@ -38,5 +38,5 @@ class inGameObject{
         void setGrounded(bool);
         void updateJumpBuffer(float);
         void updateObjectState(float);
-        void renderObject(SDL_Renderer*,camera&);
+        void renderObject(SDL_Renderer*,camera&,texture&);
 };
