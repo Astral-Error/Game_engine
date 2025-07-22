@@ -4,7 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <cmath>
-
+parallaxManager::parallaxManager():renderer(nullptr),screenWidth(0),screenHeight(0){}
 parallaxManager::parallaxManager(SDL_Renderer* init_renderer, int init_screenWidth, int init_screenHeight) : renderer(init_renderer), screenWidth(init_screenWidth), screenHeight(init_screenHeight) {}
 
 parallaxManager::~parallaxManager(){

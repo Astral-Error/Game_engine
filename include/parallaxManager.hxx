@@ -16,6 +16,7 @@ class parallaxManager{
         int screenWidth, screenHeight;
     
     public:
+        parallaxManager();
         parallaxManager(SDL_Renderer*,int,int);
         ~parallaxManager();
         void addLayer(const std::string& filePath, float scrollSpeed, int camDependenceX=0);
