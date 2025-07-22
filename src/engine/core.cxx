@@ -44,12 +44,12 @@ void core::initiateGameLoop(){
     parallaxManager background(win.getRenderer(),screenWidth,screenHeight);
     background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/sky.png",0.8,1);
     background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/rocks.png",0.7,1);
+    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/clouds_1.png",2.0,0);
+    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/clouds_2.png",2.0,0);
     background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/ground_1.png",0.7,1);
     background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/ground_2.png",0.6,1);
     background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/ground_3.png",0.5,1);
     background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/plant.png",0.1,1);
-    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/clouds_1.png",2.0);
-    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/clouds_2.png",2.0);
     /*background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Basic_Scene/_08_clouds.png",6.0);
     background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Basic_Scene/_09_distant_clouds1.png",4.0);
     background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Basic_Scene/_10_distant_clouds.png",3.0);*/
