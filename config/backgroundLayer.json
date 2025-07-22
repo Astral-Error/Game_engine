@@ -1,0 +1,12 @@
+{
+    "backgroundLayer":[
+        {"filePath":"assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/sky.png","scrollSpeed":0.8,"camDependenceX":1},
+        {"filePath":"assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/rocks.png","scrollSpeed":0.7,"camDependenceX":1},
+        {"filePath":"assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/clouds_1.png","scrollSpeed":2.0,"camDependenceX":0},
+        {"filePath":"assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/clouds_2.png","scrollSpeed":2.0,"camDependenceX":0},
+        {"filePath":"assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/ground_1.png","scrollSpeed":0.7,"camDependenceX":1},
+        {"filePath":"assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/ground_2.png","scrollSpeed":0.6,"camDependenceX":1},
+        {"filePath":"assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/ground_3.png","scrollSpeed":0.5,"camDependenceX":1},
+        {"filePath":"assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/plant.png","scrollSpeed":0.1,"camDependenceX":1}
+    ]
+}

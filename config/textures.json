@@ -1,0 +1,10 @@
+{
+    "textures":[
+        {"objectTag":"Wall","filePath":"assets/textures/WallTexture/greyBrickTexture.png"},
+        {"objectTag":"Player_Idle","filePath":"assets/Character/Ninja_Peasant/Idle.png"},
+        {"objectTag":"Player_Jump","filePath":"assets/Character/Ninja_Peasant/Jump.png"},
+        {"objectTag":"Player_Run","filePath":"assets/Character/Ninja_Peasant/Run.png"},
+        {"objectTag":"Player_Walk","filePath":"assets/Character/Ninja_Peasant/Walk.png"},
+        {"objectTag":"Player_Dead","filePath":"assets/Character/Ninja_Peasant/Dead.png"}
+    ]
+}

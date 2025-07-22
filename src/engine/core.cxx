@@ -10,6 +10,9 @@
 #include <SDL_image.h>
 #include <iostream>
 #include <vector>
+#include <json.hpp>
+#include <fstream>
+using json = nlohmann::json;
 
 int core::screenWidth = 0;
 int core::screenHeight = 0;
@@ -27,32 +30,24 @@ void core::initiateGameLoop(){
     addRequiredTextures();
     createSampleMap();
     addBackgroundLayersForParallax();
-    /*background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Basic_Scene/_08_clouds.png",6.0);
-    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Basic_Scene/_09_distant_clouds1.png",4.0);
-    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Basic_Scene/_10_distant_clouds.png",3.0);*/
     inGameObject* player = objManager.getObjectByTag("Player");
     if (player) {
-        // Idle (loop)
         animation idleAnim(textureClass.getIndiviualTexture("Player_Idle"), 6, 0.12f, 68);
         idleAnim.setLooping(true);
         player->animationStaterManagerClass.addAnimation("idle", idleAnim);
 
-        // Jump (not looping)
         animation jumpAnim(textureClass.getIndiviualTexture("Player_Jump"), 8, 0.10f, 96);
-        jumpAnim.setLooping(true); // or skip this line
+        jumpAnim.setLooping(true);
         player->animationStaterManagerClass.addAnimation("jump", jumpAnim);
 
-        // Run (loop)
         animation runAnim(textureClass.getIndiviualTexture("Player_Run"), 6, 0.08f, 96);
         runAnim.setLooping(true);
         player->animationStaterManagerClass.addAnimation("run", runAnim);
 
-        // Walk (loop)
         animation walkAnim(textureClass.getIndiviualTexture("Player_Walk"), 8, 0.10f, 65);
         walkAnim.setLooping(true);
         player->animationStaterManagerClass.addAnimation("walk", walkAnim);
 
-        // Death (not looping)
         animation deathAnim(textureClass.getIndiviualTexture("Player_Dead"), 4, 0.15f, 96);
         deathAnim.setLooping(false);
         player->animationStaterManagerClass.addAnimation("death", deathAnim);
@@ -112,25 +107,29 @@ void core::createSampleMap() {
 }
 
 void core::addRequiredTextures(){
-    textureClass.addTexture(win.getRenderer(),"assets/textures/WallTexture/greyBrickTexture.png","Wall");
-    textureClass.addTexture(win.getRenderer(),"assets/Character/Ninja_Peasant/Idle.png","Player_Idle");
-    textureClass.addTexture(win.getRenderer(),"assets/Character/Ninja_Peasant/Jump.png","Player_Jump");
-    textureClass.addTexture(win.getRenderer(),"assets/Character/Ninja_Peasant/Run.png","Player_Run");
-    textureClass.addTexture(win.getRenderer(),"assets/Character/Ninja_Peasant/Walk.png","Player_Walk");
-    textureClass.addTexture(win.getRenderer(),"assets/Character/Ninja_Peasant/Dead.png","Player_Dead");
+    SDL_Renderer* tempRenderer = win.getRenderer();
+    std::ifstream file("config/textures.json");
+    json data;
+    file>>data;
+    for(auto& textureJson: data["textures"]){
+        std::string objectTag = textureJson["objectTag"];
+        std::string filePath = textureJson["filePath"];
+        textureClass.addTexture(tempRenderer,filePath,objectTag);
+    }
 }
 
 void core::addBackgroundLayersForParallax(){
     parallaxManager temp(win.getRenderer(),screenWidth,screenHeight);
     background=temp;
-    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/sky.png",0.8,1);
-    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/rocks.png",0.7,1);
-    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/clouds_1.png",2.0,0);
-    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/clouds_2.png",2.0,0);
-    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/ground_1.png",0.7,1);
-    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/ground_2.png",0.6,1);
-    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/ground_3.png",0.5,1);
-    background.addLayer("assets/backgrounds/Animated_Backgrounds/Parallax/Night_forest/plant.png",0.1,1);
+    std::ifstream file("config/backgroundLayer.json");
+    json data;
+    file>>data;
+    for(auto& backgroundLayer: data["backgroundLayer"]){
+        std::string filePath = backgroundLayer["filePath"];
+        float scrollSpeed = backgroundLayer["scrollSpeed"];
+        int camDependenceX = backgroundLayer["camDependenceX"];
+        background.addLayer(filePath,scrollSpeed,camDependenceX);
+    }
 }
 
 int core::getScreenWidth(){return screenWidth;}
