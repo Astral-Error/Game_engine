@@ -7,6 +7,7 @@
 namespace engine{
     class objectManager{
         private:
+            int levelWidth, levelHeight;
             std::vector<inGameObject> gameObjects;
 
         public:
@@ -14,6 +15,10 @@ namespace engine{
             void updateAllObjects();
             void renderAllObjects(SDL_Renderer*,camera&,texture&);
             void removeObject(std::string tag);
+            void setLevelWidth(int);
+            void setLevelHeight(int);
+            int getLevelWidth();
+            int getLevelHeight();
             inGameObject* getObjectByTag(const std::string& tag);
     };
 }

@@ -15,16 +15,6 @@ void texture::addTexture(SDL_Renderer* win,const std::string& filePath, std::str
     textureUNMap[objectType] = temp;
 }
 
-/*bool texture::loadTextureFromFile(SDL_Renderer* renderer, const std::string& filePath){
-    destroy();
-    loadedTexture = IMG_LoadTexture(renderer,filePath.c_str());
-    if(!loadedTexture){
-        std::cout<<"Failed to load texture at "<<filePath<<"Error: "<<SDL_GetError()<<std::endl;
-        return false;
-    }
-    SDL_QueryTexture(loadedTexture,nullptr,nullptr,&textureWidth,&textureHeight);
-    return true;
-}*/
 
 SDL_Texture* texture::getTexture(std::string objectType){
     return textureUNMap[objectType].loadedTexture;
@@ -38,10 +28,4 @@ int texture::getTextureHeight(std::string objectType){return textureUNMap[object
 int texture::getTextureWidth(std::string objectType){return textureUNMap[objectType].textureWidth;}
 
 void texture::destroy(){
-    /*if(loadedTexture){
-        SDL_DestroyTexture(loadedTexture);
-        loadedTexture=nullptr;
-        textureWidth=0;
-        textureHeight=0;
-    }*/
 }

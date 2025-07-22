@@ -70,10 +70,12 @@ void core::initiateGameLoop(){
         deathAnim.setLooping(false);
         player->animationStaterManagerClass.addAnimation("death", deathAnim);
     }
+    objManager.setLevelWidth(6000);
+    objManager.setLevelHeight(3100);
     while(win.isRunning()){
         engineTime::startFrame();
         win.inputHandler();
-        cam.updateCamera(player->getX(), player->getY(),6000,3100);
+        cam.updateCamera(player->getX(), player->getY(), objManager.getLevelWidth(),objManager.getLevelHeight());
         objManager.updateAllObjects();
         //std::cout << "Player X: " << player->getX() << ", Camera X: " << cam.getCameraX() << std::endl;
         background.update(engineTime::getDeltaTime());

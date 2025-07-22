@@ -11,7 +11,7 @@ namespace engine{
 
     void objectManager::updateAllObjects(){
         for(inGameObject& i: gameObjects){
-            i.updateObjectState(engineTime::getDeltaTime());
+            i.updateObjectState(engineTime::getDeltaTime(),levelWidth,levelHeight);
         }
 
         int playerIndex = gameObjects.size()-1;
@@ -55,5 +55,21 @@ namespace engine{
             }
         }
         return nullptr; 
+    }
+
+    void objectManager::setLevelWidth(int init_levelWidth){
+        levelWidth = init_levelWidth;
+    }
+
+    void objectManager::setLevelHeight(int init_levelHeight){
+        levelHeight = init_levelHeight;
+    }
+
+    int objectManager::getLevelWidth(){
+        return levelWidth;
+    }
+
+    int objectManager::getLevelHeight(){
+        return levelHeight;
     }
 }
