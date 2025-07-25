@@ -20,5 +20,6 @@ namespace engine{
             int getLevelWidth();
             int getLevelHeight();
             inGameObject* getObjectByTag(const std::string& tag);
+            inGameObject* getPlayerObject();
     };
 }

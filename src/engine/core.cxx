@@ -30,7 +30,7 @@ void core::initiateGameLoop(){
     addRequiredTextures();
     createSampleMap();
     addBackgroundLayersForParallax();
-    inGameObject* player = objManager.getObjectByTag("Player");
+    inGameObject* player = objManager.getPlayerObject();
     if (player) {
         animation idleAnim(textureClass.getIndiviualTexture("Player_Idle"), 6, 0.12f, 68);
         idleAnim.setLooping(true);

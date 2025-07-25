@@ -57,6 +57,10 @@ namespace engine{
         return nullptr; 
     }
 
+    inGameObject* objectManager::getPlayerObject(){
+        return &gameObjects[gameObjects.size()-1];
+    }
+
     void objectManager::setLevelWidth(int init_levelWidth){
         levelWidth = init_levelWidth;
     }
