@@ -2,7 +2,7 @@
 #include <SDL.h>
 
 void animationStateManager::addAnimation(const std::string& animationState, animation sourceAnimation){
-    animations[animationState] = &sourceAnimation;
+    animations[animationState] = new animation(sourceAnimation);
     if(currentState.empty()){
         currentState=animationState;
     }

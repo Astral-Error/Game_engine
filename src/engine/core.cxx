@@ -31,27 +31,7 @@ void core::initiateGameLoop(){
     loadLevel("config/level1.json");
     addBackgroundLayersForParallax();
     inGameObject* player = objManager.getPlayerObject();
-    if (player) {
-        animation idleAnim(textureClass.getIndiviualTexture("Player_Idle"), 6, 0.12f, 68);
-        idleAnim.setLooping(true);
-        player->animationStaterManagerClass.addAnimation("idle", idleAnim);
-
-        animation jumpAnim(textureClass.getIndiviualTexture("Player_Jump"), 8, 0.10f, 96);
-        jumpAnim.setLooping(true);
-        player->animationStaterManagerClass.addAnimation("jump", jumpAnim);
-
-        animation runAnim(textureClass.getIndiviualTexture("Player_Run"), 6, 0.08f, 96);
-        runAnim.setLooping(true);
-        player->animationStaterManagerClass.addAnimation("run", runAnim);
-
-        animation walkAnim(textureClass.getIndiviualTexture("Player_Walk"), 8, 0.10f, 65);
-        walkAnim.setLooping(true);
-        player->animationStaterManagerClass.addAnimation("walk", walkAnim);
-
-        animation deathAnim(textureClass.getIndiviualTexture("Player_Dead"), 4, 0.15f, 96);
-        deathAnim.setLooping(false);
-        player->animationStaterManagerClass.addAnimation("death", deathAnim);
-    }
+    if (player) getAnimationForPlayer(player);
     while(win.isRunning()){
         engineTime::startFrame();
         win.inputHandler();
@@ -122,6 +102,28 @@ void core::addBackgroundLayersForParallax(){
         int camDependenceX = backgroundLayer["camDependenceX"];
         background.addLayer(filePath,scrollSpeed,camDependenceX);
     }
+}
+
+void core::getAnimationForPlayer(inGameObject* player){
+        animation idleAnim(textureClass.getIndiviualTexture("Player_Idle"), 6, 0.12f, 68);
+        idleAnim.setLooping(true);
+        player->animationStaterManagerClass.addAnimation("idle", idleAnim);
+
+        animation jumpAnim(textureClass.getIndiviualTexture("Player_Jump"), 8, 0.10f, 96);
+        jumpAnim.setLooping(true);
+        player->animationStaterManagerClass.addAnimation("jump", jumpAnim);
+
+        animation runAnim(textureClass.getIndiviualTexture("Player_Run"), 6, 0.08f, 96);
+        runAnim.setLooping(true);
+        player->animationStaterManagerClass.addAnimation("run", runAnim);
+
+        animation walkAnim(textureClass.getIndiviualTexture("Player_Walk"), 8, 0.10f, 65);
+        walkAnim.setLooping(true);
+        player->animationStaterManagerClass.addAnimation("walk", walkAnim);
+
+        animation deathAnim(textureClass.getIndiviualTexture("Player_Dead"), 4, 0.15f, 96);
+        deathAnim.setLooping(false);
+        player->animationStaterManagerClass.addAnimation("death", deathAnim);
 }
 
 int core::getScreenWidth(){return screenWidth;}

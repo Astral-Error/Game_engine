@@ -28,6 +28,7 @@ class core{
         void createSampleMap();
         void loadLevel(const std::string&);
         SDL_Texture* getTexture(std::string);
+        void getAnimationForPlayer(inGameObject* player);
         static int getScreenWidth();
         static int getScreenHeight();
     
