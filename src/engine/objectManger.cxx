@@ -4,8 +4,8 @@
 #include "collision.hxx"
 
 namespace engine{
-    void objectManager::addObject(float x, float y, int height, int width, float MovementSpeed, SDL_Color objectColor, std::string objectTag){
-        inGameObject temp(x,y,height,width,MovementSpeed,objectColor,objectTag);
+    void objectManager::addObject(float x, float y, int width, int height, float MovementSpeed, SDL_Color objectColor, std::string objectTag){
+        inGameObject temp(x,y,width,height,MovementSpeed,objectColor,objectTag);
         gameObjects.push_back(temp);
     }
 

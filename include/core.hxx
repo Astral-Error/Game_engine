@@ -26,6 +26,7 @@ class core{
         void addRequiredTextures();
         void addBackgroundLayersForParallax();
         void createSampleMap();
+        void loadLevel(const std::string&);
         SDL_Texture* getTexture(std::string);
         static int getScreenWidth();
         static int getScreenHeight();

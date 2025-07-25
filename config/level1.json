@@ -1,0 +1,49 @@
+{
+    "level":{
+        "width":6000,
+        "height":3100
+    },
+    "walls":[
+        { "x": 0, "y": 3000, "width": 6000, "height": 100, "speed":0, "objectTag":"Wall" },
+        { "x": 200, "y": 2900, "width": 150, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 200, "y": 2700, "width": 150, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 200, "y": 2500, "width": 150, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 200, "y": 2300, "width": 150, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 200, "y": 2100, "width": 150, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 200, "y": 1900, "width": 150, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 200, "y": 1700, "width": 150, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 200, "y": 1500, "width": 150, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 200, "y": 1300, "width": 150, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 200, "y": 1100, "width": 150, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 1000, "y": 2500, "width": 200, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 1300, "y": 2200, "width": 200, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 1600, "y": 1900, "width": 200, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 1900, "y": 1600, "width": 200, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 2200, "y": 1300, "width": 200, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 4000, "y": 1000, "width": 150, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 4150, "y": 1200, "width": 150, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 4300, "y": 1400, "width": 150, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 4450, "y": 1600, "width": 150, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 4600, "y": 1800, "width": 150, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 4750, "y": 2000, "width": 150, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 4900, "y": 2200, "width": 150, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 5050, "y": 2400, "width": 150, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 3000, "y": 800, "width": 200, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 3400, "y": 800, "width": 200, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 3800, "y": 800, "width": 200, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 5000, "y": 700, "width": 200, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 5000, "y": 500, "width": 200, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 5000, "y": 300, "width": 200, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 5500, "y": 2900, "width": 200, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 5700, "y": 2700, "width": 200, "height": 20, "speed":0, "objectTag":"Wall" },
+        { "x": 5900, "y": 2500, "width": 200, "height": 20, "speed":0, "objectTag":"Wall" }
+    ],
+    "player":{
+        "x":100,
+        "y":100,
+        "width":40,
+        "height":80,
+        "speed":150,
+        "objectTag":"Player"
+    }
+}

@@ -28,7 +28,8 @@ bool core::initiateWindow(const char* winTitle, int width, int height){
 void core::initiateGameLoop(){
     camera cam(screenWidth,screenHeight);
     addRequiredTextures();
-    createSampleMap();
+    loadLevel("config/level1.json");
+    //createSampleMap();
     addBackgroundLayersForParallax();
     inGameObject* player = objManager.getPlayerObject();
     if (player) {
@@ -52,8 +53,8 @@ void core::initiateGameLoop(){
         deathAnim.setLooping(false);
         player->animationStaterManagerClass.addAnimation("death", deathAnim);
     }
-    objManager.setLevelWidth(6000);
-    objManager.setLevelHeight(3100);
+    //objManager.setLevelWidth(6000);
+    //objManager.setLevelHeight(3100);
     while(win.isRunning()){
         engineTime::startFrame();
         win.inputHandler();
@@ -104,6 +105,32 @@ void core::createSampleMap() {
     objManager.addObject(5900, 2500, 200, 20, 0, mediumGrey, "Wall");
 
     objManager.addObject(100, 100, 40, 80, 150, {0, 0, 0, 255}, "Player");
+}
+
+void core::loadLevel(const std::string& levelFile){
+    std::ifstream file(levelFile);
+    if(!file.is_open()){
+        std::cout<<"Failed to load level file\n";
+        return;
+    }
+    json data;
+    file>>data;
+    objManager.setLevelWidth(data["level"]["width"]);
+    objManager.setLevelHeight(data["level"]["height"]);
+
+    for(auto& wall:data["walls"]){
+        objManager.addObject(wall["x"],wall["y"],
+                            wall["width"],wall["height"],
+                            wall["speed"],
+                            mediumGrey,
+                            wall["objectTag"]);
+    }
+
+    objManager.addObject(data["player"]["x"],data["player"]["y"],
+                        data["player"]["width"],data["player"]["height"],
+                        data["player"]["speed"],
+                        {0, 0, 0, 255},
+                        data["player"]["objectTag"]);
 }
 
 void core::addRequiredTextures(){
