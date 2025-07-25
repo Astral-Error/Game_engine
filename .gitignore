@@ -14,6 +14,7 @@ testData/
 
 #Ignore windows compile time dependencies
 dependencies/
+include/json.hpp
 
 # Optional: ignore distribution packages (uncomment if built dynamically)
 # dist/
