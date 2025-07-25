@@ -28,4 +28,10 @@ int texture::getTextureHeight(std::string objectType){return textureUNMap[object
 int texture::getTextureWidth(std::string objectType){return textureUNMap[objectType].textureWidth;}
 
 void texture::destroy(){
+    for(auto& pair : textureUNMap){
+        if(pair.second.loadedTexture){
+            SDL_DestroyTexture(pair.second.loadedTexture);
+        }
+    }
+    textureUNMap.clear();
 }

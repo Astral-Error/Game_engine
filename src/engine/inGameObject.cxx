@@ -98,7 +98,6 @@ float inGameObject::getWidth() { return width; }
 float inGameObject::getHeight() { return height; }
 float inGameObject::getVelocityY() { return velocityY; }
 float inGameObject::getGrounded() { return isGrounded; }
-float inGameObject::getVelocity() { return velocityY; }
 void inGameObject::setX(float newX) { x = newX; }
 void inGameObject::setY(float newY) { y = newY; }
 void inGameObject::setVelocityY(float newVelocityY) {velocityY = newVelocityY;}
