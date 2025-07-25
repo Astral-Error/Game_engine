@@ -29,7 +29,6 @@ void core::initiateGameLoop(){
     camera cam(screenWidth,screenHeight);
     addRequiredTextures();
     loadLevel("config/level1.json");
-    //createSampleMap();
     addBackgroundLayersForParallax();
     inGameObject* player = objManager.getPlayerObject();
     if (player) {
@@ -53,8 +52,6 @@ void core::initiateGameLoop(){
         deathAnim.setLooping(false);
         player->animationStaterManagerClass.addAnimation("death", deathAnim);
     }
-    //objManager.setLevelWidth(6000);
-    //objManager.setLevelHeight(3100);
     while(win.isRunning()){
         engineTime::startFrame();
         win.inputHandler();
@@ -73,38 +70,6 @@ void core::initiateGameLoop(){
 
 SDL_Texture* core::getTexture(std::string objectTag){
     return textureClass.getIndiviualTexture(objectTag)->loadedTexture;
-}
-
-void core::createSampleMap() {
-    objManager.addObject(0, 3000, 6000, 100, 0, mediumGrey, "Wall");
-
-    for (int i = 0; i < 10; ++i) {
-        objManager.addObject(200, 2900 - i * 200, 150, 20, 0, mediumGrey, "Wall");
-    }
-
-    objManager.addObject(1000, 2500, 200, 20, 0, mediumGrey, "Wall");
-    objManager.addObject(1300, 2200, 200, 20, 0, mediumGrey, "Wall");
-    objManager.addObject(1600, 1900, 200, 20, 0, mediumGrey, "Wall");
-    objManager.addObject(1900, 1600, 200, 20, 0, mediumGrey, "Wall");
-    objManager.addObject(2200, 1300, 200, 20, 0, mediumGrey, "Wall");
-
-    for (int i = 0; i < 8; ++i) {
-        objManager.addObject(4000 + i * 150, 1000 + i * 200, 150, 20, 0, mediumGrey, "Wall");
-    }
-
-    objManager.addObject(3000, 800, 200, 20, 0, mediumGrey, "Wall");
-    objManager.addObject(3400, 800, 200, 20, 0, mediumGrey, "Wall");
-    objManager.addObject(3800, 800, 200, 20, 0, mediumGrey, "Wall");
-
-    objManager.addObject(5000, 700, 200, 20, 0, mediumGrey, "Wall");
-    objManager.addObject(5000, 500, 200, 20, 0, mediumGrey, "Wall");
-    objManager.addObject(5000, 300, 200, 20, 0, mediumGrey, "Wall");
-
-    objManager.addObject(5500, 2900, 200, 20, 0, mediumGrey, "Wall");
-    objManager.addObject(5700, 2700, 200, 20, 0, mediumGrey, "Wall");
-    objManager.addObject(5900, 2500, 200, 20, 0, mediumGrey, "Wall");
-
-    objManager.addObject(100, 100, 40, 80, 150, {0, 0, 0, 255}, "Player");
 }
 
 void core::loadLevel(const std::string& levelFile){
