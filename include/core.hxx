@@ -4,6 +4,7 @@
 #include "objectManager.hxx"
 #include "texture.hxx"
 #include "parallaxManager.hxx"
+#include "sceneManager.hxx"
 #include <SDL.h>
 #include <vector>
 
@@ -12,6 +13,7 @@ class core{
         window win;
         texture textureClass;
         parallaxManager background;
+        sceneManager* sceneMgr;
         engine::objectManager objManager;
         static int screenWidth, screenHeight;
         SDL_Color mediumGrey = {169,169,169,255};
@@ -24,7 +26,7 @@ class core{
         bool initiateWindow(const char*,int,int);
         void initiateGameLoop();
         void addRequiredTextures();
-        void addBackgroundLayersForParallax();
+        void addBackgroundLayersForParallax(const std::string&);
         void createSampleMap();
         void loadLevel(const std::string&);
         SDL_Texture* getTexture(std::string);

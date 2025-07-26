@@ -1,0 +1,6 @@
+{
+    "scenes":[
+        {"sceneName":"Scene1","bgConfig":"config/bg1.json","levelConfig":"config/level1.json"},
+        {"sceneName":"Scene2","bgConfig":"config/bg2.json","levelConfig":"config/level2.json"}
+    ]
+}

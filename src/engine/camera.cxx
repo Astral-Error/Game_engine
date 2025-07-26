@@ -15,7 +15,7 @@ void camera::updateCamera(float targetX, float targetY, float levelWidth, float 
     if (cameraY < 0) cameraY = 0;
     if (cameraX > maxCameraX) cameraX = maxCameraX;
     if (cameraY > maxCameraY) cameraY = maxCameraY;
-    std::cout << "CameraX: " << cameraX << " | CameraY: " << cameraY << std::endl;
+    //std::cout << "CameraX: " << cameraX << " | CameraY: " << cameraY << std::endl;
 }
 
 float camera::getCameraX(){return cameraX;}

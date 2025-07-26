@@ -6,6 +6,7 @@
 #include "objectManager.hxx"
 #include "texture.hxx"
 #include "camera.hxx"
+#include "sceneManager.hxx"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>
@@ -28,8 +29,9 @@ bool core::initiateWindow(const char* winTitle, int width, int height){
 void core::initiateGameLoop(){
     camera cam(screenWidth,screenHeight);
     addRequiredTextures();
-    loadLevel("config/level1.json");
-    addBackgroundLayersForParallax();
+    sceneMgr = new sceneManager(this);
+    sceneMgr->getScenes("config/sceneManager.json");
+    sceneMgr->loadScene(0);
     inGameObject* player = objManager.getPlayerObject();
     if (player) getAnimationForPlayer(player);
     while(win.isRunning()){
@@ -37,7 +39,17 @@ void core::initiateGameLoop(){
         win.inputHandler();
         cam.updateCamera(player->getX(), player->getY(), objManager.getLevelWidth(),objManager.getLevelHeight());
         objManager.updateAllObjects();
-        //std::cout << "Player X: " << player->getX() << ", Camera X: " << cam.getCameraX() << std::endl;
+        if (player->getX() + player->getWidth() > objManager.getLevelWidth() - 50) {
+            sceneMgr->loadNextScene();
+
+            player = objManager.getPlayerObject();
+            if (player) getAnimationForPlayer(player);
+            if (player) {
+                player->setX(100);
+                player->setY(100);
+                getAnimationForPlayer(player);
+            }
+        }
         background.update(engineTime::getDeltaTime());
         background.render(cam.getCameraX());
 
@@ -53,6 +65,7 @@ SDL_Texture* core::getTexture(std::string objectTag){
 }
 
 void core::loadLevel(const std::string& levelFile){
+    objManager.clearAllObjects();
     std::ifstream file(levelFile);
     if(!file.is_open()){
         std::cout<<"Failed to load level file\n";
@@ -90,10 +103,10 @@ void core::addRequiredTextures(){
     }
 }
 
-void core::addBackgroundLayersForParallax(){
+void core::addBackgroundLayersForParallax(const std::string& bgFile){
     parallaxManager temp(win.getRenderer(),screenWidth,screenHeight);
     background=temp;
-    std::ifstream file("config/backgroundLayer.json");
+    std::ifstream file(bgFile);
     json data;
     file>>data;
     for(auto& backgroundLayer: data["backgroundLayer"]){

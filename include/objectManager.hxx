@@ -21,5 +21,6 @@ namespace engine{
             int getLevelHeight();
             inGameObject* getObjectByTag(const std::string& tag);
             inGameObject* getPlayerObject();
+            void clearAllObjects();
     };
 }

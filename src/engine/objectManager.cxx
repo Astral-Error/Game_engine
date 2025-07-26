@@ -76,4 +76,8 @@ namespace engine{
     int objectManager::getLevelHeight(){
         return levelHeight;
     }
+
+    void objectManager::clearAllObjects(){
+        gameObjects.clear();
+    }
 }
