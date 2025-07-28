@@ -27,8 +27,8 @@
         { "x": 5700, "y": 600, "width": 300, "height": 20, "speed": 0, "objectTag": "Wall" }
     ],
     "player": {
-        "x": 100,
-        "y": 100,
+        "x": 0,
+        "y": 2900,
         "width": 40,
         "height": 80,
         "speed": 150,

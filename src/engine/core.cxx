@@ -45,8 +45,8 @@ void core::initiateGameLoop(){
             player = objManager.getPlayerObject();
             if (player) getAnimationForPlayer(player);
             if (player) {
-                player->setX(100);
-                player->setY(100);
+                player->setX(0);
+                player->setY(2900);
                 getAnimationForPlayer(player);
             }
         }
@@ -113,7 +113,8 @@ void core::addBackgroundLayersForParallax(const std::string& bgFile){
         std::string filePath = backgroundLayer["filePath"];
         float scrollSpeed = backgroundLayer["scrollSpeed"];
         int camDependenceX = backgroundLayer["camDependenceX"];
-        background.addLayer(filePath,scrollSpeed,camDependenceX);
+        int isActuallyScrolling = backgroundLayer["isActuallyScrolling"];
+        background.addLayer(filePath,scrollSpeed,camDependenceX,isActuallyScrolling);
     }
 }
 

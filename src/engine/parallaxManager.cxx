@@ -14,7 +14,7 @@ parallaxManager::~parallaxManager(){
     layers.clear();
 }
 
-void parallaxManager::addLayer(const std::string& filePath, float scrollSpeed, int camDependenceX){
+void parallaxManager::addLayer(const std::string& filePath, float scrollSpeed, int camDependenceX, int isActuallyScrolling){
     SDL_Surface* tempSurface = IMG_Load(filePath.c_str());
     if(!tempSurface){
         std::cout<<"Error in loading image, Error: "<<IMG_GetError()<<std::endl;
@@ -29,30 +29,32 @@ void parallaxManager::addLayer(const std::string& filePath, float scrollSpeed, i
     parallaxLayer tempLayer;
     tempLayer.parallaxTexture=parallaxTexture;
     tempLayer.scrollSpeed=scrollSpeed;
+    if (scrollSpeed < farthestLayerScroll) farthestLayerScroll = scrollSpeed;
     tempLayer.offsetX=0;
     tempLayer.textureWidth=screenWidth;
     tempLayer.textureHeight=screenHeight;
     tempLayer.camDependenceX=camDependenceX;
+    tempLayer.isActuallyScrolling=isActuallyScrolling;
     layers.push_back(tempLayer);
 }
 
 void parallaxManager::update(float deltaTime){
-    for(auto& i : layers){
-        i.offsetX -= i.scrollSpeed*deltaTime;
-        if(i.offsetX<i.textureWidth){
-            i.offsetX += i.textureWidth;
+        for(auto& i : layers){
+            if(i.isActuallyScrolling) i.offsetX -= i.scrollSpeed*deltaTime;
+            if(i.offsetX<i.textureWidth){
+                i.offsetX += i.textureWidth;
+            }
         }
-    }
 }
 
 void parallaxManager::render(float cameraX){
     for(auto& i : layers){
         float x;
-        if(!i.camDependenceX){
-            x = -fmod(i.offsetX + cameraX * (1 - 0.7), i.textureWidth);
+        if(i.camDependenceX==0){
+            x = -fmod(i.offsetX + cameraX * (farthestLayerScroll), i.textureWidth);
         }
         else{
-            x = -fmod(i.offsetX + cameraX * (1 - i.scrollSpeed), i.textureWidth);
+            x = -fmod(i.offsetX + cameraX * (i.scrollSpeed), i.textureWidth);
         }
         while (x < screenWidth) {
                 SDL_FRect renderablTextureRect = { x, 0.0, (float)i.textureWidth, (float)i.textureHeight };
