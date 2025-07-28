@@ -26,7 +26,10 @@ void inGameObject::updateObjectState(float deltaTime,int levelWidth,int levelHei
             animationStaterManagerClass.getCurrentAnimation()->setFlipping(false); 
         }
     }
-    x+=velocityX*movementSpeed*deltaTime;
+    bool isRunning = keyboardState[SDL_SCANCODE_LSHIFT] || keyboardState[SDL_SCANCODE_RSHIFT];
+    if (isRunning) {
+        velocityX *= 1.5f;
+    }
     if (objectTag == "Player"){
         if (!isGrounded){
             velocityY += gravity * deltaTime;
@@ -46,8 +49,14 @@ void inGameObject::updateObjectState(float deltaTime,int levelWidth,int levelHei
             }
         }
         else if (velocityX != 0) {
-            if (animationStaterManagerClass.getCurrentStateName() != "walk") {
-                animationStaterManagerClass.play("walk");
+            if (isRunning) {
+                if (animationStaterManagerClass.getCurrentStateName() != "run") {
+                    animationStaterManagerClass.play("run");
+                }
+            } else {
+                if (animationStaterManagerClass.getCurrentStateName() != "walk") {
+                    animationStaterManagerClass.play("walk");
+                }
             }
         }
         else {
@@ -58,6 +67,7 @@ void inGameObject::updateObjectState(float deltaTime,int levelWidth,int levelHei
         animationStaterManagerClass.update(deltaTime);
         if (x < 0) x = 0;
         else if (x + width > levelWidth) x = levelWidth - width;
+        x+=velocityX*movementSpeed*deltaTime;
     }
 }
 

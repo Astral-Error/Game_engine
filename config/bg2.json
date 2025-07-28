@@ -1,5 +1,5 @@
 {
     "backgroundLayer":[
-        {"filePath":"assets/backgrounds/Animated_Backgrounds/Parallax/Ancient_Ruins.png","scrollSpeed":0,"camDependenceX":1}
+        {"filePath":"assets/backgrounds/Animated_Backgrounds/Parallax/Ancient_Ruins.png","scrollSpeed":0,"camDependenceX":1,"isActuallyScrolling":0}
     ]
 }
