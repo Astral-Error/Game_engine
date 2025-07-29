@@ -10,11 +10,8 @@ namespace engine{
     }
 
     void objectManager::updateAllObjects(){
-        for(inGameObject& i: gameObjects){
-            i.updateObjectState(engineTime::getDeltaTime(),levelWidth,levelHeight);
-        }
-
         int playerIndex = gameObjects.size()-1;
+        gameObjects[playerIndex].updateObjectState(engineTime::getDeltaTime(),levelWidth,levelHeight);
         gameObjects[playerIndex].setGrounded(false);
 
         bool grounded=false;

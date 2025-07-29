@@ -7,6 +7,7 @@
 #include "texture.hxx"
 #include "camera.hxx"
 #include "sceneManager.hxx"
+#include "keyBindManager.hxx"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>
@@ -28,11 +29,13 @@ bool core::initiateWindow(const char* winTitle, int width, int height){
 
 void core::initiateGameLoop(){
     camera cam(screenWidth,screenHeight);
+    keyBindClass.loadKeyBindConfig("config/keybinds.json");
     addRequiredTextures();
     sceneMgr = new sceneManager(this);
     sceneMgr->getScenes("config/sceneManager.json");
     sceneMgr->loadScene(0);
     inGameObject* player = objManager.getPlayerObject();
+    player->setKeyBinds(keyBindClass);
     if (player) getAnimationForPlayer(player);
     while(win.isRunning()){
         engineTime::startFrame();

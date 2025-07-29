@@ -1,6 +1,7 @@
 #pragma once
 #include "animationStateManager.hxx"
 #include "camera.hxx"
+#include "keyBindManager.hxx"
 #include <SDL.h>
 #include <string>
 
@@ -18,6 +19,7 @@ class inGameObject{
         SDL_Color objectColor;
         bool isGrounded = false;
         std::string objectTag;
+        keyBindManager* keyBinds;
 
 
     public:
@@ -35,6 +37,7 @@ class inGameObject{
         void setX(float);
         void setVelocityY(float);
         void setGrounded(bool);
+        void setKeyBinds(keyBindManager&);
         void updateJumpBuffer(float);
         void updateObjectState(float,int,int);
         void renderObject(SDL_Renderer*,camera&,texture&);

@@ -13,62 +13,61 @@ inGameObject::inGameObject() : x(0.0), y(0.0), width(0), height(0), movementSpee
 
 void inGameObject::updateObjectState(float deltaTime,int levelWidth,int levelHeight) {
     const Uint8 *keyboardState = SDL_GetKeyboardState(nullptr);
+    bool isRunning;
     velocityX = 0.0;
-    if (keyboardState[SDL_SCANCODE_A]){
+    if (keyBinds->isActionPressed("move_left")){
         velocityX = -2.5f;
         if (animationStaterManagerClass.getCurrentAnimation()) {
             animationStaterManagerClass.getCurrentAnimation()->setFlipping(true); 
         }
     }
-    if (keyboardState[SDL_SCANCODE_D]) {
+    if (keyBinds->isActionPressed("move_right")) {
         velocityX = 2.5f;
         if (animationStaterManagerClass.getCurrentAnimation()) {
             animationStaterManagerClass.getCurrentAnimation()->setFlipping(false); 
         }
     }
-    bool isRunning = keyboardState[SDL_SCANCODE_LSHIFT] || keyboardState[SDL_SCANCODE_RSHIFT];
+    isRunning = keyBinds->isActionPressed("run");
     if (isRunning) {
         velocityX *= 1.5f;
     }
-    if (objectTag == "Player"){
-        if (!isGrounded){
-            velocityY += gravity * deltaTime;
-        }
-        y += velocityY * deltaTime;
-        if(keyboardState[SDL_SCANCODE_SPACE]) jumpBufferTimer=jumpBufferGap;
-        updateJumpBuffer(deltaTime);
-        if ((isGrounded) && jumpBufferTimer>0) {
-            velocityY = -800.0;
-            isGrounded = false;
-            jumpBufferTimer=0;
-        }
-        if(!keyboardState[SDL_SCANCODE_SPACE]&&velocityY<0.0) velocityY*=0.5;
-        if (!isGrounded) {
-            if (animationStaterManagerClass.getCurrentStateName() != "jump") {
-                animationStaterManagerClass.play("jump");
-            }
-        }
-        else if (velocityX != 0) {
-            if (isRunning) {
-                if (animationStaterManagerClass.getCurrentStateName() != "run") {
-                    animationStaterManagerClass.play("run");
-                }
-            } else {
-                if (animationStaterManagerClass.getCurrentStateName() != "walk") {
-                    animationStaterManagerClass.play("walk");
-                }
-            }
-        }
-        else {
-            if (animationStaterManagerClass.getCurrentStateName() != "idle") {
-                animationStaterManagerClass.play("idle");
-            }
-        }
-        animationStaterManagerClass.update(deltaTime);
-        if (x < 0) x = 0;
-        else if (x + width > levelWidth) x = levelWidth - width;
-        x+=velocityX*movementSpeed*deltaTime;
+    if (!isGrounded){
+        velocityY += gravity * deltaTime;
     }
+    y += velocityY * deltaTime;
+    if(keyBinds->isActionPressed("jump")) jumpBufferTimer=jumpBufferGap;
+    updateJumpBuffer(deltaTime);
+    if ((isGrounded) && jumpBufferTimer>0) {
+        velocityY = -800.0;
+        isGrounded = false;
+        jumpBufferTimer=0;
+    }
+    if(!keyBinds->isActionPressed("jump")&&velocityY<0.0) velocityY*=0.5;
+    if (!isGrounded) {
+        if (animationStaterManagerClass.getCurrentStateName() != "jump") {
+            animationStaterManagerClass.play("jump");
+        }
+    }
+    else if (velocityX != 0) {
+        if (isRunning) {
+            if (animationStaterManagerClass.getCurrentStateName() != "run") {
+                animationStaterManagerClass.play("run");
+            }
+        } else {
+            if (animationStaterManagerClass.getCurrentStateName() != "walk") {
+                animationStaterManagerClass.play("walk");
+            }
+        }
+    }
+    else {
+        if (animationStaterManagerClass.getCurrentStateName() != "idle") {
+            animationStaterManagerClass.play("idle");
+        }
+    }
+    animationStaterManagerClass.update(deltaTime);
+    if (x < 0) x = 0;
+    else if (x + width > levelWidth) x = levelWidth - width;
+    x+=velocityX*movementSpeed*deltaTime;
 }
 
 void inGameObject::renderObject(SDL_Renderer* renderer, camera& cam,texture& textureClass) {
@@ -112,6 +111,7 @@ void inGameObject::setX(float newX) { x = newX; }
 void inGameObject::setY(float newY) { y = newY; }
 void inGameObject::setVelocityY(float newVelocityY) {velocityY = newVelocityY;}
 void inGameObject::setGrounded(bool newState) { isGrounded = newState; }
+void inGameObject::setKeyBinds(keyBindManager& keyBindClass) {keyBinds=&keyBindClass;}
 void inGameObject::updateJumpBuffer(float deltaTime){
     jumpBufferTimer-=deltaTime;
 }

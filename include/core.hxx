@@ -11,6 +11,7 @@
 class core{
     private:
         window win;
+        keyBindManager keyBindClass;
         texture textureClass;
         parallaxManager background;
         sceneManager* sceneMgr;
