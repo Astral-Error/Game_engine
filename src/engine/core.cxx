@@ -88,6 +88,16 @@ void core::loadLevel(const std::string& levelFile){
                             wall["objectTag"]);
     }
 
+    objManager.addEnemyObject(data["Enemy"]["x"],data["Enemy"]["y"],
+                        data["Enemy"]["width"],data["Enemy"]["height"],
+                        data["Enemy"]["speed"],
+                        {255, 0, 0, 255},
+                        data["Enemy"]["objectTag"],
+                        data["Enemy"]["objectInitalRenderCoordinateX"],
+                        data["Enemy"]["objectInitalRenderCoordinateY"],
+                        data["Enemy"]["rangeStart"],
+                        data["Enemy"]["rangeEnd"]);
+
     objManager.addObject(data["player"]["x"],data["player"]["y"],
                         data["player"]["width"],data["player"]["height"],
                         data["player"]["speed"],

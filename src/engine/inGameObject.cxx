@@ -1,8 +1,4 @@
 #include "inGameObject.hxx"
-#include "core.hxx"
-#include "objectManager.hxx"
-#include "camera.hxx"
-#include "main.hxx"
 #include <SDL.h>
 #include <SDL_keyboard.h>
 #include <SDL_keycode.h>

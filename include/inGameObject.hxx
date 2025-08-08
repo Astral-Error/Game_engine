@@ -6,7 +6,7 @@
 #include <string>
 
 class inGameObject{
-    private:
+    protected:
         float x,y;
         int width, height, objectInitalRenderCoordinateX, objectInitalRenderCoordinateY;
         float movementSpeed,
@@ -43,4 +43,15 @@ class inGameObject{
         void updateJumpBuffer(float);
         void updateObjectState(float,int,int);
         void renderObject(SDL_Renderer*,camera&,texture&);
+};
+
+class enemyObject: public inGameObject{
+    private:
+        float rangeStart, rangeEnd;
+        bool patrolDirectionRight = true;
+
+    public:
+        enemyObject(float, float, int, int, float, SDL_Color, std::string, int, int, float, float);
+        enemyObject();
+        void updateObjectState(float, int, int);
 };

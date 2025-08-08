@@ -38,6 +38,18 @@
         { "x": 5700, "y": 2700, "width": 200, "height": 20, "speed":0, "objectTag":"Wall" },
         { "x": 5900, "y": 2500, "width": 200, "height": 20, "speed":0, "objectTag":"Wall" }
     ],
+    "Enemy":{
+        "x":1000,
+        "y":2900,
+        "width":40,
+        "height":80,
+        "speed":150,
+        "objectTag":"Enemy",
+        "objectInitalRenderCoordinateX":500,
+        "objectInitalRenderCoordinateY":2900,
+        "rangeStart":500,
+        "rangeEnd":1000
+    },
     "player":{
         "x":0,
         "y":2900,

@@ -12,6 +12,7 @@ namespace engine{
 
         public:
             void addObject(float,float,int,int,float,SDL_Color,std::string objectTag="NULL", int objectInitalRenderCoordinateX=0, int objectInitalRenderCoordinateY=0);
+            void addEnemyObject(float, float, int, int, float, SDL_Color, std::string, int, int, float, float);
             void updateAllObjects();
             void renderAllObjects(SDL_Renderer*,camera&,texture&);
             void removeObject(std::string tag);

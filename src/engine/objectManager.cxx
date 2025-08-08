@@ -10,6 +10,11 @@ namespace engine{
         gameObjects.push_back(temp);
     }
 
+    void objectManager::addEnemyObject(float x, float y, int width, int height, float MovementSpeed, SDL_Color objectColor, std::string objectTag, int objectInitalRenderCoordinateX, int objectInitalRenderCoordinateY, float rangeStart, float rangeEnd){
+        enemyObject temp(x,y,width,height,MovementSpeed,objectColor,objectTag,objectInitalRenderCoordinateX,objectInitalRenderCoordinateY,rangeStart,rangeEnd);
+        gameObjects.push_back(temp);
+    }
+
     void objectManager::updateAllObjects(){
         int playerIndex = gameObjects.size()-1;
         gameObjects[playerIndex].updateObjectState(engineTime::getDeltaTime(),levelWidth,levelHeight);
