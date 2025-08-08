@@ -8,7 +8,7 @@
 class inGameObject{
     private:
         float x,y;
-        int width, height;
+        int width, height, objectInitalRenderCoordinateX, objectInitalRenderCoordinateY;
         float movementSpeed,
             velocityX=0.0,
             velocityY=0.0f, 
@@ -24,7 +24,7 @@ class inGameObject{
 
     public:
         animationStateManager animationStaterManagerClass;
-        inGameObject(float,float,int,int,float,SDL_Color,std::string);
+        inGameObject(float,float,int,int,float,SDL_Color,std::string,int,int);
         inGameObject();
         float getX();
         float getY();
@@ -33,6 +33,8 @@ class inGameObject{
         float getVelocityY();
         float getGrounded();
         std::string getObjectTag();
+        int getObjectInitalRenderCoordinateX();
+        int getObjectInitalRenderCoordinateY();
         void setY(float);
         void setX(float);
         void setVelocityY(float);

@@ -2,10 +2,11 @@
 #include "objectManager.hxx"
 #include "time.hxx"
 #include "collision.hxx"
+#include <iostream>
 
 namespace engine{
-    void objectManager::addObject(float x, float y, int width, int height, float MovementSpeed, SDL_Color objectColor, std::string objectTag){
-        inGameObject temp(x,y,width,height,MovementSpeed,objectColor,objectTag);
+    void objectManager::addObject(float x, float y, int width, int height, float MovementSpeed, SDL_Color objectColor, std::string objectTag, int objectInitalRenderCoordinateX, int objectInitalRenderCoordinateY){
+        inGameObject temp(x,y,width,height,MovementSpeed,objectColor,objectTag,objectInitalRenderCoordinateX,objectInitalRenderCoordinateY);
         gameObjects.push_back(temp);
     }
 

@@ -11,7 +11,7 @@ namespace engine{
             std::vector<inGameObject> gameObjects;
 
         public:
-            void addObject(float,float,int,int,float,SDL_Color,std::string objectTag="NULL");
+            void addObject(float,float,int,int,float,SDL_Color,std::string objectTag="NULL", int objectInitalRenderCoordinateX=0, int objectInitalRenderCoordinateY=0);
             void updateAllObjects();
             void renderAllObjects(SDL_Renderer*,camera&,texture&);
             void removeObject(std::string tag);

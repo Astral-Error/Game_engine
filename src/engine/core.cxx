@@ -48,8 +48,9 @@ void core::initiateGameLoop(){
             player = objManager.getPlayerObject();
             if (player) getAnimationForPlayer(player);
             if (player) {
-                player->setX(0);
-                player->setY(2900);
+                player->setKeyBinds(keyBindClass);
+                player->setX(player->getObjectInitalRenderCoordinateX());
+                player->setY(player->getObjectInitalRenderCoordinateY());
                 getAnimationForPlayer(player);
             }
         }
@@ -91,7 +92,9 @@ void core::loadLevel(const std::string& levelFile){
                         data["player"]["width"],data["player"]["height"],
                         data["player"]["speed"],
                         {0, 0, 0, 255},
-                        data["player"]["objectTag"]);
+                        data["player"]["objectTag"],
+                        data["player"]["objectInitalRenderCoordinateX"],
+                        data["player"]["objectInitalRenderCoordinateY"]);
 }
 
 void core::addRequiredTextures(){
