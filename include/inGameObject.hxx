@@ -41,8 +41,9 @@ class inGameObject{
         void setGrounded(bool);
         void setKeyBinds(keyBindManager&);
         void updateJumpBuffer(float);
-        void updateObjectState(float,int,int);
-        void renderObject(SDL_Renderer*,camera&,texture&);
+        virtual void updateObjectState(float,int,int);
+        virtual void renderObject(SDL_Renderer*,camera&,texture&);
+        virtual ~inGameObject();
 };
 
 class enemyObject: public inGameObject{
@@ -53,5 +54,6 @@ class enemyObject: public inGameObject{
     public:
         enemyObject(float, float, int, int, float, SDL_Color, std::string, int, int, float, float);
         enemyObject();
+        ~enemyObject();
         void updateObjectState(float, int, int);
 };

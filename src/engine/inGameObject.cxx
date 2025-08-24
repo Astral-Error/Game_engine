@@ -15,6 +15,10 @@ inGameObject::inGameObject(float init_x, float init_y, int init_width,
         {}
 
 inGameObject::inGameObject() : x(0.0), y(0.0), width(0), height(0), movementSpeed(0) {}
+inGameObject::~inGameObject(){
+
+}
+
 
 void inGameObject::updateObjectState(float deltaTime,int levelWidth,int levelHeight) {
     const Uint8 *keyboardState = SDL_GetKeyboardState(nullptr);

@@ -25,3 +25,7 @@ void enemyObject::updateObjectState(float deltaTime, int levelWdth, int levelHei
     if(getX()<rangeStart) patrolDirectionRight=true;
     else if (getX()+getWidth()>rangeEnd) patrolDirectionRight=false;
 }
+
+enemyObject::~enemyObject(){
+
+}

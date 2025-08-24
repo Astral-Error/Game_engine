@@ -8,7 +8,7 @@ namespace engine{
     class objectManager{
         private:
             int levelWidth, levelHeight;
-            std::vector<inGameObject> gameObjects;
+            std::vector<inGameObject*> gameObjects;
 
         public:
             void addObject(float,float,int,int,float,SDL_Color,std::string objectTag="NULL", int objectInitalRenderCoordinateX=0, int objectInitalRenderCoordinateY=0);

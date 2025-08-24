@@ -6,45 +6,45 @@
 
 namespace engine{
     void objectManager::addObject(float x, float y, int width, int height, float MovementSpeed, SDL_Color objectColor, std::string objectTag, int objectInitalRenderCoordinateX, int objectInitalRenderCoordinateY){
-        inGameObject temp(x,y,width,height,MovementSpeed,objectColor,objectTag,objectInitalRenderCoordinateX,objectInitalRenderCoordinateY);
-        gameObjects.push_back(temp);
+        gameObjects.push_back(new inGameObject(x,y,width,height,MovementSpeed,objectColor,objectTag,objectInitalRenderCoordinateX,objectInitalRenderCoordinateY));
     }
 
     void objectManager::addEnemyObject(float x, float y, int width, int height, float MovementSpeed, SDL_Color objectColor, std::string objectTag, int objectInitalRenderCoordinateX, int objectInitalRenderCoordinateY, float rangeStart, float rangeEnd){
-        enemyObject temp(x,y,width,height,MovementSpeed,objectColor,objectTag,objectInitalRenderCoordinateX,objectInitalRenderCoordinateY,rangeStart,rangeEnd);
-        gameObjects.push_back(temp);
+        gameObjects.push_back(new enemyObject(x,y,width,height,MovementSpeed,objectColor,objectTag,objectInitalRenderCoordinateX,objectInitalRenderCoordinateY,rangeStart,rangeEnd));
     }
 
     void objectManager::updateAllObjects(){
         int playerIndex = gameObjects.size()-1;
-        gameObjects[playerIndex].updateObjectState(engineTime::getDeltaTime(),levelWidth,levelHeight);
-        gameObjects[playerIndex].setGrounded(false);
+        gameObjects[playerIndex]->updateObjectState(engineTime::getDeltaTime(),levelWidth,levelHeight);
+        gameObjects[playerIndex]->setGrounded(false);
+        gameObjects[playerIndex-1]->updateObjectState(engineTime::getDeltaTime(),levelWidth,levelHeight);
 
         bool grounded=false;
 
-        for(inGameObject surface : gameObjects){
-            if(surface.getObjectTag()=="Wall"){
-                if(collision::checkAABB(gameObjects[playerIndex],surface)){
-                    collision::resolveCollision(gameObjects[playerIndex],surface);
+        for(inGameObject* surface : gameObjects){
+            if(surface->getObjectTag()=="Wall"){
+                if(collision::checkAABB(*gameObjects[playerIndex],*surface)){
+                    collision::resolveCollision(*gameObjects[playerIndex],*surface);
                 }
 
-                if(collision::isTouchingGround(gameObjects[playerIndex], surface)){
+                if(collision::isTouchingGround(*gameObjects[playerIndex],*surface)){
                     grounded = true;
                 }
             }
         }
-        gameObjects[playerIndex].setGrounded(grounded);
+        gameObjects[playerIndex]->setGrounded(grounded);
     }
 
     void objectManager::renderAllObjects(SDL_Renderer* renderer, camera& cam,texture& textureClass){
-        for(inGameObject& i : gameObjects){
-            i.renderObject(renderer,cam,textureClass);
+        for(inGameObject* i : gameObjects){
+            i->renderObject(renderer,cam,textureClass);
         }
     }
 
     void objectManager::removeObject(std::string removeObjectTag){
-        for(std::vector<inGameObject>::iterator i = gameObjects.begin(); i!=gameObjects.end();i++){
-            if((*i).getObjectTag()==removeObjectTag){
+        for(std::vector<inGameObject*>::iterator i = gameObjects.begin(); i!=gameObjects.end();i++){
+            if((*i)->getObjectTag()==removeObjectTag){
+                delete *i;
                 gameObjects.erase(i);
                 break;
             }
@@ -52,16 +52,16 @@ namespace engine{
     }
 
     inGameObject* objectManager::getObjectByTag(const std::string& tag) {
-        for (auto& obj : gameObjects) {
-            if (obj.getObjectTag() == tag) {
-                return &obj;
+        for (inGameObject* obj : gameObjects) {
+            if (obj->getObjectTag() == tag) {
+                return obj;
             }
         }
         return nullptr; 
     }
 
     inGameObject* objectManager::getPlayerObject(){
-        return &gameObjects[gameObjects.size()-1];
+        return gameObjects.back();
     }
 
     void objectManager::setLevelWidth(int init_levelWidth){
@@ -81,6 +81,9 @@ namespace engine{
     }
 
     void objectManager::clearAllObjects(){
+        for (inGameObject* obj : gameObjects) {
+            delete obj;
+        }
         gameObjects.clear();
     }
 }
