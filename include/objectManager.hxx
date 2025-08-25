@@ -9,6 +9,7 @@ namespace engine{
         private:
             int levelWidth, levelHeight;
             std::vector<inGameObject*> gameObjects;
+            std::vector<int> dynamicObjects;
 
         public:
             void addObject(float,float,int,int,float,SDL_Color,std::string objectTag="NULL", int objectInitalRenderCoordinateX=0, int objectInitalRenderCoordinateY=0);

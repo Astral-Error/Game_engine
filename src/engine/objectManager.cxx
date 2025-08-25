@@ -10,10 +10,12 @@ namespace engine{
     }
 
     void objectManager::addEnemyObject(float x, float y, int width, int height, float MovementSpeed, SDL_Color objectColor, std::string objectTag, int objectInitalRenderCoordinateX, int objectInitalRenderCoordinateY, float rangeStart, float rangeEnd){
+        dynamicObjects.push_back(gameObjects.size());
         gameObjects.push_back(new enemyObject(x,y,width,height,MovementSpeed,objectColor,objectTag,objectInitalRenderCoordinateX,objectInitalRenderCoordinateY,rangeStart,rangeEnd));
     }
 
     void objectManager::addMovingPlatform(float x, float y, int width, int height, float MovementSpeed, SDL_Color objectColor, std::string objectTag, int objectInitalRenderCoordinateX, int objectInitalRenderCoordinateY, float rangeStart, float rangeEnd){
+        dynamicObjects.push_back(gameObjects.size());
         gameObjects.push_back(new movingPlatform(x,y,width,height,MovementSpeed,objectColor,objectTag,objectInitalRenderCoordinateX,objectInitalRenderCoordinateY,rangeStart,rangeEnd));
     }
     
@@ -22,8 +24,10 @@ namespace engine{
         gameObjects[playerIndex]->updateObjectState(engineTime::getDeltaTime(),levelWidth,levelHeight);
         gameObjects[playerIndex]->setGrounded(false);
 
-        gameObjects[playerIndex-2]->updateObjectState(engineTime::getDeltaTime(),levelWidth,levelHeight);
-        gameObjects[playerIndex-1]->updateObjectState(engineTime::getDeltaTime(),levelWidth,levelHeight);
+        for(int i : dynamicObjects){
+            if(gameObjects[i]->getObjectTag()=="MovingPlatform"||gameObjects[i]->getObjectTag()=="Enemy")
+                gameObjects[i]->updateObjectState(engineTime::getDeltaTime(),levelWidth,levelHeight);
+        }
 
         bool grounded=false;
 
