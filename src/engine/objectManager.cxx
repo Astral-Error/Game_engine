@@ -111,6 +111,7 @@ namespace engine{
         for (inGameObject* obj : gameObjects) {
             delete obj;
         }
+        dynamicObjects.clear();
         gameObjects.clear();
     }
 }
