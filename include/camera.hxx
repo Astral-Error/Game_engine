@@ -13,4 +13,5 @@ class camera{
         float getCameraY();
         int getCameraWidth();
         int getCameraHeight();
+        void setCamera(float,float);
 };

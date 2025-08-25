@@ -51,6 +51,7 @@ void core::initiateGameLoop(){
                 player->setKeyBinds(keyBindClass);
                 player->setX(player->getObjectInitalRenderCoordinateX());
                 player->setY(player->getObjectInitalRenderCoordinateY());
+                cam.setCamera(player->getX(), player->getY());
                 getAnimationForPlayer(player);
             }
         }

@@ -22,3 +22,7 @@ float camera::getCameraX(){return cameraX;}
 float camera::getCameraY(){return cameraY;}
 int camera::getCameraWidth(){return cameraWidth;}
 int camera::getCameraHeight(){return cameraHeight;}
+void camera::setCamera(float cameraX, float cameraY){
+    this->cameraX=cameraX;
+    this->cameraY=cameraY;
+}
