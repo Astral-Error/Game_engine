@@ -30,6 +30,7 @@ class inGameObject{
         float getY();
         float getWidth();
         float getHeight();
+        float getVelocityX();
         float getVelocityY();
         float getGrounded();
         std::string getObjectTag();
@@ -37,6 +38,8 @@ class inGameObject{
         int getObjectInitalRenderCoordinateY();
         void setY(float);
         void setX(float);
+        void setVelocityX(float);
+        void addVelocityX(float);
         void setVelocityY(float);
         void setGrounded(bool);
         void setKeyBinds(keyBindManager&);
@@ -56,4 +59,18 @@ class enemyObject: public inGameObject{
         enemyObject();
         ~enemyObject();
         void updateObjectState(float, int, int);
+};
+
+class movingPlatform: public inGameObject{
+    private:
+        float deltaX=0.0;
+        float rangeStart, rangeEnd;
+        bool movementDirection = true;
+
+    public:
+        movingPlatform(float, float, int, int, float, SDL_Color, std::string, int, int, float, float);
+        movingPlatform();
+        ~movingPlatform();
+        void updateObjectState(float, int, int);
+        float getDeltaX();
 };

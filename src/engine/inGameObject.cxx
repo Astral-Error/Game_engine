@@ -114,12 +114,15 @@ float inGameObject::getY() { return y; }
 std::string inGameObject::getObjectTag() { return objectTag; }
 float inGameObject::getWidth() { return width; }
 float inGameObject::getHeight() { return height; }
+float inGameObject::getVelocityX() { return velocityX; }
 float inGameObject::getVelocityY() { return velocityY; }
 float inGameObject::getGrounded() { return isGrounded; }
 int inGameObject::getObjectInitalRenderCoordinateX(){return objectInitalRenderCoordinateX;}
 int inGameObject::getObjectInitalRenderCoordinateY(){return objectInitalRenderCoordinateY;}
 void inGameObject::setX(float newX) { x = newX; }
 void inGameObject::setY(float newY) { y = newY; }
+void inGameObject::setVelocityX(float newVelocityX) {velocityX = newVelocityX;}
+void inGameObject::addVelocityX(float newVelocityX) {velocityX += newVelocityX;}
 void inGameObject::setVelocityY(float newVelocityY) {velocityY = newVelocityY;}
 void inGameObject::setGrounded(bool newState) { isGrounded = newState; }
 void inGameObject::setKeyBinds(keyBindManager& keyBindClass) {keyBinds=&keyBindClass;}

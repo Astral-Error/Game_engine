@@ -13,10 +13,16 @@ namespace engine{
         gameObjects.push_back(new enemyObject(x,y,width,height,MovementSpeed,objectColor,objectTag,objectInitalRenderCoordinateX,objectInitalRenderCoordinateY,rangeStart,rangeEnd));
     }
 
+    void objectManager::addMovingPlatform(float x, float y, int width, int height, float MovementSpeed, SDL_Color objectColor, std::string objectTag, int objectInitalRenderCoordinateX, int objectInitalRenderCoordinateY, float rangeStart, float rangeEnd){
+        gameObjects.push_back(new movingPlatform(x,y,width,height,MovementSpeed,objectColor,objectTag,objectInitalRenderCoordinateX,objectInitalRenderCoordinateY,rangeStart,rangeEnd));
+    }
+    
     void objectManager::updateAllObjects(){
         int playerIndex = gameObjects.size()-1;
         gameObjects[playerIndex]->updateObjectState(engineTime::getDeltaTime(),levelWidth,levelHeight);
         gameObjects[playerIndex]->setGrounded(false);
+
+        gameObjects[playerIndex-2]->updateObjectState(engineTime::getDeltaTime(),levelWidth,levelHeight);
         gameObjects[playerIndex-1]->updateObjectState(engineTime::getDeltaTime(),levelWidth,levelHeight);
 
         bool grounded=false;
@@ -27,6 +33,23 @@ namespace engine{
                     collision::resolveCollision(*gameObjects[playerIndex],*surface);
                 }
 
+                if(collision::isTouchingGround(*gameObjects[playerIndex],*surface)){
+                    grounded = true;
+                }
+            }
+            else if (surface->getObjectTag()=="MovingPlatform"){
+                if(collision::checkAABB(*gameObjects[playerIndex],*surface)){
+                    collision::resolveCollision(*gameObjects[playerIndex],*surface);
+                }
+                if(collision::isTouchingGround(*gameObjects[playerIndex],*surface)){
+                    grounded = true;
+                    gameObjects[playerIndex]->setX(gameObjects[playerIndex]->getX()+static_cast<movingPlatform*>(surface)->getDeltaX());
+                }
+            }
+            else if (surface->getObjectTag()=="Enemy"){
+                if(collision::checkAABB(*gameObjects[playerIndex],*surface)){
+                    collision::resolveCollision(*gameObjects[playerIndex],*surface);
+                }
                 if(collision::isTouchingGround(*gameObjects[playerIndex],*surface)){
                     grounded = true;
                 }

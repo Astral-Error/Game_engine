@@ -88,6 +88,16 @@ void core::loadLevel(const std::string& levelFile){
                             wall["objectTag"]);
     }
 
+    objManager.addMovingPlatform(data["MovingPlatform"]["x"],data["MovingPlatform"]["y"],
+                        data["MovingPlatform"]["width"],data["MovingPlatform"]["height"],
+                        data["MovingPlatform"]["speed"],
+                        {0, 255, 0, 255},
+                        data["MovingPlatform"]["objectTag"],
+                        data["MovingPlatform"]["objectInitalRenderCoordinateX"],
+                        data["MovingPlatform"]["objectInitalRenderCoordinateY"],
+                        data["MovingPlatform"]["rangeStart"],
+                        data["MovingPlatform"]["rangeEnd"]);
+
     objManager.addEnemyObject(data["Enemy"]["x"],data["Enemy"]["y"],
                         data["Enemy"]["width"],data["Enemy"]["height"],
                         data["Enemy"]["speed"],
