@@ -25,5 +25,6 @@ namespace engine{
             inGameObject* getObjectByTag(const std::string& tag);
             inGameObject* getPlayerObject();
             void clearAllObjects();
+            void checkEnemyAttacks(float);
     };
 }

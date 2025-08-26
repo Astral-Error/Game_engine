@@ -1,5 +1,5 @@
 #pragma once
-#include <SDL_Keycode.h>
+#include <SDL_keycode.h>
 #include <SDL.h>
 #include <string>
 #include <unordered_map>

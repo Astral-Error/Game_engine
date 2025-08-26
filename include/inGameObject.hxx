@@ -20,6 +20,9 @@ class inGameObject{
         bool isGrounded = false;
         std::string objectTag;
         keyBindManager* keyBinds;
+        int health=3;
+        bool isPlayer=false;
+        float invulnTimer=0;
 
 
     public:
@@ -47,18 +50,26 @@ class inGameObject{
         virtual void updateObjectState(float,int,int);
         virtual void renderObject(SDL_Renderer*,camera&,texture&);
         virtual ~inGameObject();
+        void setAsPlayer(bool);
+        bool getIsPlayer();
+        void damage(int);
+        void updateInvuln(float);
 };
+
+enum EnemyState { ENEMY_PATROL, ENEMY_ATTACK };
 
 class enemyObject: public inGameObject{
     private:
-        float rangeStart, rangeEnd;
+        float rangeStart, rangeEnd, attackRange, damageCooldown, cooldownTimer;
         bool patrolDirectionRight = true;
+        EnemyState state = ENEMY_PATROL; 
 
     public:
-        enemyObject(float, float, int, int, float, SDL_Color, std::string, int, int, float, float);
+        enemyObject(float, float, int, int, float, SDL_Color, std::string, int, int, float, float, float init_attackRange=40, float init_damageCooldown = 0.5, float init_cooldownTimer=0.0);
         enemyObject();
         ~enemyObject();
         void updateObjectState(float, int, int);
+        void tryAttackPlayer(inGameObject*);
 };
 
 class movingPlatform: public inGameObject{

@@ -129,3 +129,18 @@ void inGameObject::setKeyBinds(keyBindManager& keyBindClass) {keyBinds=&keyBindC
 void inGameObject::updateJumpBuffer(float deltaTime){
     jumpBufferTimer-=deltaTime;
 }
+void inGameObject::setAsPlayer(bool val){ isPlayer = val; }
+bool inGameObject::getIsPlayer(){ return isPlayer; }
+
+void inGameObject::damage(int dmg){
+    if(invulnTimer > 0.0f) return;
+    health -= dmg;
+    invulnTimer = 1.0f; // 1s i-frame
+    if(health <= 0) {
+        // TODO: trigger death animation/state
+    }
+}
+
+void inGameObject::updateInvuln(float deltaTime){
+    if(invulnTimer > 0.0f) invulnTimer -= deltaTime;
+}

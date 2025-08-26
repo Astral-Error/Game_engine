@@ -28,7 +28,7 @@ namespace engine{
             if(gameObjects[i]->getObjectTag()=="MovingPlatform"||gameObjects[i]->getObjectTag()=="Enemy")
                 gameObjects[i]->updateObjectState(engineTime::getDeltaTime(),levelWidth,levelHeight);
         }
-
+        checkEnemyAttacks(engineTime::getDeltaTime());
         bool grounded=false;
 
         for(inGameObject* surface : gameObjects){
@@ -114,4 +114,21 @@ namespace engine{
         dynamicObjects.clear();
         gameObjects.clear();
     }
+
+    void objectManager::checkEnemyAttacks(float deltaTime) {
+        inGameObject* player = getPlayerObject();
+        if(!player) return;
+
+        for(int idx : dynamicObjects) {
+            inGameObject* obj = gameObjects[idx];
+            if(obj->getObjectTag() == "Enemy") {
+                enemyObject* enemy = dynamic_cast<enemyObject*>(obj);
+                if(enemy) {
+                    enemy->tryAttackPlayer(player);
+                }
+            }
+        }
+        player->updateInvuln(deltaTime);
+    }
+
 }

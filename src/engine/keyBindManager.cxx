@@ -1,7 +1,7 @@
 #include "keyBindManager.hxx"
 #include <SDL.h>
-#include <SDL_Keycode.h>
-#include <SDL_Keyboard.h>
+#include <SDL_keycode.h>
+#include <SDL_keyboard.h>
 #include <fstream>
 #include <iostream>
 #include "json.hpp"
