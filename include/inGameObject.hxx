@@ -56,19 +56,19 @@ class inGameObject{
         void updateInvuln(float);
 };
 
-enum EnemyState { ENEMY_PATROL, ENEMY_ATTACK };
+enum EnemyState { ENEMY_PATROL, ENEMY_ATTACK, ENEMY_CHASE, ENEMY_RETURN };
 
 class enemyObject: public inGameObject{
     private:
-        float rangeStart, rangeEnd, attackRange, damageCooldown, cooldownTimer;
+        float rangeStart, rangeEnd, attackRange, damageCooldown, cooldownTimer, chaseRange;
         bool patrolDirectionRight = true;
-        EnemyState state = ENEMY_PATROL; 
+        EnemyState state; 
 
     public:
-        enemyObject(float, float, int, int, float, SDL_Color, std::string, int, int, float, float, float init_attackRange=40, float init_damageCooldown = 0.5, float init_cooldownTimer=0.0);
+        enemyObject(float, float, int, int, float, SDL_Color, std::string, int, int, float, float, float, float, float, float);
         enemyObject();
         ~enemyObject();
-        void updateObjectState(float, int, int);
+        void updateObjectState(float, int, int,inGameObject* player=nullptr);
         void tryAttackPlayer(inGameObject*);
 };
 

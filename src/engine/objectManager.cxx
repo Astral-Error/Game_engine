@@ -9,9 +9,9 @@ namespace engine{
         gameObjects.push_back(new inGameObject(x,y,width,height,MovementSpeed,objectColor,objectTag,objectInitalRenderCoordinateX,objectInitalRenderCoordinateY));
     }
 
-    void objectManager::addEnemyObject(float x, float y, int width, int height, float MovementSpeed, SDL_Color objectColor, std::string objectTag, int objectInitalRenderCoordinateX, int objectInitalRenderCoordinateY, float rangeStart, float rangeEnd){
+    void objectManager::addEnemyObject(float x, float y, int width, int height, float MovementSpeed, SDL_Color objectColor, std::string objectTag, int objectInitalRenderCoordinateX, int objectInitalRenderCoordinateY, float rangeStart, float rangeEnd, float attackRange, float damageCooldown, float cooldownTimer, float chaseRange){
         dynamicObjects.push_back(gameObjects.size());
-        gameObjects.push_back(new enemyObject(x,y,width,height,MovementSpeed,objectColor,objectTag,objectInitalRenderCoordinateX,objectInitalRenderCoordinateY,rangeStart,rangeEnd));
+        gameObjects.push_back(new enemyObject(x,y,width,height,MovementSpeed,objectColor,objectTag,objectInitalRenderCoordinateX,objectInitalRenderCoordinateY,rangeStart,rangeEnd,attackRange,damageCooldown,cooldownTimer,chaseRange));
     }
 
     void objectManager::addMovingPlatform(float x, float y, int width, int height, float MovementSpeed, SDL_Color objectColor, std::string objectTag, int objectInitalRenderCoordinateX, int objectInitalRenderCoordinateY, float rangeStart, float rangeEnd){
@@ -25,10 +25,13 @@ namespace engine{
         gameObjects[playerIndex]->setGrounded(false);
 
         for(int i : dynamicObjects){
-            if(gameObjects[i]->getObjectTag()=="MovingPlatform"||gameObjects[i]->getObjectTag()=="Enemy")
+            if(gameObjects[i]->getObjectTag()=="MovingPlatform")
                 gameObjects[i]->updateObjectState(engineTime::getDeltaTime(),levelWidth,levelHeight);
+            else if(gameObjects[i]->getObjectTag()=="Enemy"){
+                dynamic_cast<enemyObject*>(gameObjects[i])->updateObjectState(engineTime::getDeltaTime(),levelWidth,levelHeight,gameObjects[playerIndex]);
+            }
         }
-        checkEnemyAttacks(engineTime::getDeltaTime());
+        //checkEnemyAttacks(engineTime::getDeltaTime());
         bool grounded=false;
 
         for(inGameObject* surface : gameObjects){
@@ -115,7 +118,7 @@ namespace engine{
         gameObjects.clear();
     }
 
-    void objectManager::checkEnemyAttacks(float deltaTime) {
+    /*void objectManager::checkEnemyAttacks(float deltaTime) {
         inGameObject* player = getPlayerObject();
         if(!player) return;
 
@@ -129,6 +132,6 @@ namespace engine{
             }
         }
         player->updateInvuln(deltaTime);
-    }
+    }*/
 
 }
