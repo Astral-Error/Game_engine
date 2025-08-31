@@ -69,7 +69,7 @@ void enemyObject::updateObjectState(float deltaTime, int levelWdth, int levelHei
         }
 
         case ENEMY_RETURN: {
-            if(x>rangeStart-1 && x<rangeStart+1){
+            if(x>rangeStart && x<rangeEnd){
                 state = ENEMY_PATROL;
             }
             else{
