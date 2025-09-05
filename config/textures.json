@@ -1,6 +1,8 @@
 {
     "textures":[
         {"objectTag":"Wall","filePath":"assets/textures/WallTexture/trialTexture.png"},
+        {"objectTag":"Grass","filePath":"assets/textures/tileset/Grass.png"},
+        {"objectTag":"Dirt","filePath":"assets/textures/tileset/Dirt.png"},
         {"objectTag":"MovingPlatform","filePath":"assets/textures/WallTexture/trialTexture.png"},
         {"objectTag":"Player_Idle","filePath":"assets/Character/Ninja_Peasant/Idle.png"},
         {"objectTag":"Player_Jump","filePath":"assets/Character/Ninja_Peasant/Jump.png"},

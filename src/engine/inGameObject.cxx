@@ -92,6 +92,25 @@ void inGameObject::renderObject(SDL_Renderer* renderer, camera& cam,texture& tex
         if(objectTag=="Player")destRect = { int(x - cam.getCameraX() + xOffset), int(y - cam.getCameraY() - yOffset), int(srcRect.w * renderScale), int(srcRect.h * renderScale)};
         SDL_RenderCopyEx(renderer, currentTexture, &srcRect, &destRect, 0, nullptr, flip);
     }
+    else if (objectTag=="Wall") {
+        int topLayerW, topLayerH, layerW, layerH;
+        SDL_QueryTexture(textureClass.getTexture("Grass"),nullptr,nullptr,&topLayerW,&topLayerH);
+        SDL_QueryTexture(textureClass.getTexture("Dirt"),nullptr,nullptr,&layerW,&layerH);
+        for(int i=0;i<height;i++){
+            for(int j=0;j<width;j++){
+                if(i==0){
+                    SDL_Rect srcRect = {0,0,topLayerW,topLayerH};
+                    SDL_Rect destRect = {int(x+topLayerW*j-cam.getCameraX()),int(y+topLayerH*i-cam.getCameraY()),topLayerW,topLayerH};
+                    SDL_RenderCopy(renderer,textureClass.getTexture("Grass"),&srcRect,&destRect);
+                }
+                else{
+                    SDL_Rect srcRect = {0,0,layerW,layerH};
+                    SDL_Rect destRect = {int(x+topLayerW*j-cam.getCameraX()),int(y+topLayerH*i-cam.getCameraY()),layerW,layerH};
+                    SDL_RenderCopy(renderer,textureClass.getTexture("Dirt"),&srcRect,&destRect);
+                }
+            }
+        }
+    }
     else if (textureClass.getTexture(objectTag)) {
         int tileW, tileH;
         SDL_QueryTexture(textureClass.getTexture(objectTag),nullptr,nullptr,&tileW,&tileH);

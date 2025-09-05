@@ -2,6 +2,7 @@
 #include "objectManager.hxx"
 #include "time.hxx"
 #include "collision.hxx"
+#include "texture.hxx"
 #include <iostream>
 
 namespace engine{
@@ -19,7 +20,7 @@ namespace engine{
         gameObjects.push_back(new movingPlatform(x,y,width,height,MovementSpeed,objectColor,objectTag,objectInitalRenderCoordinateX,objectInitalRenderCoordinateY,rangeStart,rangeEnd));
     }
     
-    void objectManager::updateAllObjects(){
+    void objectManager::updateAllObjects(texture& textureClass){
         int playerIndex = gameObjects.size()-1;
         gameObjects[playerIndex]->updateObjectState(engineTime::getDeltaTime(),levelWidth,levelHeight);
         gameObjects[playerIndex]->setGrounded(false);
@@ -36,11 +37,11 @@ namespace engine{
 
         for(inGameObject* surface : gameObjects){
             if(surface->getObjectTag()=="Wall"){
-                if(collision::checkAABB(*gameObjects[playerIndex],*surface)){
-                    collision::resolveCollision(*gameObjects[playerIndex],*surface);
+                if(collision::checkAABB(*gameObjects[playerIndex],*surface,textureClass)){
+                    collision::resolveCollision(*gameObjects[playerIndex],*surface,textureClass);
                 }
 
-                if(collision::isTouchingGround(*gameObjects[playerIndex],*surface)){
+                if(collision::isTouchingGround(*gameObjects[playerIndex],*surface,textureClass)){
                     grounded = true;
                 }
             }

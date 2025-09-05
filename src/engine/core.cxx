@@ -41,7 +41,7 @@ void core::initiateGameLoop(){
         engineTime::startFrame();
         win.inputHandler();
         cam.updateCamera(player->getX(), player->getY(), objManager.getLevelWidth(),objManager.getLevelHeight());
-        objManager.updateAllObjects();
+        objManager.updateAllObjects(textureClass);
         if (player->getX() + player->getWidth() > objManager.getLevelWidth() - 50) {
             sceneMgr->loadNextScene();
 
