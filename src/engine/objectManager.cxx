@@ -46,10 +46,10 @@ namespace engine{
                 }
             }
             else if (surface->getObjectTag()=="MovingPlatform"){
-                if(collision::checkAABB(*gameObjects[playerIndex],*surface)){
-                    collision::resolveCollision(*gameObjects[playerIndex],*surface);
+                if(collision::checkAABB(*gameObjects[playerIndex],*surface,textureClass)){
+                    collision::resolveCollision(*gameObjects[playerIndex],*surface,textureClass);
                 }
-                if(collision::isTouchingGround(*gameObjects[playerIndex],*surface)){
+                if(collision::isTouchingGround(*gameObjects[playerIndex],*surface,textureClass)){
                     grounded = true;
                     gameObjects[playerIndex]->setX(gameObjects[playerIndex]->getX()+static_cast<movingPlatform*>(surface)->getDeltaX());
                 }

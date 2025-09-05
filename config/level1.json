@@ -41,8 +41,8 @@
     "MovingPlatform":{
         "x":1000,
         "y":2400,
-        "width":80,
-        "height":40,
+        "width":4,
+        "height":2,
         "speed":150,
         "objectTag":"MovingPlatform",
         "objectInitalRenderCoordinateX":500,

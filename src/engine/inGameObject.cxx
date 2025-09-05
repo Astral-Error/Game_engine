@@ -92,7 +92,7 @@ void inGameObject::renderObject(SDL_Renderer* renderer, camera& cam,texture& tex
         if(objectTag=="Player")destRect = { int(x - cam.getCameraX() + xOffset), int(y - cam.getCameraY() - yOffset), int(srcRect.w * renderScale), int(srcRect.h * renderScale)};
         SDL_RenderCopyEx(renderer, currentTexture, &srcRect, &destRect, 0, nullptr, flip);
     }
-    else if (objectTag=="Wall") {
+    else if (objectTag=="Wall"||objectTag=="MovingPlatform") {
         int topLayerW, topLayerH, layerW, layerH;
         SDL_QueryTexture(textureClass.getTexture("Grass"),nullptr,nullptr,&topLayerW,&topLayerH);
         SDL_QueryTexture(textureClass.getTexture("Dirt"),nullptr,nullptr,&layerW,&layerH);
