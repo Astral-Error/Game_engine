@@ -130,6 +130,7 @@ void core::addRequiredTextures(){
     for(auto& textureJson: data["textures"]){
         std::string objectTag = textureJson["objectTag"];
         std::string filePath = textureJson["filePath"];
+        std::cout<<"Texture "<<objectTag<<" loaded\n";
         textureClass.addTexture(tempRenderer,filePath,objectTag);
     }
 }

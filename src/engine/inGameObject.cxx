@@ -82,32 +82,58 @@ void inGameObject::updateObjectState(float deltaTime,int levelWidth,int levelHei
 void inGameObject::renderObject(SDL_Renderer* renderer, camera& cam,texture& textureClass) {
     SDL_Rect destRect = { int(x-cam.getCameraX()), int(y-cam.getCameraY()), width, height };
 
-    if (animationStaterManagerClass.getCurrentAnimation()) {
+    if(animationStaterManagerClass.getCurrentAnimation()){
         SDL_Texture* currentTexture = animationStaterManagerClass.getCurrentAnimation()->getTexture()->loadedTexture;
         SDL_Rect srcRect = animationStaterManagerClass.getCurrentAnimation()->getCurrentFrameRect();
         SDL_RendererFlip flip = animationStaterManagerClass.getCurrentAnimation()->getFlip();
         float renderScale = 1.0;
         float xOffset = (width * renderScale - srcRect.w * renderScale) / 2.0f;
         float yOffset = srcRect.h * renderScale - height;
+        std::cout << "Player srcRect: " << srcRect.x << "," << srcRect.y
+          << " " << srcRect.w << "x" << srcRect.h << std::endl;
+
         if(objectTag=="Player")destRect = { int(x - cam.getCameraX() + xOffset), int(y - cam.getCameraY() - yOffset), int(srcRect.w * renderScale), int(srcRect.h * renderScale)};
         SDL_RenderCopyEx(renderer, currentTexture, &srcRect, &destRect, 0, nullptr, flip);
     }
-    else if (objectTag=="Wall"||objectTag=="MovingPlatform") {
-        int topLayerW, topLayerH, layerW, layerH;
-        SDL_QueryTexture(textureClass.getTexture("Grass"),nullptr,nullptr,&topLayerW,&topLayerH);
-        SDL_QueryTexture(textureClass.getTexture("Dirt"),nullptr,nullptr,&layerW,&layerH);
-        for(int i=0;i<height;i++){
-            for(int j=0;j<width;j++){
-                if(i==0){
-                    SDL_Rect srcRect = {0,0,topLayerW,topLayerH};
-                    SDL_Rect destRect = {int(x+topLayerW*j-cam.getCameraX()),int(y+topLayerH*i-cam.getCameraY()),topLayerW,topLayerH};
-                    SDL_RenderCopy(renderer,textureClass.getTexture("Grass"),&srcRect,&destRect);
+    else if (objectTag=="Wall"||objectTag=="MovingPlatform"){
+        int tileW, tileH;
+        SDL_QueryTexture(textureClass.getTexture("SingleTop"),nullptr,nullptr,&tileW,&tileH);
+        for (int i=0;i<height;i++){
+            for (int j=0;j<width;j++){
+                std::string tileKey;
+                if (height == 1 && width == 1){
+                    tileKey = "SingleTop"; 
+                }
+                else if(height==1){
+                    if(j==0) tileKey = "SingleHTopLeft";
+                    else if(j==width-1) tileKey = "SingleHTopRight";
+                    else tileKey = "SingleHTopMiddle";
+                }
+                else if(width == 1){
+                    if (i==0) tileKey = "SingleVTop";
+                    else if(i==height-1) tileKey = "SingleVBottom";
+                    else tileKey = "SingleVMiddle";
                 }
                 else{
-                    SDL_Rect srcRect = {0,0,layerW,layerH};
-                    SDL_Rect destRect = {int(x+topLayerW*j-cam.getCameraX()),int(y+topLayerH*i-cam.getCameraY()),layerW,layerH};
-                    SDL_RenderCopy(renderer,textureClass.getTexture("Dirt"),&srcRect,&destRect);
+                    if(i==0){
+                        if (j==0) tileKey = "MultiLineTopLeft";
+                        else if(j==width-1) tileKey = "MultiLineTopRight";
+                        else tileKey = "MultiLineTopMiddle";
+                    }
+                    else if(i==height-1){
+                        if (j==0) tileKey = "MultiLineLastLeft";
+                        else if (j==width-1) tileKey = "MultiLineLastRight";
+                        else tileKey = "MultiLineLastMiddle";
+                    }
+                    else{
+                        if (j==0) tileKey = "MultiLineMiddleLeft";
+                        else if (j==width-1) tileKey = "MultiLineMiddleRight";
+                        else tileKey = "MultiLineMiddleMiddle";
+                    }
                 }
+                SDL_Rect srcRect = {0, 0, tileW, tileH};
+                SDL_Rect destRect = {int(x + j * tileW - cam.getCameraX()), int(y + i * tileH - cam.getCameraY()), tileW, tileH};
+                SDL_RenderCopy(renderer, textureClass.getTexture(tileKey), &srcRect, &destRect);
             }
         }
     }
@@ -122,7 +148,7 @@ void inGameObject::renderObject(SDL_Renderer* renderer, camera& cam,texture& tex
             }
         }
     }
-    else {
+    else{
         SDL_SetRenderDrawColor(renderer, objectColor.r, objectColor.g, objectColor.b, objectColor.a);
         SDL_RenderFillRect(renderer, &destRect);
     }

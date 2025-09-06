@@ -10,7 +10,7 @@ namespace collision{
     }
 
     bool checkAABB(inGameObject& a,inGameObject& b, texture& textureClass){
-        int tileSize = textureClass.getTextureWidth("Grass");
+        int tileSize = textureClass.getTextureWidth("SingleTop");
         return (a.getX()<b.getX()+b.getWidth()*tileSize &&
                 a.getX()+a.getWidth()>b.getX() &&
                 a.getY()<b.getY()+b.getHeight()*tileSize &&
@@ -53,7 +53,7 @@ namespace collision{
     }
     
     void resolveCollision(inGameObject& player, inGameObject& surface, texture& textureClass){
-        int tileSize = textureClass.getTextureWidth("Grass");
+        int tileSize = textureClass.getTextureWidth("SingleTop");
         float playerLeft   = player.getX();
         float playerRight  = playerLeft + player.getWidth();
         float playerTop    = player.getY();
@@ -101,7 +101,7 @@ namespace collision{
     }
 
     bool isTouchingGround(inGameObject& player, inGameObject& surface, texture& textureClass){
-        int tileSize = textureClass.getTextureWidth("Grass");
+        int tileSize = textureClass.getTextureWidth("SingleTop");
         float threshold = 5.0f;
         float playerBottom = player.getY() + player.getHeight();
         float surfaceTop = surface.getY();

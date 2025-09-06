@@ -1,9 +1,27 @@
 {
     "textures":[
-        {"objectTag":"Wall","filePath":"assets/textures/WallTexture/trialTexture.png"},
-        {"objectTag":"Grass","filePath":"assets/textures/tileset/Grass.png"},
-        {"objectTag":"Dirt","filePath":"assets/textures/tileset/Dirt.png"},
-        {"objectTag":"MovingPlatform","filePath":"assets/textures/WallTexture/trialTexture.png"},
+        {"objectTag":"SingleTop","filePath":"assets/textures/tileset/Top/SingleHLine/Single.png"},
+
+        {"objectTag":"SingleHTopLeft","filePath":"assets/textures/tileset/Top/SingleHLine/Left.png"},
+        {"objectTag":"SingleHTopMiddle","filePath":"assets/textures/tileset/Top/SingleHLine/Middle.png"},
+        {"objectTag":"SingleHTopRight","filePath":"assets/textures/tileset/Top/SingleHLine/Right.png"},
+        
+        {"objectTag":"SingleVTop","filePath":"assets/textures/tileset/Top/SingleVLine/Top.png"},
+        {"objectTag":"SingleVMiddle","filePath":"assets/textures/tileset/Bottom/SingleVertical/Middle.png"},
+        {"objectTag":"SingleVBottom","filePath":"assets/textures/tileset/Bottom/SingleVertical/Bottom.png"},
+
+        {"objectTag":"MultiLineTopRight","filePath":"assets/textures/tileset/Top/MultiLine/Right.png"},
+        {"objectTag":"MultiLineTopMiddle","filePath":"assets/textures/tileset/Top/MultiLine/Middle.png"},
+        {"objectTag":"MultiLineTopLeft","filePath":"assets/textures/tileset/Top/MultiLine/Left.png"},
+
+        {"objectTag":"MultiLineMiddleLeft","filePath":"assets/textures/tileset/Bottom/MultiLine/EachLine/Left.png"},
+        {"objectTag":"MultiLineMiddleMiddle","filePath":"assets/textures/tileset/Bottom/MultiLine/EachLine/Middle.png"},
+        {"objectTag":"MultiLineMiddleRight","filePath":"assets/textures/tileset/Bottom/MultiLine/EachLine/Right.png"},
+
+        {"objectTag":"MultiLineLastLeft","filePath":"assets/textures/tileset/Bottom/MultiLine/LastLine/Left.png"},
+        {"objectTag":"MultiLineLastMiddle","filePath":"assets/textures/tileset/Bottom/MultiLine/LastLine/Middle.png"},
+        {"objectTag":"MultiLineLastRight","filePath":"assets/textures/tileset/Bottom/MultiLine/LastLine/Right.png"},
+
         {"objectTag":"Player_Idle","filePath":"assets/Character/Ninja_Peasant/Idle.png"},
         {"objectTag":"Player_Jump","filePath":"assets/Character/Ninja_Peasant/Jump.png"},
         {"objectTag":"Player_Run","filePath":"assets/Character/Ninja_Peasant/Run.png"},
