@@ -110,7 +110,9 @@ void core::loadLevel(const std::string& levelFile){
                             data["Enemy"]["objectInitalRenderCoordinateX"],
                             data["Enemy"]["objectInitalRenderCoordinateY"],
                             data["Enemy"]["rangeStart"],
-                            data["Enemy"]["rangeEnd"]);
+                            data["Enemy"]["rangeEnd"],
+                            data["Enemy"]["attackRange"], data["Enemy"]["damageCooldown"],
+                            data["Enemy"]["cooldownTimer"], data["Enemy"]["chaseRange"]);
     }
 
     objManager.addObject(data["player"]["x"],data["player"]["y"],

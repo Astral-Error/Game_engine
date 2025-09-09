@@ -60,7 +60,11 @@
         "objectInitalRenderCoordinateX":500,
         "objectInitalRenderCoordinateY":2900,
         "rangeStart":500,
-        "rangeEnd":1000
+        "rangeEnd":1000,
+        "attackRange":40,
+        "damageCooldown":0.5,
+        "cooldownTimer":0.0,
+        "chaseRange":200
     },
     "player":{
         "x":0,

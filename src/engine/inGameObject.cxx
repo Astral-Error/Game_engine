@@ -89,9 +89,6 @@ void inGameObject::renderObject(SDL_Renderer* renderer, camera& cam,texture& tex
         float renderScale = 1.0;
         float xOffset = (width * renderScale - srcRect.w * renderScale) / 2.0f;
         float yOffset = srcRect.h * renderScale - height;
-        std::cout << "Player srcRect: " << srcRect.x << "," << srcRect.y
-          << " " << srcRect.w << "x" << srcRect.h << std::endl;
-
         if(objectTag=="Player")destRect = { int(x - cam.getCameraX() + xOffset), int(y - cam.getCameraY() - yOffset), int(srcRect.w * renderScale), int(srcRect.h * renderScale)};
         SDL_RenderCopyEx(renderer, currentTexture, &srcRect, &destRect, 0, nullptr, flip);
     }

@@ -31,10 +31,10 @@ void enemyObject::updateObjectState(float deltaTime, int levelWdth, int levelHei
         if(distanceFromEnemy<=attackRange && cooldownTimer<=0.0){
             state = ENEMY_ATTACK;
         }
-        else if(player->getX()>x && x+width+chaseRange>=player->getX()){
+        else if(player->getX()>x && x+width+chaseRange>=player->getX() && ((player->getY()>=y-100&&player->getY()<=y+height+100) || (player->getY()+player->getHeight()>=y-100&&player->getY()+player->getHeight()<=y+height+100))){
             state = ENEMY_CHASE;
         }
-        else if (player->getX()+player->getWidth()<x && x-chaseRange<=player->getX()+player->getWidth()){
+        else if (player->getX()+player->getWidth()<x && x-chaseRange<=player->getX()+player->getWidth() && ((player->getY()>=y-100&&player->getY()<=y+height+100) || (player->getY()+player->getHeight()>=y-100&&player->getY()+player->getHeight()<=y+height+100))){
             state=ENEMY_CHASE;
         }
         else if(!(x>=rangeStart && x<=rangeEnd)){
