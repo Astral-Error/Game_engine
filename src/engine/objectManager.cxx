@@ -119,6 +119,9 @@ namespace engine{
         gameObjects.clear();
     }
 
+    std::vector<inGameObject*> objectManager::getAllGameObjects(){
+        return gameObjects;
+    }
     /*void objectManager::checkEnemyAttacks(float deltaTime) {
         inGameObject* player = getPlayerObject();
         if(!player) return;

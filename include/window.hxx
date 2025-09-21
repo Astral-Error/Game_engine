@@ -15,6 +15,7 @@ class window{
     void inputHandler();
     bool isRunning() const;
     SDL_Renderer* getRenderer();
+    SDL_Window* getWindow();
     SDL_GLContext getGLContext();
     ~window();
 };

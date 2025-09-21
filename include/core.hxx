@@ -5,6 +5,7 @@
 #include "texture.hxx"
 #include "parallaxManager.hxx"
 #include "sceneManager.hxx"
+#include "shadowManager.hxx"
 #include <SDL.h>
 #include <vector>
 
@@ -15,6 +16,7 @@ class core{
         texture textureClass;
         parallaxManager background;
         sceneManager* sceneMgr;
+        shadowManager shadowMgr;
         engine::objectManager objManager;
         static int screenWidth, screenHeight;
         SDL_Color mediumGrey = {169,169,169,255};

@@ -78,6 +78,10 @@ SDL_Renderer* window::getRenderer(){
     return window::renderer;
 }
 
+SDL_Window* window::getWindow(){
+    return win;
+}
+
 SDL_GLContext window::getGLContext(){
     return glContext;
 }
