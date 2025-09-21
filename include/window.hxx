@@ -7,6 +7,7 @@ class window{
     private:
     SDL_Window* win = NULL;
     SDL_Renderer* renderer = NULL;
+    SDL_GLContext glContext = NULL;
     bool appRunning = false;
 
     public:
@@ -14,5 +15,6 @@ class window{
     void inputHandler();
     bool isRunning() const;
     SDL_Renderer* getRenderer();
+    SDL_GLContext getGLContext();
     ~window();
 };
