@@ -19,7 +19,7 @@ add_executable(Game_engine ${ENGINE_SOURCES})
 
 # Platform-specific includes and linking
 if(WIN32)
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++ -static")
   # Include Directories (Windows only)
   target_include_directories(
     Game_engine
