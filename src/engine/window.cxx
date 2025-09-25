@@ -7,29 +7,19 @@
 
 window::~window(){
     if(renderer) SDL_DestroyRenderer(renderer);
-    if(glContext) SDL_GL_DeleteContext(glContext);
     if(win) SDL_DestroyWindow(win);
     SDL_Quit();
 }
 
 bool window::initiateWindow(const char* winTitle, int width, int height){
-    Uint32 windowFlags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
+    Uint32 windowFlags = SDL_WINDOW_BORDERLESS | SDL_WINDOW_RESIZABLE;
     win = SDL_CreateWindow(winTitle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, windowFlags);
     if(NULL==win){
         std::cout<<"Window creation failed"<<SDL_GetError()<<std::endl;
         return false;
     }
-
-    glContext = SDL_GL_CreateContext(win);
-    if(NULL==glContext){
-        std::cout<<"Failed to create OpenGL context: "<<SDL_GetError()<<std::endl;
-        return false;
-    }
-    SDL_GL_SetSwapInterval(1); 
-
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"); 
     renderer = SDL_CreateRenderer(win,-1,SDL_RENDERER_PRESENTVSYNC);
-
     if(NULL==renderer){
         std::cout<<"Render Window Creation failed, Error:"<<SDL_GetError()<<std::endl;
     }
@@ -76,8 +66,4 @@ bool window::isRunning() const{
 
 SDL_Renderer* window::getRenderer(){
     return window::renderer;
-}
-
-SDL_GLContext window::getGLContext(){
-    return glContext;
 }
