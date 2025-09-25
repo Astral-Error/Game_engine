@@ -57,14 +57,9 @@ void core::initiateGameLoop(){
         }
         background.update(engineTime::getDeltaTime());
         background.render(cam.getCameraX());
-        shadowMgr.renderGlobalShadow(objManager.getAllGameObjects(), cam);
-        std::vector<LightSource> lights;
-        lights.push_back({400.0f, 400.0f, 120.0f, 1.0f});
-        shadowMgr.renderPointLightShadows(objManager.getAllGameObjects(), lights, cam);
 
         objManager.renderAllObjects(win.getRenderer(),cam,textureClass);
 
-        SDL_GL_SwapWindow(win.getWindow());
         SDL_RenderPresent(win.getRenderer());
         engineTime::endFrame(144);
     }

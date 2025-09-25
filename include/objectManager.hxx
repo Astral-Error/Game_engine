@@ -25,7 +25,6 @@ namespace engine{
             int getLevelHeight();
             inGameObject* getObjectByTag(const std::string& tag);
             inGameObject* getPlayerObject();
-            std::vector<inGameObject*> getAllGameObjects();
             void clearAllObjects();
             void checkEnemyAttacks(float);
     };
