@@ -8,6 +8,7 @@
 #include "camera.hxx"
 #include "sceneManager.hxx"
 #include "keyBindManager.hxx"
+#include "renderer.hxx"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>
@@ -58,15 +59,18 @@ void core::initiateGameLoop(){
         background.update(engineTime::getDeltaTime());
         background.render(cam.getCameraX());
 
+        Renderer* renderer = win.getRenderer();
+
         objManager.renderAllObjects(win.getRenderer(),cam,textureClass);
 
-        SDL_RenderPresent(win.getRenderer());
+        if(renderer) renderer->present();
         engineTime::endFrame(144);
     }
 }
 
 SDL_Texture* core::getTexture(std::string objectTag){
-    return textureClass.getIndiviualTexture(objectTag)->loadedTexture;
+    //return textureClass.getIndiviualTexture(objectTag)->loadedTexture;
+    return nullptr;
 }
 
 void core::loadLevel(const std::string& levelFile){
@@ -125,7 +129,6 @@ void core::loadLevel(const std::string& levelFile){
 }
 
 void core::addRequiredTextures(){
-    SDL_Renderer* tempRenderer = win.getRenderer();
     std::ifstream file("config/textures.json");
     json data;
     file>>data;
@@ -133,7 +136,7 @@ void core::addRequiredTextures(){
         std::string objectTag = textureJson["objectTag"];
         std::string filePath = textureJson["filePath"];
         std::cout<<"Texture "<<objectTag<<" loaded\n";
-        textureClass.addTexture(tempRenderer,filePath,objectTag);
+        textureClass.addTexture(nullptr,filePath,objectTag);
     }
 }
 

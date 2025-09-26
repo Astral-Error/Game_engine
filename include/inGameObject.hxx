@@ -2,6 +2,7 @@
 #include "animationStateManager.hxx"
 #include "camera.hxx"
 #include "keyBindManager.hxx"
+#include "renderer.hxx"
 #include <SDL.h>
 #include <string>
 
@@ -48,7 +49,7 @@ class inGameObject{
         void setKeyBinds(keyBindManager&);
         void updateJumpBuffer(float);
         virtual void updateObjectState(float,int,int);
-        virtual void renderObject(SDL_Renderer*,camera&,texture&);
+        virtual void renderObject(Renderer*,camera&,texture&);
         virtual ~inGameObject();
         void setAsPlayer(bool);
         bool getIsPlayer();

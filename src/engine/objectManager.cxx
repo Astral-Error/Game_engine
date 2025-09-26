@@ -3,6 +3,7 @@
 #include "time.hxx"
 #include "collision.hxx"
 #include "texture.hxx"
+#include "renderer.hxx"
 #include <iostream>
 
 namespace engine{
@@ -66,7 +67,7 @@ namespace engine{
         gameObjects[playerIndex]->setGrounded(grounded);
     }
 
-    void objectManager::renderAllObjects(SDL_Renderer* renderer, camera& cam,texture& textureClass){
+    void objectManager::renderAllObjects(Renderer* renderer, camera& cam,texture& textureClass){
         for(inGameObject* i : gameObjects){
             i->renderObject(renderer,cam,textureClass);
         }

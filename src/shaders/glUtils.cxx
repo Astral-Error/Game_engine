@@ -1,19 +1,20 @@
 #include "glUtils.hxx"
 #include <iostream>
+#include <string>
 
-GLuint glUtils::compileShader(GLenum shaderType, const std::string& source){
+GLuint glutils::compileShader(GLenum shaderType, const std::string& source){
     GLuint shader = glCreateShader(shaderType);
-    const char *data = src.c_str();
+    const char *data = source.c_str();
     glShaderSource(shader, 1, &data, nullptr);
     glCompileShader(shader);
     GLint status;
     glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
     if(!status){
         GLint len=0;
-        glGetShaderiv(shader, GL_INFO_LENGTH, &len);
+        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &len);
         std::string log(len,'\0');
         glGetShaderInfoLog(shader, len, nullptr, &log[0]);
-        std::cerr<<"Shader compile error: "<<log<std::endl;
+        std::cerr<<"Shader compile error: "<<log<<std::endl;
         glDeleteShader(shader);
         return 0;
     }
@@ -21,7 +22,7 @@ GLuint glUtils::compileShader(GLenum shaderType, const std::string& source){
 
 }
 
-GLuint glUtils::linkProgram(GLuint vertexShader, GLuint fragmentShader){
+GLuint glutils::linkProgram(GLuint vertexShader, GLuint fragmentShader){
     GLuint prog = glCreateProgram(); //creates program object and returns ID to attach shader objects
     glAttachShader(prog, vertexShader); // attaching vertex shader objects to the program
     glAttachShader(prog, fragmentShader); // attaching fragment shader objects to the program
@@ -40,10 +41,10 @@ GLuint glUtils::linkProgram(GLuint vertexShader, GLuint fragmentShader){
     return prog;
 }
 
-bool glUtils::checkGLError(const std::string& context);{
+bool glutils::checkGLError(const std::string& context){
     GLenum error = glGetError();
-    if(e!=GL_NO_ERROR){
-        std::cerr << "GL Error ("<<context<<"): 0x" << std::hex << e << std::dec << std::endl;;
+    if(error!=GL_NO_ERROR){
+        std::cerr << "GL Error ("<<context<<"): 0x" << std::hex << error << std::dec << std::endl;;
         return true;
     }
     return false;

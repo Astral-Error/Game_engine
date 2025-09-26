@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <SDL_keyboard.h>
 #include <SDL_keycode.h>
+#include "renderer.hxx"
 #include <iostream>
 
 inGameObject::inGameObject(float init_x, float init_y, int init_width,
@@ -79,75 +80,89 @@ void inGameObject::updateObjectState(float deltaTime,int levelWidth,int levelHei
     x+=velocityX*movementSpeed*deltaTime;
 }
 
-void inGameObject::renderObject(SDL_Renderer* renderer, camera& cam,texture& textureClass) {
-    SDL_Rect destRect = { int(x-cam.getCameraX()), int(y-cam.getCameraY()), width, height };
+void inGameObject::renderObject(Renderer* renderer, camera& cam,texture& textureClass) {
+    float dstX = x - cam.getCameraX();
+    float dstY = y - cam.getCameraY();
+    float dstW = (float)width;
+    float dstH = (float)height;
 
     if(animationStaterManagerClass.getCurrentAnimation()){
-        SDL_Texture* currentTexture = animationStaterManagerClass.getCurrentAnimation()->getTexture()->loadedTexture;
+        GLuint glTex = animationStaterManagerClass.getCurrentAnimation()->getTexture()->loadedTexture;
         SDL_Rect srcRect = animationStaterManagerClass.getCurrentAnimation()->getCurrentFrameRect();
         SDL_RendererFlip flip = animationStaterManagerClass.getCurrentAnimation()->getFlip();
         float renderScale = 1.0;
         float xOffset = (width * renderScale - srcRect.w * renderScale) / 2.0f;
         float yOffset = srcRect.h * renderScale - height;
-        if(objectTag=="Player")destRect = { int(x - cam.getCameraX() + xOffset), int(y - cam.getCameraY() - yOffset), int(srcRect.w * renderScale), int(srcRect.h * renderScale)};
-        SDL_RenderCopyEx(renderer, currentTexture, &srcRect, &destRect, 0, nullptr, flip);
+        if(objectTag=="Player"){
+            dstX = x - cam.getCameraX() + xOffset;
+            dstY = y - cam.getCameraY() - yOffset;
+            dstW = (float)(srcRect.w * renderScale);
+            dstH = (float)(srcRect.h * renderScale);
+        }
+        bool flipX = (flip == SDL_FLIP_HORIZONTAL);
+        renderer->drawTexture(glTex, animationStaterManagerClass.getCurrentAnimation()->getTexture()->textureWidth, animationStaterManagerClass.getCurrentAnimation()->getTexture()->textureHeight,
+                              dstX, dstY, dstW, dstH,
+                              srcRect.x, srcRect.y, srcRect.w, srcRect.h,
+                              flipX, 0.0f, 1.0f);
     }
     else if (objectTag=="Wall"||objectTag=="MovingPlatform"){
-        int tileW, tileH;
-        SDL_QueryTexture(textureClass.getTexture("SingleTop"),nullptr,nullptr,&tileW,&tileH);
-        for (int i=0;i<height;i++){
-            for (int j=0;j<width;j++){
+        int tileW=18, tileH=18;
+        for (int i = 0; i < height; i++){
+            for (int j = 0; j < width; j++){
                 std::string tileKey;
                 if (height == 1 && width == 1){
-                    tileKey = "SingleTop"; 
-                }
-                else if(height==1){
+                    tileKey = "SingleTop";
+                } else if (height == 1){
                     if(j==0) tileKey = "SingleHTopLeft";
                     else if(j==width-1) tileKey = "SingleHTopRight";
                     else tileKey = "SingleHTopMiddle";
-                }
-                else if(width == 1){
+                } else if (width == 1){
                     if (i==0) tileKey = "SingleVTop";
                     else if(i==height-1) tileKey = "SingleVBottom";
                     else tileKey = "SingleVMiddle";
-                }
-                else{
+                } else {
                     if(i==0){
                         if (j==0) tileKey = "MultiLineTopLeft";
                         else if(j==width-1) tileKey = "MultiLineTopRight";
                         else tileKey = "MultiLineTopMiddle";
-                    }
-                    else if(i==height-1){
+                    } else if(i==height-1){
                         if (j==0) tileKey = "MultiLineLastLeft";
                         else if (j==width-1) tileKey = "MultiLineLastRight";
                         else tileKey = "MultiLineLastMiddle";
-                    }
-                    else{
+                    } else {
                         if (j==0) tileKey = "MultiLineMiddleLeft";
                         else if (j==width-1) tileKey = "MultiLineMiddleRight";
                         else tileKey = "MultiLineMiddleMiddle";
                     }
                 }
-                SDL_Rect srcRect = {0, 0, tileW, tileH};
-                SDL_Rect destRect = {int(x + j * tileW - cam.getCameraX()), int(y + i * tileH - cam.getCameraY()), tileW, tileH};
-                SDL_RenderCopy(renderer, textureClass.getTexture(tileKey), &srcRect, &destRect);
+
+                SDL_Rect srcRect = {0,0,tileW,tileH};
+                float posX = x + j * tileW - cam.getCameraX();
+                float posY = y + i * tileH - cam.getCameraY();
+                renderer->drawTexture(textureClass.getIndiviualTexture(tileKey)->loadedTexture, textureClass.getIndiviualTexture(tileKey)->textureWidth, textureClass.getIndiviualTexture(tileKey)->textureHeight,
+                                      posX, posY, (float)tileW, (float)tileH,
+                                      srcRect.x, srcRect.y, srcRect.w, srcRect.h);
             }
         }
     }
-    else if (textureClass.getTexture(objectTag)) {
-        int tileW, tileH;
-        SDL_QueryTexture(textureClass.getTexture(objectTag),nullptr,nullptr,&tileW,&tileH);
-        for(int offsetY =0;offsetY<height;offsetY+=tileH){
-            for(int offsetX=0;offsetX<width;offsetX+=tileW){
+    else if (textureClass.getIndiviualTexture(objectTag)) {
+        int tileW = textureClass.getIndiviualTexture(objectTag)->textureWidth;
+        int tileH = textureClass.getIndiviualTexture(objectTag)->textureHeight;
+        for(int offsetY = 0; offsetY < height; offsetY += tileH){
+            for(int offsetX = 0; offsetX < width; offsetX += tileW){
                 SDL_Rect srcRect = {0,0,tileW,tileH};
-                SDL_Rect destRect = {int(x + offsetX - cam.getCameraX()), int(y + offsetY - cam.getCameraY()),std::min(tileW,width-offsetX), std::min(tileH,height-offsetY)};
-                SDL_RenderCopy(renderer,textureClass.getTexture(objectTag),&srcRect,&destRect);
+                float dstx = x + offsetX - cam.getCameraX();
+                float dsty = y + offsetY - cam.getCameraY();
+                float dw = (float)std::min(tileW, width - offsetX);
+                float dh = (float)std::min(tileH, height - offsetY);
+                renderer->drawTexture(textureClass.getIndiviualTexture(objectTag)->loadedTexture, textureClass.getIndiviualTexture(objectTag)->textureWidth, textureClass.getIndiviualTexture(objectTag)->textureHeight,
+                                    dstx, dsty, dw, dh,
+                                    srcRect.x, srcRect.y, srcRect.w, srcRect.h);
             }
         }
     }
     else{
-        SDL_SetRenderDrawColor(renderer, objectColor.r, objectColor.g, objectColor.b, objectColor.a);
-        SDL_RenderFillRect(renderer, &destRect);
+        renderer->fillRect(dstX, dstY, dstW, dstH, objectColor.r/255.0, objectColor.g/255.0, objectColor.b/255.0, objectColor.a/255.0);
     }
 }
 

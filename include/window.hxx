@@ -2,17 +2,18 @@
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include <string>
+#include "renderer.hxx"
 
 class window{
     private:
     SDL_Window* win = NULL;
-    SDL_Renderer* renderer = NULL;
+    Renderer* renderer = NULL;
     bool appRunning = false;
 
     public:
     bool initiateWindow(const char*,int,int);
     void inputHandler();
     bool isRunning() const;
-    SDL_Renderer* getRenderer();
+    Renderer* getRenderer();
     ~window();
 };

@@ -2,6 +2,8 @@
 #include "glUtils.hxx"
 #include <iostream>
 #include <cmath>
+#include <glad/glad.h>
+
 
 
 static const char* textured_vert = R"(
@@ -46,12 +48,12 @@ void main(){
 }
 )";
 
-Renderer::renderer():
+Renderer::Renderer():
     sdlWindow(nullptr), glContext(nullptr), screenW(800), screenH(600),
-    shaderProgram(0), vao(0), vbo(0), colorShaderProgram(0), colorVAO(0), colorVBO(0)
+    shaderProgram(0), vao(0), vbo(0), colorShaderProgram(0), colorVao(0), colorVbo(0)
     {}
 
-Renderer::~renderer(){destroy();}
+Renderer::~Renderer(){destroy();}
 
 void Renderer::buildOrtho(float left, float right, float bottom, float top, float out[16]){
     identityMat4(out);
@@ -76,28 +78,35 @@ void Renderer::multMat4(const float a[16], const float b[16], float out[16]){
     for(int i=0;i<16;i++) out[i]=tmp[i];
 }
 
-void Renderer::identiyMat(float out[16]){
+void Renderer::identityMat4(float out[16]){
     for(int i=0;i<16;i++) out[i]=0;
     out[0]=out[5]=out[10]=out[15]=1;
 }
 
+static bool compileAndLinkProgram(const char* vsrc, const char* fsrc, GLuint &prog){
+    GLuint vs = glutils::compileShader(GL_VERTEX_SHADER, vsrc);
+    if(!vs) return false;
+    GLuint fs = glutils::compileShader(GL_FRAGMENT_SHADER, fsrc);
+    if(!fs){ glDeleteShader(vs); return false; }
+    prog = glutils::linkProgram(vs, fs);
+    glDeleteShader(vs); glDeleteShader(fs);
+    return prog != 0;
+}
+
 bool Renderer::initOpenGL(SDL_Window* sdlWindow, int w, int h){
-    if(!window) return false;
-    this.sdlWindow = sdlWindow;
+    if(!sdlWindow) return false;
+    this->sdlWindow = sdlWindow;
     screenW = w;
     screenH = h;
-    glContext = SDL_GL_CreateContext(sldWindow);
+    glContext = SDL_GL_CreateContext(sdlWindow);
     if(!glContext){
         std::cerr<<"Error creating glContext: "<<SDL_GetError()<<std::endl;
         return false;
     }
-    glewExperimental = GL_TRUE;
-    GLenum glewErr = glewInit();
-    if(glewErr!=GLEW_OK){
-        std::cerr << "GLEW init failed: " << glewGetErrorString(glewErr) << std::endl;
+    if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) {
+        std::cerr << "Failed to initialize GLAD" << std::endl;
         return false;
     }
-    glGetError();
 
     if(!compileAndLinkProgram(textured_vert, textured_frag, shaderProgram)){
         std::cerr << "Failed to compile/link textured shader\n";
@@ -123,10 +132,10 @@ bool Renderer::initOpenGL(SDL_Window* sdlWindow, int w, int h){
     }
     colorUniMVP = glGetUniformLocation(colorShaderProgram, "uMVP");
     colorUniColor = glGetUniformLocation(colorShaderProgram, "uColor");
-    glGenVertexArrays(1, &colorVAO);
-    glGenBuffers(1, &colorVBO);
-    glBindVertexArray(colorVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, colorVBO);
+    glGenVertexArrays(1, &colorVao);
+    glGenBuffers(1, &colorVbo);
+    glBindVertexArray(colorVao);
+    glBindBuffer(GL_ARRAY_BUFFER, colorVbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float)*4*2, nullptr, GL_DYNAMIC_DRAW);
     glEnableVertexAttribArray(0); glVertexAttribPointer(0,2,GL_FLOAT,GL_FALSE, sizeof(float)*2, (void*)0);
     glBindBuffer(GL_ARRAY_BUFFER,0);
@@ -182,59 +191,60 @@ void Renderer::drawTextureF(GLuint texID, float dstX, float dstY, float dstW, fl
 
 void Renderer::drawTexture(GLuint texID, int texWidth, int texHeight,
     float dstX, float dstY, float dstW, float dstH,
-    int srcX, int srcY, int srcW, int srcH, bool flipX, float angleDeg, float alpha){
-    if(texID==0) return;
-    if(srcW==0) srcW = texWidth;
-    if(srcH==0) srcH = texHeight;
+    int srcX, int srcY, int srcW, int srcH,
+    bool flipX, float angleDeg, float alpha)
+{
+    if(texID == 0) return;
+    if(srcW == 0) srcW = texWidth;
+    if(srcH == 0) srcH = texHeight;
+
+    // --- UVs (flip V because OpenGL is bottom-left origin) ---
     float u0 = (float)srcX / (float)texWidth;
-    float v0 = (float)srcY / (float)texHeight;
+    float v0 = 1.0f - (float)(srcY + srcH) / (float)texHeight;
     float u1 = (float)(srcX + srcW) / (float)texWidth;
-    float v1 = (float)(srcY + srcH) / (float)texHeight;
+    float v1 = 1.0f - (float)srcY / (float)texHeight;
     if(flipX) std::swap(u0, u1);
 
-    if(std::abs(angleDeg) > 0.001f){
-        float proj[16]; buildOrtho(0.0f, (float)screenW, (float)screenH, 0.0f, proj);
-        float cx = dstW * 0.5f;
-        float cy = dstH * 0.5f;
-        float T1[16]; identityMat4(T1); T1[12] = dstX; T1[13] = dstY;
-        float Tc[16]; identityMat4(Tc); Tc[12] = cx; Tc[13] = cy;
-        float Tnc[16]; identityMat4(Tnc); Tnc[12] = -cx; Tnc[13] = -cy;
-        float S[16]; identityMat4(S); S[0]=dstW; S[5]=dstH;
-        float R[16]; identityMat4(R);
-        float a = angleDeg * 3.14159265358979323846f / 180.0f;
-        float c = cosf(a), s = sinf(a);
-        R[0] = c; R[1] = s; R[4] = -s; R[5] = c;
-        float tmp1[16], tmp2[16], tmp3[16];
-        multMat4(Tc, R, tmp1);
-        multMat4(tmp1, S, tmp2);
-        multMat4(tmp2, Tnc, tmp3);
-        multMat4(T1, tmp3, tmp1);
-        float mvp[16]; multMat4(proj, tmp1, mvp);
+    // --- build transform MVP ---
+    float proj[16]; buildOrtho(0.0f, (float)screenW, (float)screenH, 0.0f, proj);
+    float model[16]; identityMat4(model);
+    model[12] = dstX;
+    model[13] = dstY;
+    model[0] = dstW;
+    model[5] = dstH;
 
-        float verts[16] = {
-            0.0f, 0.0f, u0, v0,
-            1.0f, 0.0f, u1, v0,
-            0.0f, 1.0f, u0, v1,
-            1.0f, 1.0f, u1, v1
-        };
+    float mvp[16]; multMat4(proj, model, mvp);
 
-        glUseProgram(shaderProgram);
-        glUniformMatrix4fv(uniMVP, 1, GL_FALSE, mvp);
-        glUniform1f(uniAlpha, alpha);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texID);
-        glUniform1i(uniTex, 0);
-        glBindVertexArray(vao);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(verts), verts);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindVertexArray(0);
-    }
-    else {
-        drawTextureF(texID, dstX, dstY, dstW, dstH, u0, v0, u1, v1, alpha);
+    // --- verts with UV ---
+    float verts[16] = {
+        0.0f, 0.0f, u0, v0,
+        1.0f, 0.0f, u1, v0,
+        0.0f, 1.0f, u0, v1,
+        1.0f, 1.0f, u1, v1
+    };
+
+    // --- bind + draw ---
+    glUseProgram(shaderProgram);
+    glUniformMatrix4fv(uniMVP, 1, GL_FALSE, mvp);
+    glUniform1f(uniAlpha, alpha > 0.0f ? alpha : 1.0f); // fallback if alpha=0
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texID);
+    glUniform1i(uniTex, 0);
+
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(verts), verts);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
+    // debug
+    GLenum err = glGetError();
+    if(err != GL_NO_ERROR){
+        std::cerr << "GL error in drawTexture: 0x" << std::hex << err << std::dec << std::endl;
     }
 }
+
 
 void Renderer::fillRect(float x, float y, float w, float h, float r, float g, float b, float a){
     float proj[16]; buildOrtho(0.0f, (float)screenW, (float)screenH, 0.0f, proj);
@@ -251,8 +261,8 @@ void Renderer::fillRect(float x, float y, float w, float h, float r, float g, fl
     glUseProgram(colorShaderProgram);
     glUniformMatrix4fv(colorUniMVP, 1, GL_FALSE, mvp);
     glUniform4f(colorUniColor, r, g, b, a);
-    glBindVertexArray(colorVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, colorVBO);
+    glBindVertexArray(colorVao);
+    glBindBuffer(GL_ARRAY_BUFFER, colorVbo);
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(verts), verts);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -262,7 +272,7 @@ void Renderer::fillRect(float x, float y, float w, float h, float r, float g, fl
 void Renderer::resize(int w, int h){
     screenW = w;
     screenH = h;
-    glViewPort(0,0,w,h);
+    glViewport(0,0,w,h);
 }
 
 void Renderer::destroy(){
@@ -270,8 +280,8 @@ void Renderer::destroy(){
     if(vao){ glDeleteVertexArrays(1,&vao); vao=0; }
     if(vbo){ glDeleteBuffers(1,&vbo); vbo=0; }
     if(colorShaderProgram){ glDeleteProgram(colorShaderProgram); colorShaderProgram=0; }
-    if(colorVAO){ glDeleteVertexArrays(1,&colorVAO); colorVAO=0; }
-    if(colorVBO){ glDeleteBuffers(1,&colorVBO); colorVBO=0; }
+    if(colorVao){ glDeleteVertexArrays(1,&colorVao); colorVao=0; }
+    if(colorVbo){ glDeleteBuffers(1,&colorVbo); colorVbo=0; }
     if(glContext){
         SDL_GL_DeleteContext(glContext);
         glContext = nullptr;

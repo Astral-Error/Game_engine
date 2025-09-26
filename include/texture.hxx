@@ -2,12 +2,14 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <string>
+#include "renderer.hxx"
 #include <unordered_map>
+#include <glad/glad.h>
 
 class texture{
     private:
         struct individualTexture{
-            SDL_Texture* loadedTexture;
+            GLuint loadedTexture;
             int textureHeight, textureWidth;
         };
         std::unordered_map<std::string, individualTexture> textureUNMap;
