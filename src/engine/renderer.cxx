@@ -101,7 +101,8 @@ bool Renderer::initOpenGL(SDL_Window* sdlWindow, int w, int h){
     this->sdlWindow = sdlWindow;
     screenW = w;
     screenH = h;
-    buildOrtho(0.0f, (float)screenW, (float)screenH, 0.0f, proj); // The elements in 'proj' are now fixed
+    buildOrtho(0.0f, (float)screenW, (float)screenH, 0.0f, proj);
+
     glContext = SDL_GL_CreateContext(sdlWindow);
     if(!glContext){
         std::cerr<<"Error creating glContext: "<<SDL_GetError()<<std::endl;
@@ -112,44 +113,140 @@ bool Renderer::initOpenGL(SDL_Window* sdlWindow, int w, int h){
         return false;
     }
 
+    // --- Textured shader ---
     if(!compileAndLinkProgram(textured_vert, textured_frag, shaderProgram)){
         std::cerr << "Failed to compile/link textured shader\n";
         return false;
     }
-    uniMVP = glGetUniformLocation(shaderProgram, "uMVP");
-    uniTex = glGetUniformLocation(shaderProgram, "uTex");
+    uniMVP   = glGetUniformLocation(shaderProgram, "uMVP");
+    uniTex   = glGetUniformLocation(shaderProgram, "uTex");
     uniAlpha = glGetUniformLocation(shaderProgram, "uAlpha");
 
+    // --- Setup VAO/VBO/EBO for textured quads ---
     glGenVertexArrays(1, &vao);
     glGenBuffers(1, &vbo);
+    glGenBuffers(1, &ebo);
+
     glBindVertexArray(vao);
+
+    // Each vertex = 4 floats (pos.x, pos.y, uv.x, uv.y)
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float)*4*(2+2), nullptr, GL_DYNAMIC_DRAW);
-    glEnableVertexAttribArray(0); glVertexAttribPointer(0,2,GL_FLOAT,GL_FALSE,sizeof(float)*4,(void*)(0));
-    glEnableVertexAttribArray(1); glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,sizeof(float)*4,(void*)(sizeof(float)*2));
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4 * 4 * 2000, nullptr, GL_DYNAMIC_DRAW);
+
+    // Precompute indices for 2000 quads (max batch)
+    std::vector<GLuint> indices;
+    indices.reserve(2000 * 6);
+    for (int i = 0; i < 2000; i++) {
+        GLuint base = i * 4;
+        indices.push_back(base + 0);
+        indices.push_back(base + 1);
+        indices.push_back(base + 2);
+        indices.push_back(base + 2);
+        indices.push_back(base + 1);
+        indices.push_back(base + 3);
+    }
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
+
+    // Attribute pointers
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, (void*)(0));
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, (void*)(sizeof(float) * 2));
+
     glBindVertexArray(0);
 
+    // --- Color shader for rectangles ---
     if(!compileAndLinkProgram(color_vert, color_frag, colorShaderProgram)){
         std::cerr << "Failed to compile/link color shader\n";
         return false;
     }
-    colorUniMVP = glGetUniformLocation(colorShaderProgram, "uMVP");
+    colorUniMVP   = glGetUniformLocation(colorShaderProgram, "uMVP");
     colorUniColor = glGetUniformLocation(colorShaderProgram, "uColor");
+
     glGenVertexArrays(1, &colorVao);
     glGenBuffers(1, &colorVbo);
     glBindVertexArray(colorVao);
     glBindBuffer(GL_ARRAY_BUFFER, colorVbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float)*4*2, nullptr, GL_DYNAMIC_DRAW);
-    glEnableVertexAttribArray(0); glVertexAttribPointer(0,2,GL_FLOAT,GL_FALSE, sizeof(float)*2, (void*)0);
-    glBindBuffer(GL_ARRAY_BUFFER,0);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4 * 2, nullptr, GL_DYNAMIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0);
     glBindVertexArray(0);
 
+    // --- Blending & viewport ---
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glViewport(0,0,screenW, screenH);
+    glViewport(0, 0, screenW, screenH);
+
     return true;
 }
+
+
+void Renderer::beginBatch() {
+    quadBatch.clear();
+    quadBatch.reserve(2000); // reserve space for quads this frame
+}
+
+void Renderer::submitQuad(GLuint texID, float dstX, float dstY, float dstW, float dstH,
+                          float u0, float v0, float u1, float v1, float alpha) {
+    Quad q {dstX, dstY, dstW, dstH, u0, v0, u1, v1, alpha, texID};
+    quadBatch.push_back(q);
+}
+
+void Renderer::endBatch() {
+    if (quadBatch.empty()) return;
+
+    glUseProgram(shaderProgram);
+    glUniformMatrix4fv(uniMVP, 1, GL_FALSE, proj);
+    glUniform1i(uniTex, 0);
+
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+    GLuint currentTex = 0;
+    std::vector<float> verts;
+    verts.reserve(quadBatch.size() * 16);
+
+    int quadCount = 0;
+
+    for (auto& q : quadBatch) {
+        if (q.texID != currentTex && quadCount > 0) {
+            // flush current batch
+            glBindTexture(GL_TEXTURE_2D, currentTex);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * verts.size(), verts.data());
+            glDrawElements(GL_TRIANGLES, quadCount * 6, GL_UNSIGNED_INT, 0);
+            verts.clear();
+            quadCount = 0;
+        }
+        currentTex = q.texID;
+
+        // push 4 verts for this quad
+        float v[16] = {
+            q.x,       q.y,       q.u0, q.v0,
+            q.x+q.w,   q.y,       q.u1, q.v0,
+            q.x,       q.y+q.h,   q.u0, q.v1,
+            q.x+q.w,   q.y+q.h,   q.u1, q.v1
+        };
+        verts.insert(verts.end(), v, v+16);
+
+        glUniform1f(uniAlpha, q.alpha);
+        quadCount++;
+    }
+
+    if (quadCount > 0) {
+        glBindTexture(GL_TEXTURE_2D, currentTex);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * verts.size(), verts.data());
+        glDrawElements(GL_TRIANGLES, quadCount * 6, GL_UNSIGNED_INT, 0);
+    }
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+    quadBatch.clear();
+}
+
+
+
 
 void Renderer::clear(float r, float g, float b, float a){
     glClearColor(r,g,b,a);

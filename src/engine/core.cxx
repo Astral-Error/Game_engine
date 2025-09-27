@@ -61,9 +61,16 @@ void core::initiateGameLoop(){
             }
         }
         background.update(engineTime::getDeltaTime());
-        background.render(cam.getCameraX());
+        /*background.render(cam.getCameraX());
+        //renderer->clear(255, 255, 0, 1);
 
-        objManager.renderAllObjects(renderer,cam,textureClass);
+        objManager.renderAllObjects(renderer,cam,textureClass);*/
+
+        //renderer->clear(0.6f, 0.6f, 1.0f, 1.0f); // nice bg color
+        renderer->beginBatch();
+        background.render(cam.getCameraX());       // submit quads
+        objManager.renderAllObjects(renderer,cam,textureClass); // submit quads
+        renderer->endBatch();
 
         if(renderer) renderer->present();
         engineTime::endFrame(144);

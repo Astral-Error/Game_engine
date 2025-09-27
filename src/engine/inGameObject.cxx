@@ -80,91 +80,103 @@ void inGameObject::updateObjectState(float deltaTime,int levelWidth,int levelHei
     x+=velocityX*movementSpeed*deltaTime;
 }
 
-void inGameObject::renderObject(Renderer* renderer, camera& cam,texture& textureClass) {
+void inGameObject::renderObject(Renderer* renderer, camera& cam, texture& textureClass) {
     float dstX = x - cam.getCameraX();
     float dstY = y - cam.getCameraY();
     float dstW = (float)width;
     float dstH = (float)height;
 
-    if(animationStaterManagerClass.getCurrentAnimation()){
+    if (animationStaterManagerClass.getCurrentAnimation()) {
         GLuint glTex = animationStaterManagerClass.getCurrentAnimation()->getTexture()->loadedTexture;
         SDL_Rect srcRect = animationStaterManagerClass.getCurrentAnimation()->getCurrentFrameRect();
         SDL_RendererFlip flip = animationStaterManagerClass.getCurrentAnimation()->getFlip();
-        float renderScale = 1.0;
+        float renderScale = 1.0f;
         float xOffset = (width * renderScale - srcRect.w * renderScale) / 2.0f;
         float yOffset = srcRect.h * renderScale - height;
-        if(objectTag=="Player"){
+        if (objectTag == "Player") {
             dstX = x - cam.getCameraX() + xOffset;
             dstY = y - cam.getCameraY() - yOffset;
             dstW = (float)(srcRect.w * renderScale);
             dstH = (float)(srcRect.h * renderScale);
         }
         bool flipX = (flip == SDL_FLIP_HORIZONTAL);
-        renderer->drawTexture(glTex, animationStaterManagerClass.getCurrentAnimation()->getTexture()->textureWidth, animationStaterManagerClass.getCurrentAnimation()->getTexture()->textureHeight,
-                              dstX, dstY, dstW, dstH,
-                              srcRect.x, srcRect.y, srcRect.w, srcRect.h,
-                              flipX, 0.0f, 1.0f);
+
+        // compute UVs
+        float u0 = (float)srcRect.x / animationStaterManagerClass.getCurrentAnimation()->getTexture()->textureWidth;
+        float v0 = 1.0f - (float)(srcRect.y + srcRect.h) / animationStaterManagerClass.getCurrentAnimation()->getTexture()->textureHeight;
+        float u1 = (float)(srcRect.x + srcRect.w) / animationStaterManagerClass.getCurrentAnimation()->getTexture()->textureWidth;
+        float v1 = 1.0f - (float)srcRect.y / animationStaterManagerClass.getCurrentAnimation()->getTexture()->textureHeight;
+        if (flipX) std::swap(u0, u1);
+
+        renderer->submitQuad(glTex, dstX, dstY, dstW, dstH, u0, v0, u1, v1, 1.0f);
     }
-    else if (objectTag=="Wall"||objectTag=="MovingPlatform"){
-        int tileW=18, tileH=18;
-        for (int i = 0; i < height; i++){
-            for (int j = 0; j < width; j++){
+    else if (objectTag == "Wall" || objectTag == "MovingPlatform") {
+        int tileW = 18, tileH = 18;
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
                 std::string tileKey;
-                if (height == 1 && width == 1){
+                if (height == 1 && width == 1) {
                     tileKey = "SingleTop";
-                } else if (height == 1){
-                    if(j==0) tileKey = "SingleHTopLeft";
-                    else if(j==width-1) tileKey = "SingleHTopRight";
+                } else if (height == 1) {
+                    if (j == 0) tileKey = "SingleHTopLeft";
+                    else if (j == width - 1) tileKey = "SingleHTopRight";
                     else tileKey = "SingleHTopMiddle";
-                } else if (width == 1){
-                    if (i==0) tileKey = "SingleVTop";
-                    else if(i==height-1) tileKey = "SingleVBottom";
+                } else if (width == 1) {
+                    if (i == 0) tileKey = "SingleVTop";
+                    else if (i == height - 1) tileKey = "SingleVBottom";
                     else tileKey = "SingleVMiddle";
                 } else {
-                    if(i==0){
-                        if (j==0) tileKey = "MultiLineTopLeft";
-                        else if(j==width-1) tileKey = "MultiLineTopRight";
+                    if (i == 0) {
+                        if (j == 0) tileKey = "MultiLineTopLeft";
+                        else if (j == width - 1) tileKey = "MultiLineTopRight";
                         else tileKey = "MultiLineTopMiddle";
-                    } else if(i==height-1){
-                        if (j==0) tileKey = "MultiLineLastLeft";
-                        else if (j==width-1) tileKey = "MultiLineLastRight";
+                    } else if (i == height - 1) {
+                        if (j == 0) tileKey = "MultiLineLastLeft";
+                        else if (j == width - 1) tileKey = "MultiLineLastRight";
                         else tileKey = "MultiLineLastMiddle";
                     } else {
-                        if (j==0) tileKey = "MultiLineMiddleLeft";
-                        else if (j==width-1) tileKey = "MultiLineMiddleRight";
+                        if (j == 0) tileKey = "MultiLineMiddleLeft";
+                        else if (j == width - 1) tileKey = "MultiLineMiddleRight";
                         else tileKey = "MultiLineMiddleMiddle";
                     }
                 }
 
-                SDL_Rect srcRect = {0,0,tileW,tileH};
+                auto tex = textureClass.getIndiviualTexture(tileKey);
+                if (!tex) continue;
+
                 float posX = x + j * tileW - cam.getCameraX();
                 float posY = y + i * tileH - cam.getCameraY();
-                renderer->drawTexture(textureClass.getIndiviualTexture(tileKey)->loadedTexture, textureClass.getIndiviualTexture(tileKey)->textureWidth, textureClass.getIndiviualTexture(tileKey)->textureHeight,
-                                      posX, posY, (float)tileW, (float)tileH,
-                                      srcRect.x, srcRect.y, srcRect.w, srcRect.h);
+
+                float u0 = 0.0f, v0 = 0.0f, u1 = 1.0f, v1 = 1.0f;
+                renderer->submitQuad(tex->loadedTexture, posX, posY, (float)tileW, (float)tileH,
+                                     u0, v0, u1, v1, 1.0f);
             }
         }
     }
     else if (textureClass.getIndiviualTexture(objectTag)) {
-        int tileW = textureClass.getIndiviualTexture(objectTag)->textureWidth;
-        int tileH = textureClass.getIndiviualTexture(objectTag)->textureHeight;
-        for(int offsetY = 0; offsetY < height; offsetY += tileH){
-            for(int offsetX = 0; offsetX < width; offsetX += tileW){
-                SDL_Rect srcRect = {0,0,tileW,tileH};
+        auto tex = textureClass.getIndiviualTexture(objectTag);
+        int tileW = tex->textureWidth;
+        int tileH = tex->textureHeight;
+        for (int offsetY = 0; offsetY < height; offsetY += tileH) {
+            for (int offsetX = 0; offsetX < width; offsetX += tileW) {
                 float dstx = x + offsetX - cam.getCameraX();
                 float dsty = y + offsetY - cam.getCameraY();
                 float dw = (float)std::min(tileW, width - offsetX);
                 float dh = (float)std::min(tileH, height - offsetY);
-                renderer->drawTexture(textureClass.getIndiviualTexture(objectTag)->loadedTexture, textureClass.getIndiviualTexture(objectTag)->textureWidth, textureClass.getIndiviualTexture(objectTag)->textureHeight,
-                                    dstx, dsty, dw, dh,
-                                    srcRect.x, srcRect.y, srcRect.w, srcRect.h);
+
+                float u0 = 0.0f, v0 = 0.0f, u1 = dw / (float)tex->textureWidth, v1 = dh / (float)tex->textureHeight;
+                renderer->submitQuad(tex->loadedTexture, dstx, dsty, dw, dh, u0, v0, u1, v1, 1.0f);
             }
         }
     }
-    else{
-        renderer->fillRect(dstX, dstY, dstW, dstH, objectColor.r/255.0, objectColor.g/255.0, objectColor.b/255.0, objectColor.a/255.0);
+    else {
+        // leave fillRect immediate for now (not batched)
+        renderer->fillRect(dstX, dstY, dstW, dstH,
+                           objectColor.r/255.0, objectColor.g/255.0,
+                           objectColor.b/255.0, objectColor.a/255.0);
     }
 }
+
 
 float inGameObject::getX() { return x; }
 float inGameObject::getY() { return y; }

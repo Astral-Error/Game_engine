@@ -42,8 +42,8 @@ void parallaxManager::addLayer(const std::string& filePath, float scrollSpeed, i
     tempLayer.scrollSpeed=scrollSpeed;
     if (scrollSpeed < farthestLayerScroll) farthestLayerScroll = scrollSpeed;
     tempLayer.offsetX=0;
-    tempLayer.textureWidth=surface->w; //mark for review
-    tempLayer.textureHeight=surface->h; //mark for review
+    tempLayer.textureWidth=screenWidth; //mark for review
+    tempLayer.textureHeight=screenHeight; //mark for review
     tempLayer.camDependenceX=camDependenceX;
     tempLayer.isActuallyScrolling=isActuallyScrolling;
     layers.push_back(tempLayer);
@@ -59,21 +59,22 @@ void parallaxManager::update(float deltaTime){
         }
 }
 
-void parallaxManager::render(float cameraX){
-    if(!renderer) return;
-    for(auto& i : layers){
+void parallaxManager::render(float cameraX) {
+    if (!renderer) return;
+    for (auto& i : layers) {
         float x;
-        if(i.camDependenceX==0){
+        if (i.camDependenceX == 0) {
             x = -fmod(i.offsetX + cameraX * (farthestLayerScroll), i.textureWidth);
-        }
-        else{
+        } else {
             x = -fmod(i.offsetX + cameraX * (i.scrollSpeed), i.textureWidth);
         }
         while (x < screenWidth) {
-                /*SDL_FRect renderablTextureRect = { x, 0.0, (float)i.textureWidth, (float)i.textureHeight };
-                SDL_RenderCopyF(renderer, i.parallaxTexture, nullptr, &renderablTextureRect);*/
-                renderer->drawTextureF(i.parallaxTexture, x, 0.0, (float)i.textureWidth, (float)i.textureHeight);
-                x += i.textureWidth;
+            float u0 = 0.0f, v0 = 0.0f, u1 = 1.0f, v1 = 1.0f;
+            renderer->submitQuad(i.parallaxTexture, x, 0.0f,
+                                 (float)i.textureWidth, (float)i.textureHeight,
+                                 u0, v0, u1, v1, 1.0f);
+            x += i.textureWidth;
         }
     }
 }
+
