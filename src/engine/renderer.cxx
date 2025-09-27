@@ -79,8 +79,11 @@ void Renderer::multMat4(const float a[16], const float b[16], float out[16]){
 }
 
 void Renderer::identityMat4(float out[16]){
-    for(int i=0;i<16;i++) out[i]=0;
-    out[0]=out[5]=out[10]=out[15]=1;
+    std::fill(out, out + 16, 0.0f); 
+    out[0] = 1;
+    out[5] = 1;
+    out[10] = 1;
+    out[15] = 1;
 }
 
 static bool compileAndLinkProgram(const char* vsrc, const char* fsrc, GLuint &prog){
@@ -98,6 +101,7 @@ bool Renderer::initOpenGL(SDL_Window* sdlWindow, int w, int h){
     this->sdlWindow = sdlWindow;
     screenW = w;
     screenH = h;
+    buildOrtho(0.0f, (float)screenW, (float)screenH, 0.0f, proj); // The elements in 'proj' are now fixed
     glContext = SDL_GL_CreateContext(sdlWindow);
     if(!glContext){
         std::cerr<<"Error creating glContext: "<<SDL_GetError()<<std::endl;
@@ -155,17 +159,31 @@ void Renderer::clear(float r, float g, float b, float a){
 void Renderer::present(){
     if(sdlWindow) SDL_GL_SwapWindow(sdlWindow);
 }
+
 void Renderer::drawTextureF(GLuint texID, float dstX, float dstY, float dstW, float dstH, float u0, float v0, float u1, float v1, float alpha){
     if(texID==0) return;
-    float proj[16]; buildOrtho(0.0f, (float)screenW, (float)screenH, 0.0f, proj);
+    // 1. Calculate Projection Matrix (MVP is based on this)
 
-    float model[16]; identityMat4(model);
-    model[12] = dstX;
-    model[13] = dstY;
-    model[0] = dstW;
-    model[5] = dstH;
+    // 2. Calculate the MVP Matrix Directly (replacing model setup and multMat4)
+    float mvp[16];
+    // Start by copying the PROJECTION matrix to MVP
+    // For optimal speed, a fast copy/unroll function is best, but a loop is fine.
+    for(int i=0; i<16; ++i) mvp[i] = proj[i];
 
-    float mvp[16]; multMat4(proj, model, mvp);
+    // Apply SCALE (dstW, dstH) to the projection's scale components
+    // mvp[0] = proj[0] * dstW;
+    mvp[0] *= dstW;
+    // mvp[5] = proj[5] * dstH;
+    mvp[5] *= dstH;
+
+    // Apply TRANSLATION (dstX, dstY) to the projection's translation components
+    // mvp[12] = proj[0] * dstX + proj[12];
+    mvp[12] = proj[0] * dstX + proj[12];
+    // mvp[13] = proj[5] * dstY + proj[13];
+    mvp[13] = proj[5] * dstY + proj[13];
+
+    // NOTE: If your buildOrtho is a general Z-aware ortho, you may need to apply scale/translate 
+    // to mvp[10] and mvp[14] if dstZ/dstD is used, but for 2D drawing this is typically enough.
 
     float verts[16] = {
         0.0f, 0.0f, u0, v0,
@@ -205,15 +223,29 @@ void Renderer::drawTexture(GLuint texID, int texWidth, int texHeight,
     float v1 = 1.0f - (float)srcY / (float)texHeight;
     if(flipX) std::swap(u0, u1);
 
-    // --- build transform MVP ---
-    float proj[16]; buildOrtho(0.0f, (float)screenW, (float)screenH, 0.0f, proj);
-    float model[16]; identityMat4(model);
-    model[12] = dstX;
-    model[13] = dstY;
-    model[0] = dstW;
-    model[5] = dstH;
+    float mvp[16];
+    // Copy the Projection matrix to MVP initially
+    memcpy(mvp, proj, sizeof(float) * 16);
 
-    float mvp[16]; multMat4(proj, model, mvp);
+    // Apply Scale (dstW, dstH) to the first two columns of MVP
+    // Column 0 (X-axis scaling)
+    mvp[0] *= dstW;
+    mvp[1] *= dstW;
+    mvp[2] *= dstW;
+    mvp[3] *= dstW;
+
+    // Column 1 (Y-axis scaling)
+    mvp[4] *= dstH;
+    mvp[5] *= dstH;
+    mvp[6] *= dstH;
+    mvp[7] *= dstH;
+
+    // Apply Translation (dstX, dstY) by modifying the fourth column (P12, P13, P14, P15)
+    // mvp[12] = P12 + P0 * dstX + P4 * dstY;
+    mvp[12] += proj[0] * dstX + proj[4] * dstY;
+    mvp[13] += proj[1] * dstX + proj[5] * dstY;
+    mvp[14] += proj[2] * dstX + proj[6] * dstY;
+    mvp[15] += proj[3] * dstX + proj[7] * dstY;
 
     // --- verts with UV ---
     float verts[16] = {

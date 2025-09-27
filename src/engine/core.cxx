@@ -29,6 +29,7 @@ bool core::initiateWindow(const char* winTitle, int width, int height){
 }
 
 void core::initiateGameLoop(){
+    Renderer* renderer = win.getRenderer();
     camera cam(screenWidth,screenHeight);
     keyBindClass.loadKeyBindConfig("config/keybinds.json");
     addRequiredTextures();
@@ -37,7 +38,10 @@ void core::initiateGameLoop(){
     sceneMgr->loadScene(0);
     inGameObject* player = objManager.getPlayerObject();
     player->setKeyBinds(keyBindClass);
-    if (player) getAnimationForPlayer(player);
+    if (player){
+        getAnimationForPlayer(player);
+        cam.setCamera(player->getObjectInitalRenderCoordinateX(), player->getObjectInitalRenderCoordinateY());
+    }
     while(win.isRunning()){
         engineTime::startFrame();
         win.inputHandler();
@@ -59,9 +63,7 @@ void core::initiateGameLoop(){
         background.update(engineTime::getDeltaTime());
         background.render(cam.getCameraX());
 
-        Renderer* renderer = win.getRenderer();
-
-        objManager.renderAllObjects(win.getRenderer(),cam,textureClass);
+        objManager.renderAllObjects(renderer,cam,textureClass);
 
         if(renderer) renderer->present();
         engineTime::endFrame(144);

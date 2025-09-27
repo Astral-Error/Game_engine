@@ -9,6 +9,7 @@ class Renderer{
         int screenW, screenH;
         GLuint shaderProgram, vao, vbo, colorShaderProgram, colorVao, colorVbo;
         GLint uniMVP, uniTex, uniAlpha, colorUniMVP, colorUniColor;
+        float proj[16];
         void buildOrtho(float, float, float, float, float[]);
         void multMat4(const float[], const float[], float out[]);
         void identityMat4(float out[]);
